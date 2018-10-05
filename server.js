@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var router = express.Router();
 var methodOverride = require('method-override');
 var bcrypt = require('bcryptjs');
-var cookieParser = require('cookie-parser');
+// var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var path = require("path");
 
@@ -17,7 +17,7 @@ var app = express();
 // set the app up with bodyparser
 app.use(methodOverride('_method'));
 app.use(session({ secret: 'app', cookie: { maxAge: 1*1000*60*60*24*365 }}));
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
