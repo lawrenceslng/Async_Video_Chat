@@ -17,3 +17,19 @@ CREATE TABLE users(
 	UNIQUE (email),
 	PRIMARY KEY (id)
 );
+
+CREATE TABLE contacts(
+	user_id INT NOT NULL,
+	friend_id INT NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (friend_id) REFERENCES users(id)
+)
+
+CREATE TABLE conversations(
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	title VARCHAR(255) NOT NULL,
+	content TEXT NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (user_id) REFERENCES users(id)
+)
