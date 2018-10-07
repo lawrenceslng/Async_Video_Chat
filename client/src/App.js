@@ -20,13 +20,29 @@ class App extends Component {
     alert("submit");
 
   }
+  changeForm = (e) => {
+    e.preventDefault();
+    console.log(e.target.innerHTML);
+    if(e.target.innerHTML == "Sign-Up")
+    {
+      this.setState({accountCreated: false})
+    }
+    else
+    {
+      this.setState({accountCreated: true})
+    }
+  }
 
   render() {
     return (
       <div className="App">
         <Header />
         <Carousel />
-        <LoginForm buttonClick={this.buttonClick}/>
+        <div className="loginBox">
+          <button onClick={this.changeForm} className="btn btn-primary">Sign-Up</button>
+          <button onClick={this.changeForm} className="btn btn-primary">Login</button>
+          <LoginForm buttonClick={this.buttonClick} loginForm={this.state.accountCreated}/>
+        </div>
         <Footer />
       </div>
     );

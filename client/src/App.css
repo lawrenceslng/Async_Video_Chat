@@ -30,3 +30,7 @@
     transform: rotate(360deg);
   }
 }
+
+.loginBox{
+  border: 2px black solid;
+}
