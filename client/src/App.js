@@ -26,12 +26,16 @@ class App extends Component {
     if(e.target.innerHTML == "Sign-Up")
     {
       document.getElementById("form").reset();
+      document.getElementById("sign-up-button").className = "btn btn-primary active";
+      document.getElementById("login-button").className = "btn btn-primary";
       this.setState({accountCreated: false})
       // e.target.addClass("active");
     }
     else
     {
       document.getElementById("form").reset();
+      document.getElementById("sign-up-button").className = "btn btn-primary";
+      document.getElementById("login-button").className = "btn btn-primary active";
       this.setState({accountCreated: true})
       // e.target.addClass("active");
     }
@@ -43,8 +47,8 @@ class App extends Component {
         <Header />
         <Carousel />
         <div className="loginBox">
-          <button onClick={this.changeForm} className="btn btn-primary">Sign-Up</button>
-          <button onClick={this.changeForm} className="btn btn-primary">Login</button>
+          <button id="sign-up-button" onClick={this.changeForm} className="btn btn-primary">Sign-Up</button>
+          <button id="login-button" onClick={this.changeForm} className="btn btn-primary">Login</button>
           <LoginForm buttonClick={this.buttonClick} loginForm={this.state.accountCreated} />
         </div>
         <Footer />
