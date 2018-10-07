@@ -22,14 +22,18 @@ class App extends Component {
   }
   changeForm = (e) => {
     e.preventDefault();
-    console.log(e.target.innerHTML);
+    console.log(e.target.className);
     if(e.target.innerHTML == "Sign-Up")
     {
+      document.getElementById("form").reset();
       this.setState({accountCreated: false})
+      // e.target.addClass("active");
     }
     else
     {
+      document.getElementById("form").reset();
       this.setState({accountCreated: true})
+      // e.target.addClass("active");
     }
   }
 
@@ -41,7 +45,7 @@ class App extends Component {
         <div className="loginBox">
           <button onClick={this.changeForm} className="btn btn-primary">Sign-Up</button>
           <button onClick={this.changeForm} className="btn btn-primary">Login</button>
-          <LoginForm buttonClick={this.buttonClick} loginForm={this.state.accountCreated}/>
+          <LoginForm buttonClick={this.buttonClick} loginForm={this.state.accountCreated} />
         </div>
         <Footer />
       </div>
