@@ -30,6 +30,7 @@ CREATE TABLE conversations(
 	user_id INT NOT NULL,
 	title VARCHAR(255) NOT NULL,
 	content TEXT NOT NULL,
+	fs_path TEXT NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id)
 )
