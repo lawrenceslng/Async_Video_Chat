@@ -3,6 +3,7 @@ import Header from './components/header';
 import Footer from './components/footer';
 import Carousel from './components/carousel';
 import LoginForm from './components/loginForm';
+import PWMatch from './components/accountCreate';
 import './App.css';
 
 class App extends Component {
@@ -38,10 +39,25 @@ class App extends Component {
     }
     else
     {
-      alert("this is a sign up form");
+      // alert("this is a sign up form");
+      let username = document.getElementById("username").value;
+      let password = document.getElementById("pw").value;
+      let firstName = document.getElementById("firstName").value;
+      let lastName = document.getElementById("lastName").value;
+      let repw = document.getElementById("repw").value;
+      let email = document.getElementById("email").value;
+      if(PWMatch(password, repw))
+      {
+        //post info to server
+      }
+      else
+      {
+        //alert passwords do not match, clear out password fields
+        alert("Passwords Do Not Match");
+        document.getElementById("repw").value = "";
+        document.getElementById("pw").value = "";
+      }
     }
-    
-
   }
   changeForm = (e) => {
     e.preventDefault();
