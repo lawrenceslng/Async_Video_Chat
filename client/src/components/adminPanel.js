@@ -1,6 +1,6 @@
 import React from "react";
 
-const adminPanel = () => (
+const AdminPanel = () => (
   <div class="box">
     <div class="container">
      	<div class="row">
@@ -57,4 +57,4 @@ const adminPanel = () => (
     </div>
 </div>
 )
-export default adminPanel;
+export default AdminPanel;
