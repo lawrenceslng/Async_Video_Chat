@@ -90,17 +90,13 @@ app.post('/login', function(req,res){
   });
 });
 
-app.post("/sign-up", function(req,res){
+app.post("/signup", function(req,res){
     console.log(req.body);
     var username = req.body.username;
     var password = req.body.password;
-    var firstName = req.body.first_name;
-    var lastName = req.body.last_name;
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
     var email = req.body.email;
-    var avatarPath = req.body.profileAvatar;
-    // console.log(username + " " + password + " " + firstName + " " + lastName + " " + email);
-    console.log(avatarPath);
-    //need to add restrictions on username (must be unique), email (must be unique), password (must be between 8 - 16 characters)
     var query = connection.query("SELECT * FROM users WHERE username = ? OR email = ?", [username, email],function (error, results, fields) {
       if(error) throw error;
       if(results.length == 0)
@@ -115,9 +111,7 @@ app.post("/sign-up", function(req,res){
               connection.query('SELECT id FROM users WHERE username = ?', [username],function (error, results, fields) {
                 if(error) throw error;
                 console.log(results[0].id);
-                connection.query('INSERT INTO userProfile (users_id, avatarPath) VALUES (?,?)', [results[0].id,avatarPath],function (error, results, fields) {
-                  if(error) throw error;
-                });
+                res.send('hi');
               });
              
             })

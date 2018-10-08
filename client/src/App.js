@@ -32,9 +32,10 @@ class App extends Component {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({username, password})
-      // }).then(res => res.json()).then(rj => {
-      //   let pets = [...this.state.pets, rj];
-      //   this.setState({loggedIn: true})
+      }).then(res => {
+        //need code to differentiate between whether login is successful or not
+        console.log(res);
+        this.setState({loggedIn: true})
       })
     }
     else
@@ -46,9 +47,22 @@ class App extends Component {
       let lastName = document.getElementById("lastName").value;
       let repw = document.getElementById("repw").value;
       let email = document.getElementById("email").value;
+      // alert("here");
       if(PWMatch(password, repw))
       {
         //post info to server
+        return fetch("http://localhost:3001/signup", {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({username, firstName, lastName, email, password})
+        }).then(res => {
+          //need code to differentiate whether user created account is successful or not
+          console.log(res);
+          this.setState({loggedIn: true})
+        })
       }
       else
       {
@@ -83,7 +97,12 @@ class App extends Component {
   render() {
     if(this.state.loggedIn)
     {
-
+      return (
+        //code for adminPanel here
+        <div className="App">
+          <p>You are now logged in</p>
+        </div>
+      )
     }
     else
     {

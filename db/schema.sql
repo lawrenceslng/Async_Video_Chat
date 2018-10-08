@@ -25,12 +25,12 @@ CREATE TABLE contacts(
 	FOREIGN KEY (friend_id) REFERENCES users(id)
 )
 
-CREATE TABLE conversations(
-	id INT NOT NULL AUTO_INCREMENT,
-	user_id INT NOT NULL,
-	title VARCHAR(255) NOT NULL,
-	content TEXT NOT NULL,
-	fs_path TEXT NOT NULL,
-	PRIMARY KEY (id),
-	FOREIGN KEY (user_id) REFERENCES users(id)
-)
+-- CREATE TABLE conversations(
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	user_id INT NOT NULL,
+-- 	title VARCHAR(255) NOT NULL,
+-- 	content TEXT NOT NULL,
+-- 	fs_path TEXT NOT NULL,
+-- 	PRIMARY KEY (id),
+-- 	FOREIGN KEY (user_id) REFERENCES users(id)
+-- )
