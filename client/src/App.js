@@ -17,7 +17,30 @@ class App extends Component {
 
   buttonClick = (e) => {
     e.preventDefault();
-    alert("submit");
+    // alert("submit");
+    console.log(e.target.children[0].className);
+    if(e.target.children[0].className.includes("login-form"))
+    {
+      let username = document.getElementById("username").value;
+      let password = document.getElementById("pw").value;
+      // alert("Login Form Submitted");
+      return fetch("http://localhost:3001/login", {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({username, password})
+      // }).then(res => res.json()).then(rj => {
+      //   let pets = [...this.state.pets, rj];
+      //   this.setState({loggedIn: true})
+      })
+    }
+    else
+    {
+      alert("this is a sign up form");
+    }
+    
 
   }
   changeForm = (e) => {
@@ -42,18 +65,26 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <div className="App">
-        <Header />
-        <Carousel />
-        <div className="loginBox">
-          <button id="sign-up-button" onClick={this.changeForm} className="btn btn-primary">Sign-Up</button>
-          <button id="login-button" onClick={this.changeForm} className="btn btn-primary">Login</button>
-          <LoginForm buttonClick={this.buttonClick} loginForm={this.state.accountCreated} />
+    if(this.state.loggedIn)
+    {
+
+    }
+    else
+    {
+      return (
+        <div className="App">
+          <Header />
+          <Carousel />
+          <div className="loginBox">
+            <button id="sign-up-button" onClick={this.changeForm} className="btn btn-primary">Sign-Up</button>
+            <button id="login-button" onClick={this.changeForm} className="btn btn-primary">Login</button>
+            <LoginForm buttonClick={this.buttonClick} loginForm={this.state.accountCreated} />
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    );
+      );
+    }
+    
   }
 }
 

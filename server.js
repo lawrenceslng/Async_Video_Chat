@@ -59,6 +59,36 @@ app.get('/', function(req, res){
 	res.send('hi');
 });
 
+app.post('/login', function(req,res){
+  let username = req.body.username;
+  let password = req.body.password;
+  console.log(username + " " + password);
+  connection.query('SELECT * FROM users WHERE username = ?', [username],function (error, results, fields) {
+    if (error) throw error;
+  
+    //  res.json(results);
+    if (results.length == 0){
+      // res.redirect('/login');
+      
+    }
+    else {
+      bcrypt.compare(password, results[0].password, function(err, result) {
+      if (result == true){
+        // req.session.user_id = results[0].id;
+        // req.session.email = results[0].email;
+        // req.session.username = results[0].username;
+        // req.session.firstName = results[0].first_name;
+        // req.session.lastName = results[0].last_name;
+        // // res.redirect('decks');
+        // res.render('pages/decks', {data: [req.session]});
+      }
+      else{
+        res.redirect('/login');
+      }
+      });
+    }
+  });
+})
 
 
 app.listen(PORT, function() {
