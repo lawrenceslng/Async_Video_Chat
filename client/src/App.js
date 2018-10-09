@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import Header from './components/header';
 import Footer from './components/footer';
 import Carousel from './components/carousel';
-
 import LoginForm from './components/loginForm';
 import PWMatch from './components/accountCreate';
-
-import AdminPanel from './components/AdminPanel';
+import AdminPanel from './components/adminPanel';
 
 import './App.css';
 
@@ -105,7 +103,7 @@ class App extends Component {
       return (
         //code for adminPanel here
         <div className="App">
-          <p>You are now logged in</p>
+          <AdminPanel />
         </div>
       )
     }
