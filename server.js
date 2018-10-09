@@ -59,6 +59,71 @@ app.get('/', function(req, res){
 	res.send('hi');
 });
 
+app.post('/login', function(req,res){
+  let username = req.body.username;
+  let password = req.body.password;
+  console.log(username + " " + password);
+  connection.query('SELECT * FROM users WHERE username = ?', [username],function (error, results, fields) {
+    if (error) throw error;
+  
+    //  res.json(results);
+    if (results.length == 0){
+      // res.redirect('/login');
+      
+    }
+    else {
+      bcrypt.compare(password, results[0].password, function(err, result) {
+      if (result == true){
+        // req.session.user_id = results[0].id;
+        // req.session.email = results[0].email;
+        // req.session.username = results[0].username;
+        // req.session.firstName = results[0].first_name;
+        // req.session.lastName = results[0].last_name;
+        // // res.redirect('decks');
+        // res.render('pages/decks', {data: [req.session]});
+      }
+      else{
+        res.redirect('/login');
+      }
+      });
+    }
+  });
+});
+
+app.post("/signup", function(req,res){
+    console.log(req.body);
+    var username = req.body.username;
+    var password = req.body.password;
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var email = req.body.email;
+    var query = connection.query("SELECT * FROM users WHERE username = ? OR email = ?", [username, email],function (error, results, fields) {
+      if(error) throw error;
+      if(results.length == 0)
+      {
+        console.log("no duplicate username or email" + password.length);  
+        bcrypt.genSalt(10, function(err, salt) {
+          // res.send(salt);
+          bcrypt.hash(password, salt, function(err, p_hash) { 
+            connection.query('INSERT INTO users (username, password, first_name, last_name, email) VALUES (?,?,?,?,?)', [username, p_hash, firstName, lastName, email],function (error, results, fields) {
+              if (error) throw error;
+              console.log(results);
+              connection.query('SELECT id FROM users WHERE username = ?', [username],function (error, results, fields) {
+                if(error) throw error;
+                console.log(results[0].id);
+                res.send('hi');
+              });
+             
+            })
+          })
+        })
+      }
+      else{
+        console.log("username/email taken");
+        
+      }
+    });
+  });
 
 
 app.listen(PORT, function() {
