@@ -34,10 +34,17 @@ class App extends Component {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({username, password})
-      }).then(res => {
-        //need code to differentiate between whether login is successful or not
-        console.log(res);
-        this.setState({loggedIn: true})
+      }).then(res => res.json()).then(rj => {
+        console.log(rj);
+        // debugger
+        if(rj.success)
+        {
+          this.setState({loggedIn: true});
+        }
+        else{
+          alert("wrong password, try again");
+          // this.setState({loggedIn: false});
+        }
       })
     }
     else
@@ -60,10 +67,16 @@ class App extends Component {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({username, firstName, lastName, email, password})
-        }).then(res => {
-          //need code to differentiate whether user created account is successful or not
-          console.log(res);
-          this.setState({loggedIn: true})
+        }).then(res => res.json()).then(rj => {
+          console.log(rj);
+          // debugger;
+          if(rj.success)
+          {
+            this.setState({loggedIn: true});
+          }
+          else{
+            this.setState({loggedIn: false});
+          }
         })
       }
       else

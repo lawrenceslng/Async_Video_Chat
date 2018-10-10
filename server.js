@@ -7,8 +7,9 @@ var bodyParser = require('body-parser');
 var router = express.Router();
 var methodOverride = require('method-override');
 var bcrypt = require('bcryptjs');
-// var cookieParser = require('cookie-parser');
+var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var morgan = require('morgan');
 var path = require("path");
 
 var PORT = 3001;
@@ -17,7 +18,7 @@ var app = express();
 // set the app up with bodyparser
 app.use(methodOverride('_method'));
 app.use(session({ secret: 'app', cookie: { maxAge: 1*1000*60*60*24*365 }}));
-// app.use(cookieParser());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -38,6 +39,9 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
     next();
 });
+
+// use morgan to log requests to the console
+app.use(morgan('dev'));
 
 // Initializes the connection variable to sync with a MySQL database
 var connection = mysql.createConnection({
@@ -67,23 +71,29 @@ app.post('/login', function(req,res){
     if (error) throw error;
   
     //  res.json(results);
+    console.log(results);
     if (results.length == 0){
       // res.redirect('/login');
-      
+      console.log("no such user");
+      res.json({success: false});
     }
     else {
       bcrypt.compare(password, results[0].password, function(err, result) {
       if (result == true){
-        // req.session.user_id = results[0].id;
-        // req.session.email = results[0].email;
-        // req.session.username = results[0].username;
-        // req.session.firstName = results[0].first_name;
-        // req.session.lastName = results[0].last_name;
+        req.session.user_id = results[0].id;
+        req.session.email = results[0].email;
+        req.session.username = results[0].username;
+        req.session.firstName = results[0].first_name;
+        req.session.lastName = results[0].last_name;
+        console.log(req.session.user_id + req.session.email + req.session.username + req.session.firstName + req.session.lastName);
+        console.log("got session and sending it back");
+        res.json({success: true});
         // // res.redirect('decks');
         // res.render('pages/decks', {data: [req.session]});
       }
       else{
-        res.redirect('/login');
+        console.log("did not get session");
+        res.json({success: false});;
       }
       });
     }
@@ -111,7 +121,7 @@ app.post("/signup", function(req,res){
               connection.query('SELECT id FROM users WHERE username = ?', [username],function (error, results, fields) {
                 if(error) throw error;
                 console.log(results[0].id);
-                res.send('hi');
+                res.json({success:true});
               });
              
             })
