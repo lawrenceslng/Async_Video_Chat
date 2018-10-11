@@ -4,7 +4,7 @@ import Footer from './components/footer';
 import Carousel from './components/carousel';
 import LoginForm from './components/loginForm';
 import PWMatch from './components/accountCreate';
-import AdminPanel from './components/AdminPanel';
+import AdminPanel from './components/adminPanel';
 
 import './App.css';
 
@@ -13,7 +13,7 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      loggedIn: false,
+      loggedIn: true,
       accountCreated: false
     }
   }
@@ -96,12 +96,12 @@ class App extends Component {
     }
   }
 
-  render() {
+  render(){
 
-    if(this.state.loggedIn)
+  if(this.state.loggedIn)
     {
       return (
-        //code for adminPanel here
+        // code for AdminPanel here
         <div className="App">
           <AdminPanel />
         </div>
@@ -114,7 +114,11 @@ class App extends Component {
           <Header />
           <Carousel />
           <div className="loginBox">
-            <button id="sign-up-button" onClick={this.changeForm} className="btn btn-primary">Sign-Up</button>
+            <button id="sign-up-button"
+              onClick={this.changeForm}
+              className="btn btn-primary">
+              Sign-Up
+            </button>
             <button id="login-button" onClick={this.changeForm} className="btn btn-primary">Login</button>
             <LoginForm buttonClick={this.buttonClick} loginForm={this.state.accountCreated} />
           </div>
@@ -122,8 +126,6 @@ class App extends Component {
         </div>
       );
     }
-
-
   }
 }
 
