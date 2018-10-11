@@ -82,9 +82,9 @@ app.post('/login', function(req,res){
     else {
       bcrypt.compare(password, results[0].password, function(err, result) {
       if (result == true){
-        const payload = {
-          user: username 
-        };
+        // const payload = {
+        //   user: username 
+        // };
           // var token = jwt.sign(payload, app.get('superSecret'), {
               // expiresInMinutes: 1440 // expires in 24 hours }
           // );
@@ -140,7 +140,6 @@ app.post("/signup", function(req,res){
                 console.log(results[0].id);
                 res.json({success:true});
               });
-             
             })
           })
         })

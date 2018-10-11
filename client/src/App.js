@@ -16,7 +16,7 @@ class App extends Component {
       loggedIn: false,
       accountCreated: false,
       token: ""
-    }
+    };
   }
 
   buttonClick = (e) => {
