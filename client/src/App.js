@@ -108,6 +108,42 @@ class App extends Component {
       // e.target.addClass("active");
     }
   }
+  logOut = (e) => {
+    e.preventDefault();
+    console.log(e.target.className);
+    return fetch("http://localhost:3001/logout", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      // body: JSON.stringify({username, firstName, lastName, email, password})
+    }).then(res => res.json()).then(rj => {
+      console.log(rj);
+      // debugger;
+      if(rj.success)
+      {
+        this.setState({loggedIn: false});
+      }
+      else{
+        this.setState({loggedIn: true});
+      }
+    })
+  }
+
+  //route to get all users when users search for friends to connect
+  componentDidMount() {
+    return fetch("http://localhost:3001/usersapi", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+      // body: JSON.stringify({username, firstName, lastName, email, password})
+    })
+    .then(res => res.json())
+    .then(rj => console.log(rj));
+  }
 
   render() {
 

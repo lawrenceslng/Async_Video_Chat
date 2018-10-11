@@ -135,6 +135,19 @@ app.post("/signup", function(req,res){
     });
   });
 
+app.get('/logout', function(req, res){
+  req.session.destroy(function(err){
+    res.json({success: true});
+  })
+});
+
+app.get('/usersapi', function (req, res){
+  connection.query('SELECT username, first_name, last_name FROM users',function (error, results, fields) {
+    if (error) throw error;
+    console.log(results);
+  res.json(results);
+  })
+});
 
 app.listen(PORT, function() {
   console.log('🌎 ==> Now listening on PORT %s! Visit http://localhost:%s in your browser!', PORT, PORT);
