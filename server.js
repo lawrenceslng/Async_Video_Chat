@@ -11,6 +11,8 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var morgan = require('morgan');
 var path = require("path");
+var jwt = require('jsonwebtoken');
+var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
 
 var PORT = 3001;
 var app = express();
@@ -35,7 +37,7 @@ app.use(express.static("public"));
   //allow the api to be accessed by other apps
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
     next();
 });
@@ -80,14 +82,29 @@ app.post('/login', function(req,res){
     else {
       bcrypt.compare(password, results[0].password, function(err, result) {
       if (result == true){
-        req.session.user_id = results[0].id;
-        req.session.email = results[0].email;
-        req.session.username = results[0].username;
-        req.session.firstName = results[0].first_name;
-        req.session.lastName = results[0].last_name;
-        console.log(req.session.user_id + req.session.email + req.session.username + req.session.firstName + req.session.lastName);
-        console.log("got session and sending it back");
-        res.json({success: true});
+        const payload = {
+          user: username 
+        };
+          // var token = jwt.sign(payload, app.get('superSecret'), {
+              // expiresInMinutes: 1440 // expires in 24 hours }
+          // );
+          req.session.user_id = results[0].id;
+          req.session.email = results[0].email;
+          req.session.username = results[0].username;
+          req.session.firstName = results[0].first_name;
+          req.session.lastName = results[0].last_name;
+            // return the information including token as JSON
+          res.json({
+              success: true,
+              message: 'Enjoy your token!',
+              token: token
+          });
+             
+    
+        
+        // console.log(req.session.user_id + req.session.email + req.session.username + req.session.firstName + req.session.lastName);
+        // console.log("got session and sending it back");
+        // res.json({success: true});
         // // res.redirect('decks');
         // res.render('pages/decks', {data: [req.session]});
       }
@@ -142,11 +159,26 @@ app.get('/logout', function(req, res){
 });
 
 app.get('/usersapi', function (req, res){
-  connection.query('SELECT username, first_name, last_name FROM users',function (error, results, fields) {
+   // check header or url parameters or post parameters for token
+   var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.authorization;
+   console.log(req.headers.authorization);
+  console.log(token);
+   // decode token
+   if (token) {
+ 
+     // verifies secret and checks exp
+     jwt.verify(token, 'shhhhh', function(err, decoded) {      
+
+    connection.query('SELECT username, first_name, last_name FROM users',function (error, results, fields) {
     if (error) throw error;
     console.log(results);
   res.json(results);
   })
+})
+}
+  else{
+    console.log("unsuccessful because no token");
+  }
 });
 
 app.listen(PORT, function() {

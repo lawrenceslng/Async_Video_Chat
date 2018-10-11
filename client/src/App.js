@@ -14,7 +14,8 @@ class App extends Component {
     super();
     this.state = {
       loggedIn: false,
-      accountCreated: false
+      accountCreated: false,
+      token: ""
     }
   }
 
@@ -39,7 +40,7 @@ class App extends Component {
         // debugger
         if(rj.success)
         {
-          this.setState({loggedIn: true});
+          this.setState({loggedIn: true, token: rj.token});
         }
         else{
           alert("wrong password, try again");
@@ -132,14 +133,16 @@ class App extends Component {
   }
 
   //route to get all users when users search for friends to connect
-  componentDidMount() {
+  getUsers = (e) => {
+    e.preventDefault();
+    console.log(this.state.token);
     return fetch("http://localhost:3001/usersapi", {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': this.state.token
       }
-      // body: JSON.stringify({username, firstName, lastName, email, password})
     })
     .then(res => res.json())
     .then(rj => console.log(rj));
@@ -152,6 +155,7 @@ class App extends Component {
       return (
         //code for adminPanel here
         <div className="App">
+          <button onClick={this.getUsers} className="btn btn-primary">Get Users</button>
           <AdminPanel />
         </div>
       )
@@ -160,6 +164,7 @@ class App extends Component {
     {
       return (
         <div className="App">
+        <button onClick={this.getUsers} className="btn btn-primary">Get Users</button>
           <Header />
           <Carousel />
           <div className="loginBox">
