@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import $ from 'jquery';
 
 // onclick= (this.expand)
 //outside of render:
@@ -17,7 +16,6 @@ class AdminPanel extends Component {
   expand = (event) => {
     event.preventDefault();
 
-    // $('.title').hide();
 
     var elements = document.querySelectorAll('.title');
     debugger;
