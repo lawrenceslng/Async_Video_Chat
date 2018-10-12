@@ -14,8 +14,9 @@ class App extends Component {
     super();
     this.state = {
       loggedIn: false,
-      accountCreated: false
-    }
+      accountCreated: false,
+      token: ""
+    };
   }
 
   buttonClick = (e) => {
@@ -34,10 +35,17 @@ class App extends Component {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({username, password})
-      }).then(res => {
-        //need code to differentiate between whether login is successful or not
-        console.log(res);
-        this.setState({loggedIn: true})
+      }).then(res => res.json()).then(rj => {
+        console.log(rj);
+        // debugger
+        if(rj.success)
+        {
+          this.setState({loggedIn: true, token: rj.token});
+        }
+        else{
+          alert("wrong password, try again");
+          // this.setState({loggedIn: false});
+        }
       })
     }
     else
@@ -60,10 +68,16 @@ class App extends Component {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({username, firstName, lastName, email, password})
-        }).then(res => {
-          //need code to differentiate whether user created account is successful or not
-          console.log(res);
-          this.setState({loggedIn: true})
+        }).then(res => res.json()).then(rj => {
+          console.log(rj);
+          // debugger;
+          if(rj.success)
+          {
+            this.setState({loggedIn: true});
+          }
+          else{
+            this.setState({loggedIn: false});
+          }
         })
       }
       else
@@ -95,6 +109,44 @@ class App extends Component {
       // e.target.addClass("active");
     }
   }
+  logOut = (e) => {
+    e.preventDefault();
+    console.log(e.target.className);
+    return fetch("http://localhost:3001/logout", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      // body: JSON.stringify({username, firstName, lastName, email, password})
+    }).then(res => res.json()).then(rj => {
+      console.log(rj);
+      // debugger;
+      if(rj.success)
+      {
+        this.setState({loggedIn: false});
+      }
+      else{
+        this.setState({loggedIn: true});
+      }
+    })
+  }
+
+  //route to get all users when users search for friends to connect
+  getUsers = (e) => {
+    e.preventDefault();
+    console.log(this.state.token);
+    return fetch("http://localhost:3001/usersapi", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': this.state.token
+      }
+    })
+    .then(res => res.json())
+    .then(rj => console.log(rj));
+  }
 
   render() {
 
@@ -103,6 +155,7 @@ class App extends Component {
       return (
         //code for adminPanel here
         <div className="App">
+          <button onClick={this.getUsers} className="btn btn-primary">Get Users</button>
           <AdminPanel />
         </div>
       )
@@ -111,6 +164,7 @@ class App extends Component {
     {
       return (
         <div className="App">
+        <button onClick={this.getUsers} className="btn btn-primary">Get Users</button>
           <Header />
           <Carousel />
           <div className="loginBox">
