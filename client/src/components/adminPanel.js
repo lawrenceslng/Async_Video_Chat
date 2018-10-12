@@ -92,9 +92,48 @@ function Card({ click, show, id, text, src }) {
 }
 
 
+//OTHER IDEAS
+
+// constructor(){
+//     super();
+//
+//      this.expand = this.expand.bind(this);
+//      this.state = {
+//        hide: !this.state.hide
+//      };
+//   }
+//
+//
+//   expand = (event) => {
+//     event.preventDefault();
+//
+//     this.setState({
+//        hide: true
+//     });
+//
+//     alert('hi');
+//
+//   }
+//
+//
+//   { this.state.hide ?
+//
+//      <div className="col-sm-6 ">
+//                 <a href="#"/>
+//
+//                 <div class="box-part text-center">
+//                     <div class="title" onClick={this.expand}>
+//                         <img class="card-img-top" src="https://visualpharm.com/assets/168/Read%20Message-595b40b75ba036ed117d88f5.svg" alt=" image"/>
+//                     </div>
+//                     <div className="text">
+//             <span><h2>Incoming Requests</h2></span>
+//                     </div>
+//                  </div>
+//             </div>
 
 
-//previous code
+
+//******** ORIGINAL CODE
 
 
 // // import $ from 'jquery';
