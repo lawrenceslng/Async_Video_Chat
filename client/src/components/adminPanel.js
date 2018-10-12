@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Nav from './nav';
 
 class AdminPanel extends Component {
   state = {
@@ -61,7 +62,8 @@ class AdminPanel extends Component {
     }
     return (
       <div class="container">
-        {showNav ? <nav>Your Nav(Placeholder for nav!</nav> : null}
+        {showNav ? <nav> Nav (Placeholder for nav!)</nav> : null}
+
         <div class="row">{currentCards}</div>
       </div>
     );
