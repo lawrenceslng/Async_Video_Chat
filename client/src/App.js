@@ -13,10 +13,11 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      loggedIn: false,
-      accountCreated: false,
+      loggedIn: true,
+      accountCreated: false
       token: ""
     };
+
   }
 
   buttonClick = (e) => {
@@ -148,12 +149,12 @@ class App extends Component {
     .then(rj => console.log(rj));
   }
 
-  render() {
+  render(){
 
-    if(this.state.loggedIn)
+  if(this.state.loggedIn)
     {
       return (
-        //code for adminPanel here
+        // code for AdminPanel here
         <div className="App">
           <button onClick={this.getUsers} className="btn btn-primary">Get Users</button>
           <AdminPanel />
@@ -168,7 +169,11 @@ class App extends Component {
           <Header />
           <Carousel />
           <div className="loginBox">
-            <button id="sign-up-button" onClick={this.changeForm} className="btn btn-primary">Sign-Up</button>
+            <button id="sign-up-button"
+              onClick={this.changeForm}
+              className="btn btn-primary">
+              Sign-Up
+            </button>
             <button id="login-button" onClick={this.changeForm} className="btn btn-primary">Login</button>
             <LoginForm buttonClick={this.buttonClick} loginForm={this.state.accountCreated} />
           </div>
@@ -176,8 +181,6 @@ class App extends Component {
         </div>
       );
     }
-    
-
   }
 }
 
