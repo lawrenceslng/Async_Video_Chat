@@ -16,7 +16,6 @@ class AdminPanel extends Component {
   expand = (event) => {
     event.preventDefault();
 
-
     var elements = document.querySelectorAll('.title');
     debugger;
     for (var i=0; i<elements.length; i++){
@@ -94,22 +93,6 @@ class AdminPanel extends Component {
   }
 }
 
-// const AdminPanel = () => (
-//
-// )
-
-// function ActionLink() {
-//   function handleClick(e) {
-//     e.preventDefault();
-//     console.log('The link was clicked.');
-//   }
-//
-//   return (
-//     <a href="#" onClick={handleClick}>
-//       prompt('hello');
-//     </a>
-//   );
-// }
 
 
 export default AdminPanel;
