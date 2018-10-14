@@ -13,7 +13,10 @@ var morgan = require('morgan');
 var path = require("path");
 var jwt = require('jsonwebtoken');
 var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
-
+// var server = require('http'),
+var url = require('url');
+    // path = require('path'),
+    // fs = require('fs');
 var PORT = 3001;
 var app = express();
 
@@ -179,6 +182,159 @@ app.get('/usersapi', function (req, res){
     console.log("unsuccessful because no token");
   }
 });
+
+app.get('/uploads/:id', function (req, res){
+    var fileName = req.params.id;
+    var filePath = path.join(__dirname+'/uploads/', fileName);
+    console.log("line 188" + filePath);
+    // res.writeHead(200);
+    const stat = fs.statSync(filePath)
+    const fileSize = stat.size
+    const range = req.headers.range
+    if (range) {
+      const parts = range.replace(/bytes=/, "").split("-")
+      const start = parseInt(parts[0], 10)
+      const end = parts[1] 
+        ? parseInt(parts[1], 10)
+        : fileSize-1
+      const chunksize = (end-start)+1
+      const file = fs.createReadStream(filePath, {start, end})
+      const head = {
+        'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+        'Accept-Ranges': 'bytes',
+        'Content-Length': chunksize,
+        'Content-Type': 'video/mp4',
+      }
+      res.writeHead(206, head);
+      file.pipe(res);
+    } else {
+      const head = {
+        'Content-Length': fileSize,
+        'Content-Type': 'video/mp4',
+      }
+      res.writeHead(200, head)
+      fs.createReadStream(filePath).pipe(res)
+    }
+  });
+
+app.post("/uploadFile", function(request,response) {
+  var uri = url.parse(request.url).pathname,
+      filename = path.join(process.cwd(), uri);
+  console.log(filename);
+  var isWin = !!process.platform.match(/^win/);
+
+  if (filename && filename.toString().indexOf(isWin ? '\\uploadFile' : '/uploadFile') != -1 && request.method.toLowerCase() == 'post') {
+      uploadFile(request, response);
+      return;
+  }
+
+  fs.exists(filename, function(exists) {
+      if (!exists) {
+          response.writeHead(404, {
+              'Content-Type': 'text/plain'
+          });
+          response.write('404 Not Found: ' + filename + '\n');
+          response.end();
+          return;
+      }
+
+      if (filename.indexOf('favicon.ico') !== -1) {
+          return;
+      }
+
+      if (fs.statSync(filename).isDirectory() && !isWin) {
+          filename += '/index.html';
+      } else if (fs.statSync(filename).isDirectory() && !!isWin) {
+          filename += '\\index.html';
+      }
+      console.log('line 226 = ' + filename);
+      fs.readFile(filename, 'binary', function(err, file) {
+          if (err) {
+              response.writeHead(500, {
+                  'Content-Type': 'text/plain'
+              });
+              console.log(err);
+              response.write(err + '\n');
+              response.end();
+              return;
+          }
+
+          var contentType;
+
+          if (filename.indexOf('.html') !== -1) {
+              contentType = 'text/html';
+          }
+
+          if (filename.indexOf('.js') !== -1) {
+              contentType = 'application/javascript';
+          }
+
+          if (contentType) {
+              response.writeHead(200, {
+                  'Content-Type': contentType
+              });
+          } else response.writeHead(200);
+
+          response.write(file, 'binary');
+          response.end();
+      });
+  });
+});
+
+function uploadFile(request, response) {
+  console.log("start of uploadFile");
+  console.log("request = " + request);
+  console.log("response = " + response);
+  // parse a file upload
+  var mime = require('mime');
+  var formidable = require('formidable');
+  var util = require('util');
+
+  var form = new formidable.IncomingForm();
+
+  var dir = !!process.platform.match(/^win/) ? '\\uploads\\' : '/uploads/';
+
+  form.uploadDir = __dirname + dir;
+  form.keepExtensions = true;
+  form.maxFieldsSize = 10 * 1024 * 1024;
+  form.maxFields = 1000;
+  form.multiples = false;
+
+  form.parse(request, function(err, fields, files) {
+      if(err) throw err;
+      var file = util.inspect(files);
+
+      response.writeHead(200, getHeaders('Content-Type', 'application/json'));
+
+      var fileName = file.split('path:')[1].split('\',')[0].split(dir)[1].toString().replace(/\\/g, '').replace(/\//g, '');
+      var fileURL = 'http://localhost:' + PORT + '/uploads/' + fileName;
+      console.log(fileName);
+      console.log('fileURL: ', fileURL);
+      response.write(JSON.stringify({
+          fileURL: fileURL
+      }));
+      response.end();
+  });
+}
+
+function getHeaders(opt, val) {
+  try {
+      var headers = {};
+      headers["Access-Control-Allow-Origin"] = "*";
+      headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
+      headers["Access-Control-Allow-Credentials"] = true;
+      headers["Access-Control-Max-Age"] = '86400'; // 24 hours
+      headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
+
+      if (opt) {
+          headers[opt] = val;
+      }
+
+      return headers;
+  } catch (e) {
+      return {};
+  }
+}
 
 app.listen(PORT, function() {
   console.log('🌎 ==> Now listening on PORT %s! Visit http://localhost:%s in your browser!', PORT, PORT);
