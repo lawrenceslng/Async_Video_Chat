@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import RecordRTC from 'recordrtc';
 import {_xhr} from './video'
 import axios from "axios";
+import ReactPlayer from 'react-player';
 
 export default class Record extends React.Component {
   constructor(props) {
@@ -83,6 +84,7 @@ export default class Record extends React.Component {
             var file = new File([recorderBlob], fileName, {
                 type: 'video/webm'
             });
+            console.log('line 86 file name before request: ' + fileName);
             _xhr('http://localhost:3001/uploadFile', file, function(responseText) {
                 var fileURL = JSON.parse(responseText).fileURL;
 
@@ -98,31 +100,56 @@ export default class Record extends React.Component {
                     src: fileURL
                 });
                 // document.querySelector('video').src = fileURL;
-                document.querySelector('video').play();
-                document.querySelector('video').muted = false;
-                document.querySelector('video').controls = true;
-
+                document.querySelector('video').classList.add('autoplay');
+                // document.querySelector('video').classList;
+                // document.querySelector('video').controls = true;
+                // console.log(document.querySelector('video'));
+                // console.log(classThis.state.stream);
                 // document.querySelector('#footer-h2').innerHTML = '<a href="' + videoElement.src + '">' + videoElement.src + '</a>';
             });
-            console.log(document.querySelector('video'));
-            console.log(classThis.state.stream);
+            // console.log(document.querySelector('video'));
+            // console.log(classThis.state.stream);
         })
         
     };
     btnGetVideo = () => {
+        console.log("get Video button clicked");
         var id = this.state.src;
-        return fetch(id).then(this.setState({isRecording: false}));
+        let classThis = this;
+        return fetch(id).then(function(response){
+            console.log('after fetch line 118');
+            console.log(response);
+            classThis.setState({
+                src: response.url,
+                isRecording: false});
+            document.querySelector('video').play();
+            document.querySelector('video').muted = false;
+            document.querySelector('video').controls = true;
+        });
     }
     render(){
+        let vid;
+        if(this.state.src)
+        {
+            vid = 
+            <p>
+                <ReactPlayer url={this.state.src} playing controls/>
+            </p>
+        }
+        else{
+            vid = 
+            <p>
+                {/* <ReactPlayer url={this.state.src} playing controls/> */}
+                <video width="500" height="281">
+                <source src={this.state.src} type='video/webm' />
+                </video>
+            </p>
+        }
         return (    
             <div>
             <div>
             <h1>RecordRTC to Node.js</h1>
-            <p>
-                <video width="500" height="281" controls>
-                <source src={this.state.src} type='video/webm'/>
-                </video>
-            </p><hr />
+            {vid}<hr />
 
             <hr />
 

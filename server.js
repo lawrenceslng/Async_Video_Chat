@@ -186,11 +186,12 @@ app.get('/usersapi', function (req, res){
 app.get('/uploads/:id', function (req, res){
     var fileName = req.params.id;
     var filePath = path.join(__dirname+'/uploads/', fileName);
-    console.log("line 188" + filePath);
+    console.log("line 189" + filePath);
     // res.writeHead(200);
     const stat = fs.statSync(filePath)
     const fileSize = stat.size
     const range = req.headers.range
+    console.log(stat + ' ' + fileSize + ' ' + range);
     if (range) {
       const parts = range.replace(/bytes=/, "").split("-")
       const start = parseInt(parts[0], 10)
@@ -203,28 +204,44 @@ app.get('/uploads/:id', function (req, res){
         'Content-Range': `bytes ${start}-${end}/${fileSize}`,
         'Accept-Ranges': 'bytes',
         'Content-Length': chunksize,
-        'Content-Type': 'video/mp4',
+        'Content-Type': 'video/webm',
       }
       res.writeHead(206, head);
+      console.log('range true');
       file.pipe(res);
     } else {
       const head = {
         'Content-Length': fileSize,
-        'Content-Type': 'video/mp4',
+        'Content-Type': 'video/webm',
       }
+      console.log('range not true');
       res.writeHead(200, head)
-      fs.createReadStream(filePath).pipe(res)
+        // This line opens the file as a readable stream
+      var readStream = fs.createReadStream(filePath);
+
+        // This will wait until we know the readable stream is actually valid before piping
+      readStream.on('open', function () {
+      // This just pipes the read stream to the response object (which goes to the client)
+      readStream.pipe(res);
+      console.log('piping');
+      });
+
+       // This catches any errors that happen while creating the readable stream (usually invalid names)
+      readStream.on('error', function(err) {
+        res.end(err);
+      });
     }
   });
 
 app.post("/uploadFile", function(request,response) {
   var uri = url.parse(request.url).pathname,
       filename = path.join(process.cwd(), uri);
-  console.log(filename);
+  console.log('line 223 file name = ' + filename);
   var isWin = !!process.platform.match(/^win/);
 
   if (filename && filename.toString().indexOf(isWin ? '\\uploadFile' : '/uploadFile') != -1 && request.method.toLowerCase() == 'post') {
       uploadFile(request, response);
+      console.log('after uploadFile function 228');
       return;
   }
 
