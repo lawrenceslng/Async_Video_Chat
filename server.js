@@ -334,6 +334,7 @@ function uploadFile(request, response) {
       var user_two_id = '2';
       var title = 'test title';
       var content = 'no content for now';
+      console.log('line 337 filename: ' + fileName + ' ...... fileURL: ' + fileURL);
       createConversation(user_one_id, user_two_id, title, content, fileName)
       response.write(JSON.stringify({
           fileURL: fileURL
@@ -362,10 +363,10 @@ function getHeaders(opt, val) {
 }
 
 function createConversation(user_one_id, user_two_id, title, content, filePath){
-  // connection.query("INSERT INTO conversations (user_one_id, user_two_id, title, content, fs-path) VALUES (?, ?, ?, ?, ?)", [user_one_id, user_two_id, title, content, filePath],function (error, results, fields) {
-  //   if(error) throw error;
-  //   console.log(results);
-  // });
+  connection.query("INSERT INTO conversations (user_one_id, user_two_id, title, content, fs_path) VALUES (?, ?, ?, ?, ?)", [user_one_id, user_two_id, title, content, filePath],function (error, results, fields) {
+    if(error) throw error;
+    console.log(results);
+  });
 }
 app.listen(PORT, function() {
   console.log('🌎 ==> Now listening on PORT %s! Visit http://localhost:%s in your browser!', PORT, PORT);
