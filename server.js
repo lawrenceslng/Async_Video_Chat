@@ -12,7 +12,7 @@ var session = require('express-session');
 var morgan = require('morgan');
 var path = require("path");
 var jwt = require('jsonwebtoken');
-var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
+
 // var server = require('http'),
 var url = require('url');
     // path = require('path'),
@@ -96,8 +96,9 @@ app.post('/login', function(req,res){
           req.session.username = results[0].username;
           req.session.firstName = results[0].first_name;
           req.session.lastName = results[0].last_name;
+          var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
             // return the information including token as JSON
-          res.json({
+          res.status(200).json({
               success: true,
               message: 'Enjoy your token!',
               token: token
@@ -113,7 +114,7 @@ app.post('/login', function(req,res){
       }
       else{
         console.log("did not get session");
-        res.json({success: false});;
+        res.status(403).json({success: false});;
       }
       });
     }
@@ -154,6 +155,33 @@ app.post("/signup", function(req,res){
     });
   });
 
+// ALL AUTHENTICATED ROUTE GOES BELOW THIS
+app.use((req, res, next)=>{
+    // check header or url parameters or post parameters for token
+    console.log(req.body);
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    if(token){
+      console.log("token");
+      jwt.verify(token,"samplesecret",(err,decod)=>{
+        if(err){
+          res.status(403).json({
+            message:"Wrong Token"
+          });
+        }
+        else{
+          console.log("success");
+          req.decoded=decod;
+          next();
+        }
+      });
+    }
+    else{
+      res.status(403).json({
+        message:"No Token"
+      });
+    }
+});
+
 app.get('/logout', function(req, res){
   req.session.destroy(function(err){
     res.json({success: true});
@@ -162,25 +190,25 @@ app.get('/logout', function(req, res){
 
 app.get('/usersapi', function (req, res){
    // check header or url parameters or post parameters for token
-   var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.authorization;
-   console.log(req.headers.authorization);
-  console.log(token);
+  //  var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.authorization;
+  //  console.log(req.headers.authorization);
+  // console.log(token);
    // decode token
-   if (token) {
+  //  if (token) {
  
-     // verifies secret and checks exp
-     jwt.verify(token, 'shhhhh', function(err, decoded) {      
+  //    // verifies secret and checks exp
+  //    jwt.verify(token, 'shhhhh', function(err, decoded) {      
 
     connection.query('SELECT username, first_name, last_name FROM users',function (error, results, fields) {
     if (error) throw error;
     console.log(results);
   res.json(results);
-  })
+  // })
 })
-}
-  else{
-    console.log("unsuccessful because no token");
-  }
+
+  // else{
+  //   console.log("unsuccessful because no token");
+  // }
 });
 
 app.get('/uploads/:id', function (req, res){
