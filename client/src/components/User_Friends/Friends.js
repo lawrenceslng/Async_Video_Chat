@@ -22,7 +22,9 @@ class Friends extends Component {
     })
   };
   getInfo = () => {
-      
+      return fetch(`http://localhost:3001/${this.state.searchStr}`,{method: 'GET'}).then(res => res.json()).then(rj => {
+          this.setState({results: rj});
+      })
   }
   render(){
     return(
