@@ -26,10 +26,17 @@ class Friends extends Component {
   };
   getInfo = () => {
       console.log(this.state.searchStr);
-      return fetch(`http://localhost:3001/friends/${this.state.searchStr}`,{method: 'GET'}).then((res) => res.json()).then(rj => {
-          console.log(rj);
-          this.setState({results: rj});
-      })
+      if(this.state.searchStr === '')
+      {
+          //nothing
+      }
+      else
+      {
+        return fetch(`http://localhost:3001/friends/${this.state.searchStr}`,{method: 'GET'}).then((res) => res.json()).then(rj => {
+            console.log(rj);
+            this.setState({results: rj});
+        })
+      }   
   }
   render(){
     return(

@@ -156,31 +156,31 @@ app.post("/signup", function(req,res){
   });
 
 // ALL AUTHENTICATED ROUTE GOES BELOW THIS
-app.use((req, res, next)=>{
-    // check header or url parameters or post parameters for token
-    console.log(req.body);
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
-    if(token){
-      console.log("token");
-      jwt.verify(token,"samplesecret",(err,decod)=>{
-        if(err){
-          res.status(403).json({
-            message:"Wrong Token"
-          });
-        }
-        else{
-          console.log("success");
-          req.decoded=decod;
-          next();
-        }
-      });
-    }
-    else{
-      res.status(403).json({
-        message:"No Token"
-      });
-    }
-});
+// app.use((req, res, next)=>{
+//     // check header or url parameters or post parameters for token
+//     console.log(req.body);
+//     var token = req.body.token || req.query.token || req.headers['x-access-token'];
+//     if(token){
+//       console.log("token");
+//       jwt.verify(token,"samplesecret",(err,decod)=>{
+//         if(err){
+//           res.status(403).json({
+//             message:"Wrong Token"
+//           });
+//         }
+//         else{
+//           console.log("success");
+//           req.decoded=decod;
+//           next();
+//         }
+//       });
+//     }
+//     else{
+//       res.status(403).json({
+//         message:"No Token"
+//       });
+//     }
+// });
 
 app.get('/logout', function(req, res){
   req.session.destroy(function(err){
@@ -266,7 +266,7 @@ app.get('/uploads/:id', function (req, res){
 app.get("/friends/:name", function(req,res){
   var search = req.params.name;
   console.log(search);
-  connection.query('SELECT * FROM users WHERE username LIKE %law%',function (error, results, fields) {
+  connection.query(`SELECT * FROM users WHERE username LIKE ?`,['%'+search+'%'],function (error, results, fields) {
     if (error) throw error;
     console.log(results);
     res.json(results);
