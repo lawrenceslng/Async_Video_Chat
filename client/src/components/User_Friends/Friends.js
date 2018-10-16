@@ -19,10 +19,15 @@ class Friends extends Component {
   handleInputChange = () => {
     this.setState({
       searchStr: this.search.value
-    })
+    },
+    () => this.getInfo())
+    console.log('24: ' + this.state.searchStr);
+    // this.getInfo();
   };
   getInfo = () => {
-      return fetch(`http://localhost:3001/${this.state.searchStr}`,{method: 'GET'}).then(res => res.json()).then(rj => {
+      console.log(this.state.searchStr);
+      return fetch(`http://localhost:3001/friends/${this.state.searchStr}`,{method: 'GET'}).then((res) => res.json()).then(rj => {
+          console.log(rj);
           this.setState({results: rj});
       })
   }
