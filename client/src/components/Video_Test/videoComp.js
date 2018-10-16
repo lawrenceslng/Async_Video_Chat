@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import RecordRTC from 'recordrtc';
 import {_xhr} from './video'
-import axios from "axios";
+// import axios from "axios";
 import ReactPlayer from 'react-player';
 
 export default class Record extends React.Component {
@@ -111,6 +111,7 @@ export default class Record extends React.Component {
                     stream: null,
                     videoRecorder: '',
                     isRecording: false,
+                    isDone: true,
                     src: fileURL,
                     btnStatus: 'btn-start-recording',
                     btnText: 'Start Recording'
@@ -190,6 +191,7 @@ export default class Record extends React.Component {
                 {/* <button id="btn-stop-recording" onClick={this.btnStopRecording}>Stop Recording</button>  */}
                 <button id="btn-get-video" onClick={this.btnGetVideo}>Get Video</button>
                 <p>{this.state.counter}</p>
+                {(this.state.isDone) && <button>Click to Go to Next Page</button>}
             </div>
             </div>
             </div>
