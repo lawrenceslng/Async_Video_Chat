@@ -17,11 +17,18 @@ export default class Record extends React.Component {
       isDone: false,
       pausing: false,
       btnStatus: 'btn-start-recording',
-      btnText: 'Start Recording'
+      btnText: 'Start Recording',
+      counter: 0
     }
 }
+    tick(){
+            this.setState(prevState => ({
+              counter: prevState.counter + 1
+            }));
 
+    }
 // UI events handling
+//start a counter and have a recording animation during this
     btnStartRecording = (e) => {
     // debugger;
         let classThis = this;
@@ -41,7 +48,7 @@ export default class Record extends React.Component {
             //     video.src = URL.createObjectURL(mediaStream);
             //   }
             // console.log('mediaStream Line 80 = ' + mediaStream);
-            video.play();
+            // video.play();
 
                 const videoRecorder = RecordRTC(video.camera, {
                     type: 'video',
@@ -56,6 +63,8 @@ export default class Record extends React.Component {
                 })
                 console.log(videoRecorder);
                 videoRecorder.startRecording();
+                this.interval = setInterval(() => classThis.tick(), 1000);
+
                 classThis.setState({
                     stream: video.camera,
                     videoRecorder: videoRecorder,
@@ -75,6 +84,7 @@ export default class Record extends React.Component {
         e.preventDefault();
         let classThis = this;
         console.log("clicked");
+        clearInterval(this.interval);
         classThis.state.videoRecorder.stopRecording(function() {
             // var recordedBlob = classThis.state.videoRecorder.blob; // blob property
         
@@ -105,7 +115,7 @@ export default class Record extends React.Component {
                     btnStatus: 'btn-start-recording',
                     btnText: 'Start Recording'
                 });
-                document.querySelector('video').classList.add('autoplay');
+                // document.querySelector('video').classList.add('autoplay');
 
             });
 
@@ -179,6 +189,7 @@ export default class Record extends React.Component {
                 {button}
                 {/* <button id="btn-stop-recording" onClick={this.btnStopRecording}>Stop Recording</button>  */}
                 <button id="btn-get-video" onClick={this.btnGetVideo}>Get Video</button>
+                <p>{this.state.counter}</p>
             </div>
             </div>
             </div>
