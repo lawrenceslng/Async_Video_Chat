@@ -16,6 +16,8 @@ export default class Record extends React.Component {
       isPreview: false,
       isDone: false,
       pausing: false,
+      btnStatus: 'btn-start-recording',
+      btnText: 'Start Recording'
     }
 }
 
@@ -58,6 +60,8 @@ export default class Record extends React.Component {
                     stream: video.camera,
                     videoRecorder: videoRecorder,
                     isRecording: true,
+                    btnStatus: 'btn-stop-recording',
+                    btnText: 'Stop Recording'
                 });
                 console.log(classThis.state.stream);
                 console.log(videoRecorder);
@@ -97,18 +101,14 @@ export default class Record extends React.Component {
                     stream: null,
                     videoRecorder: '',
                     isRecording: false,
-                    src: fileURL
+                    src: fileURL,
+                    btnStatus: 'btn-start-recording',
+                    btnText: 'Start Recording'
                 });
-                // document.querySelector('video').src = fileURL;
                 document.querySelector('video').classList.add('autoplay');
-                // document.querySelector('video').classList;
-                // document.querySelector('video').controls = true;
-                // console.log(document.querySelector('video'));
-                // console.log(classThis.state.stream);
-                // document.querySelector('#footer-h2').innerHTML = '<a href="' + videoElement.src + '">' + videoElement.src + '</a>';
+
             });
-            // console.log(document.querySelector('video'));
-            // console.log(classThis.state.stream);
+
         })
         
     };
@@ -141,6 +141,7 @@ export default class Record extends React.Component {
     }
     render(){
         let vid;
+        let button;
         if(this.state.src)
         {
             vid = 
@@ -155,7 +156,16 @@ export default class Record extends React.Component {
                 <video id="record" width="500" height="281">
                 <source src={this.state.src} type='video/webm' />
                 </video>
+                
             </div>
+        }
+        if(this.state.btnStatus == 'btn-start-recording')
+        {
+            button = <button id={this.state.btnStatus} onClick={this.btnStartRecording}>{this.state.btnText}</button>
+        }
+        else
+        {
+            button = <button id={this.state.btnStatus} onClick={this.btnStopRecording}>{this.state.btnText}</button>
         }
         return (    
             <div>
@@ -166,8 +176,8 @@ export default class Record extends React.Component {
             <hr />
 
             <div>
-                <button id="btn-start-recording" onClick={this.btnStartRecording}>Start Recording</button>
-                <button id="btn-stop-recording" onClick={this.btnStopRecording}>Stop Recording</button>
+                {button}
+                {/* <button id="btn-stop-recording" onClick={this.btnStopRecording}>Stop Recording</button>  */}
                 <button id="btn-get-video" onClick={this.btnGetVideo}>Get Video</button>
             </div>
             </div>

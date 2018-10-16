@@ -184,6 +184,7 @@ app.get('/usersapi', function (req, res){
 });
 
 app.get('/uploads/:id', function (req, res){
+    console.log(req.sessions);
     var fileName = req.params.id;
     var filePath = path.join(__dirname+'/uploads/', fileName);
     console.log("line 189" + filePath);
