@@ -12,6 +12,17 @@ import React, { Component } from 'react';
 class Friends extends Component {
   constructor(){
     super();
+    this.state = {
+        searchStr: ''
+    }
+  };
+  handleInputChange = () => {
+    this.setState({
+      searchStr: this.search.value
+    })
+  };
+  getInfo = () => {
+      
   }
   render(){
     return(
@@ -25,7 +36,10 @@ class Friends extends Component {
                 <div className="col-sm-6 ">
                 {/* searchable form for friends */}
                 <span>Here's gonna be your searchable field</span>
-                <form></form>
+                <form id='friend-search'>
+                    <input type='text' name='username' ref={input => this.search = input} onChange={this.handleInputChange}></input>
+                </form>
+                <p>{this.state.searchStr}</p>
                 </div>
             </div>
         </div>

@@ -234,6 +234,16 @@ app.get('/uploads/:id', function (req, res){
     }
   });
 
+//route to get friends by username
+app.get("/friends/:name", function(req,res){
+  var search = req.params.name;
+  connection.query('SELECT * FROM users WHERE username LIKE %'+search+'%',function (error, results, fields) {
+    if (error) throw error;
+    console.log(results);
+    res.json(results);
+  });
+});
+
 app.post("/uploadFile", function(request,response) {
   var uri = url.parse(request.url).pathname,
       filename = path.join(process.cwd(), uri);
