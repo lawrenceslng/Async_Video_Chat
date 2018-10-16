@@ -266,7 +266,7 @@ app.get('/uploads/:id', function (req, res){
 app.get("/friends/:name", function(req,res){
   var search = req.params.name;
   console.log(search);
-  connection.query(`SELECT * FROM users WHERE username LIKE ?`,['%'+search+'%'],function (error, results, fields) {
+  connection.query(`SELECT id, username, first_name, last_name FROM users WHERE username LIKE ?`,['%'+search+'%'],function (error, results, fields) {
     if (error) throw error;
     console.log(results);
     res.json(results);

@@ -35,6 +35,7 @@ class Friends extends Component {
         return fetch(`http://localhost:3001/friends/${this.state.searchStr}`,{method: 'GET'}).then((res) => res.json()).then(rj => {
             console.log(rj);
             this.setState({results: rj});
+            //get length of rj, create a li item for each with an Add friends button
         })
       }   
   }
@@ -54,6 +55,10 @@ class Friends extends Component {
                     <input type='text' name='username' ref={input => this.search = input} onChange={this.handleInputChange}></input>
                 </form>
                 <p>{this.state.searchStr}</p>
+                <div className='list of matching search'>
+                    {/* //use array.map */}
+                    
+                </div>
                 </div>
             </div>
         </div>
