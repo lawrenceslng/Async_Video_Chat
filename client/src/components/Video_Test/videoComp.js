@@ -23,25 +23,25 @@ export default class Record extends React.Component {
     btnStartRecording = (e) => {
     // debugger;
         let classThis = this;
-        console.log(this.state.stream);
-        console.log(this.state.isRecording);
+        // console.log(this.state.stream);
+        // console.log(this.state.isRecording);
         e.preventDefault();
-        let session = {
-            audio: true,
-            video: true
-        }; 
-        navigator.mediaDevices.getUserMedia(session)
-        .then(function(mediaStream) {
+        // let session = {
+        //     audio: true,
+        //     video: true
+        // }; 
+        // navigator.mediaDevices.getUserMedia(session)
+        // .then(function(mediaStream) {
             var video = document.querySelector('video');
-            if (typeof video.srcObject == "object") {
-                video.srcObject = mediaStream;
-              } else {
-                video.src = URL.createObjectURL(mediaStream);
-              }
-            console.log('mediaStream Line 80 = ' + mediaStream);
+            // if (typeof video.srcObject == "object") {
+            //     video.srcObject = mediaStream;
+            //   } else {
+            //     video.src = URL.createObjectURL(mediaStream);
+            //   }
+            // console.log('mediaStream Line 80 = ' + mediaStream);
             video.play();
 
-                const videoRecorder = RecordRTC(mediaStream, {
+                const videoRecorder = RecordRTC(video.camera, {
                     type: 'video',
                     video: {
                         width: 640,
@@ -55,16 +55,16 @@ export default class Record extends React.Component {
                 console.log(videoRecorder);
                 videoRecorder.startRecording();
                 classThis.setState({
-                    stream: mediaStream,
+                    stream: video.camera,
                     videoRecorder: videoRecorder,
                     isRecording: true,
                 });
                 console.log(classThis.state.stream);
                 console.log(videoRecorder);
-                console.log(video.src);
+                // console.log(video.src);
                 console.log(video.poster);
-        })
-        .catch(function(err) { console.log(err.name + ": " + err.message); });
+        // })
+        // .catch(function(err) { console.log(err.name + ": " + err.message); });
     };
 
     btnStopRecording = (e) => {
@@ -127,23 +127,35 @@ export default class Record extends React.Component {
             document.querySelector('video').controls = true;
         });
     }
+
+    componentDidMount(){
+        navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true
+        }).then(function(camera) {
+            document.querySelector('video').muted = true;
+            document.querySelector('video').srcObject = camera;
+            document.querySelector('video').camera = camera;
+            document.querySelector('video').play();
+        });
+    }
     render(){
         let vid;
         if(this.state.src)
         {
             vid = 
-            <p>
+            <div>
                 <ReactPlayer url={this.state.src} playing controls/>
-            </p>
+            </div>
         }
         else{
             vid = 
-            <p>
+            <div>
                 {/* <ReactPlayer url={this.state.src} playing controls/> */}
-                <video width="500" height="281">
+                <video id="record" width="500" height="281">
                 <source src={this.state.src} type='video/webm' />
                 </video>
-            </p>
+            </div>
         }
         return (    
             <div>
