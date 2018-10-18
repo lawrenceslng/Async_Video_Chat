@@ -96,6 +96,7 @@ app.post('/login', function(req,res){
           req.session.username = results[0].username;
           req.session.firstName = results[0].first_name;
           req.session.lastName = results[0].last_name;
+          //signing token will need to be updated with user info
           var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
             // return the information including token as JSON
           res.status(200).json({
@@ -260,6 +261,16 @@ app.get('/uploads/:id', function (req, res){
         res.end(err);
       });
     }
+  });
+
+  app.get("/friends", function(req,res){
+    // var search = req.params.name;
+    console.log(search);
+    // connection.query(`SELECT id, username, first_name, last_name FROM users WHERE username LIKE ?`,['%'+search+'%'],function (error, results, fields) {
+    //   if (error) throw error;
+    //   console.log(results);
+    //   res.json(results);
+    // });
   });
 
 //route to get friends by username

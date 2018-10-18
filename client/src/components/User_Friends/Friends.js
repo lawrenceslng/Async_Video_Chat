@@ -13,7 +13,15 @@ class Friends extends Component {
   constructor(){
     super();
     this.state = {
-        searchStr: ''
+        searchStr: '',
+        friends: [{
+            id: 0,
+            name: ''
+        }],
+        results: [{
+            id: 0,
+            name: ''
+        }]
     }
   };
   handleInputChange = () => {
@@ -39,6 +47,13 @@ class Friends extends Component {
         })
       }   
   }
+//   getFriends = () => {
+//     return fetch("http://localhost:3001/friends")
+//       .then(res => res.json())
+//   }
+  componentDidMount(){
+    return fetch("http://localhost:3001/friends")
+  }
   render(){
     return(
         <div className="FriendFinder">
@@ -46,7 +61,8 @@ class Friends extends Component {
      	    <div className="row">
                 <div className="col-sm-6 ">
                 {/* list of friends of user */}
-                <span>Here are your current Friends: </span>
+                <div>Here are your current Friends: </div>
+                {this.state.friends.map((x) => <div id={x.id} name={x.name}>{x.name}</div>)}
                 </div>
                 <div className="col-sm-6 ">
                 {/* searchable form for friends */}
@@ -57,6 +73,7 @@ class Friends extends Component {
                 <p>{this.state.searchStr}</p>
                 <div className='list of matching search'>
                     {/* //use array.map */}
+                    {this.state.results.map((x) => <div id={x.id} name={x.name}>{x.name}</div>)}
                     
                 </div>
                 </div>
