@@ -35,8 +35,7 @@ class Friends extends Component {
       {
           //nothing
           this.setState({results: {}});
-          var node = document.createElement("LI");                 // Create a <li> node
-          var textnode = document.createTextNode("Water");  
+          var textnode = document.createTextNode("");  
           document.querySelector('.list-of-matching-search').appendChild(textnode);
       }
       else
@@ -49,10 +48,27 @@ class Friends extends Component {
         })
       }   
   }
-//   getFriends = () => {
-//     return fetch("http://localhost:3001/friends")
-//       .then(res => res.json())
-//   }
+
+  addFriend = (e) => {
+      e.preventDefault();
+      //gets User ID from ID in button
+      console.log(e.target.id);
+      var id = e.target.id;
+      //do POST fetch call to server
+      fetch(`http://localhost:3001/friends/`+id,{method: 'POST'}).then((res) => res.json()).then(rj => {
+          console.log(rj);
+          this.getFriends();
+      });
+  }
+  getFriends = () => {
+       return fetch('http://localhost:3001/friends', {headers : { 
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+   }}).then((res) => res.json()).then(rj => {
+       console.log(rj);
+        this.setState({friends: rj});
+  });
+}
   componentDidMount(){
     return fetch('http://localhost:3001/friends', {headers : { 
         'Content-Type': 'application/json',
@@ -60,6 +76,7 @@ class Friends extends Component {
        }}).then((res) => res.json()).then(rj => {
            console.log(rj);
             this.setState({friends: rj});
+            this.getInfo();
         })
   }
   render(){
@@ -81,7 +98,7 @@ class Friends extends Component {
                 {/* <p>{this.state.searchStr}</p> */}
                 <div className='list-of-matching-search'>
                     {/* //use array.map */}
-                    {this.state.results.length > 0 && this.state.results.map((x) => <div className='addFriend'><div id={x.id} name={x.name} key={x.id}>{x.username}<button>Add Friend</button></div></div>)}
+                    {this.state.results.length > 0 && this.state.results.map((x) => <div id={x.id} name={x.name} key={x.id}>{x.username}<button id={x.id} onClick={this.addFriend}>Add Friend</button></div>)}
                     
                 </div>
                 </div>

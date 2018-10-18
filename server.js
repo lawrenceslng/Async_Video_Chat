@@ -275,13 +275,13 @@ app.get('/uploads/:id', function (req, res){
       console.log(res);
       var query = res.toString();
       console.log(query);
-      connection.query(`SELECT username FROM users WHERE id IN (${query})`,function (err, results, fields2) {
+      connection.query(`SELECT id, username FROM users WHERE id IN (${query})`,function (err, results, fields2) {
             if(err) throw err;
             console.log(results);
             response.send(results);
         //     arr.push(res);
             
-          })
+          });
       
     });
     //syntax for multiple value query
@@ -307,6 +307,18 @@ app.get("/friends/:name", function(req,res){
     res.json(results);
   });
 });
+
+app.post("/friends/:id", function(req,res){
+  var id = req.params.id;
+  //userId to be sent via body with jsonwebtoken
+  var userId = 1;
+  console.log(id);
+  connection.query(`INSERT INTO contacts (user_id,friend_id) VALUES (?,?)`,[userId,id],function (error, results, fields) {
+    if (error) throw error;
+    console.log(results);
+    res.json(results);
+  });
+})
 
 app.post("/uploadFile", function(request,response) {
   var uri = url.parse(request.url).pathname,
