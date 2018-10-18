@@ -263,15 +263,39 @@ app.get('/uploads/:id', function (req, res){
     }
   });
 
-  app.get("/friends", function(req,res){
+  app.get("/friends", function(req,response){
     // var search = req.params.name;
-    console.log(search);
-    // connection.query(`SELECT id, username, first_name, last_name FROM users WHERE username LIKE ?`,['%'+search+'%'],function (error, results, fields) {
-    //   if (error) throw error;
-    //   console.log(results);
+    // console.log(search);
+    //userId is going to be the user's id
+    var userId = 1;
+    var arr = [2,3,4,6];
+    var arrStr = arr.toString();
+    console.log(`(${arr.toString()})`);
+    getFriends(userId).then(res => {
+      console.log(res);
+      var query = res.toString();
+      console.log(query);
+      connection.query(`SELECT username FROM users WHERE id IN (${query})`,function (err, results, fields2) {
+            if(err) throw err;
+            console.log(results);
+            response.send(results);
+        //     arr.push(res);
+            
+          })
+      
+    });
+    //syntax for multiple value query
+    // connection.query(`SELECT username FROM users WHERE id IN (${arr.toString()})`,function (err, res, fields2) {
+    //     if(err) throw err;
+    //     console.log(res);
+        
+    //   });
+      // console.log(arr);
+      // response.json(arr);
     //   res.json(results);
     // });
-  });
+    // res.send('hi');
+});
 
 //route to get friends by username
 app.get("/friends/:name", function(req,res){
@@ -411,17 +435,32 @@ function getHeaders(opt, val) {
   } catch (e) {
       return {};
   }
-}
+};
 
 function createConversation(user_one_id, user_two_id, title, content, filePath){
   connection.query("INSERT INTO conversations (user_one_id, user_two_id, title, content, fs_path) VALUES (?, ?, ?, ?, ?)", [user_one_id, user_two_id, title, content, filePath],function (error, results, fields) {
     if(error) throw error;
     console.log(results);
   });
-}
+};
+
+function getFriends(id){
+  return new Promise(function(resolve, reject) {
+    connection.query(`SELECT user_id, friend_id FROM contacts WHERE user_id = ?`,[id],function (error, results, fields) {
+      if (error) return reject(error);
+      console.log('how many friends I have: ' + results.length);
+      var arr = [];
+      for(var i = 0; i < results.length; i++)
+      {
+        console.log(results[i].friend_id);
+        arr.push(results[i].friend_id);
+       
+      }
+      console.log('get friends line 444: ' + arr);
+      resolve(arr);
+  });
+})
+};
 app.listen(PORT, function() {
   console.log('🌎 ==> Now listening on PORT %s! Visit http://localhost:%s in your browser!', PORT, PORT);
 });
-
-
-

@@ -18,10 +18,7 @@ class Friends extends Component {
             id: 0,
             name: ''
         }],
-        results: [{
-            id: 0,
-            name: ''
-        }]
+        results: [{}]
     }
   };
   handleInputChange = () => {
@@ -37,12 +34,17 @@ class Friends extends Component {
       if(this.state.searchStr === '')
       {
           //nothing
+          this.setState({results: {}});
+          var node = document.createElement("LI");                 // Create a <li> node
+          var textnode = document.createTextNode("Water");  
+          document.querySelector('.list-of-matching-search').appendChild(textnode);
       }
       else
       {
         return fetch(`http://localhost:3001/friends/${this.state.searchStr}`,{method: 'GET'}).then((res) => res.json()).then(rj => {
             console.log(rj);
             this.setState({results: rj});
+           
             //get length of rj, create a li item for each with an Add friends button
         })
       }   
@@ -52,7 +54,13 @@ class Friends extends Component {
 //       .then(res => res.json())
 //   }
   componentDidMount(){
-    return fetch("http://localhost:3001/friends")
+    return fetch('http://localhost:3001/friends', {headers : { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       }}).then((res) => res.json()).then(rj => {
+           console.log(rj);
+            this.setState({friends: rj});
+        })
   }
   render(){
     return(
@@ -62,7 +70,7 @@ class Friends extends Component {
                 <div className="col-sm-6 ">
                 {/* list of friends of user */}
                 <div>Here are your current Friends: </div>
-                {this.state.friends.map((x) => <div id={x.id} name={x.name}>{x.name}</div>)}
+                {this.state.friends.map((x) => <div id={x.id} key={x.id}>{x.username}</div>)}
                 </div>
                 <div className="col-sm-6 ">
                 {/* searchable form for friends */}
@@ -70,10 +78,10 @@ class Friends extends Component {
                 <form id='friend-search'>
                     <input type='text' name='username' ref={input => this.search = input} onChange={this.handleInputChange}></input>
                 </form>
-                <p>{this.state.searchStr}</p>
-                <div className='list of matching search'>
+                {/* <p>{this.state.searchStr}</p> */}
+                <div className='list-of-matching-search'>
                     {/* //use array.map */}
-                    {this.state.results.map((x) => <div id={x.id} name={x.name}>{x.name}</div>)}
+                    {this.state.results.length > 0 && this.state.results.map((x) => <div className='addFriend'><div id={x.id} name={x.name} key={x.id}>{x.username}<button>Add Friend</button></div></div>)}
                     
                 </div>
                 </div>
