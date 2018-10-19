@@ -13,15 +13,30 @@ class AdminPanel extends Component {
   constructor(){
     super();
   }
-
+  this.state = {
+    target: '';
+  }
   expand = (event) => {
     event.preventDefault();
+    if(event.target.classList.contains("box-part"))
+    {
+      event.target.classList.add("expand");
+    }
+    else
+    {
+      if(event.target.parentElement )
+      {
 
-
+      }
+      else{
+        if( event.target.parentElement.parentElement.
+      }
+    }
+    event.target.parentElement.parentElement.classList.add("expand");
     var elements = document.querySelectorAll('.title');
     debugger;
     for (var i=0; i<elements.length; i++){
-      elements[i].classList.add('hidee');
+      // elements[i].classList.add('hidee');
       //hide everything except the one we clicked on
         //if event.target != elements[i] then add a class of hidee
       //add a class to event.target called expand
@@ -42,8 +57,8 @@ class AdminPanel extends Component {
       <div className="col-sm-6 ">
        <a href="#"/>
 
-       <div class="box-part text-center">
-         <div class="title" onClick={this.expand}>
+       <div class="box-part text-center" onClick={this.expand}>
+         <div class="title">
            <img class="card-img-top" src="https://visualpharm.com/assets/224/Folder-595b40b85ba036ed117dd27b.svg" alt=" image"/>
 
          </div>
