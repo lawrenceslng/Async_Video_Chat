@@ -14,7 +14,7 @@ class App extends Component {
     super();
     this.state = {
       loggedIn: true,
-      accountCreated: false
+      accountCreated: false,
       token: ""
     };
 
