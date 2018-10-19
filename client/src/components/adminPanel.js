@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Nav from './nav';
 
 class AdminPanel extends Component {
+<<<<<<< HEAD
   state = {
     // Here's a list of the cards
     cards: {
@@ -40,6 +41,41 @@ class AdminPanel extends Component {
         cards[key].show = !cards[key].show;
         showNav = !cards[key].show;
       }
+=======
+  constructor(){
+    super();
+  }
+  this.state = {
+    target: '';
+  }
+  expand = (event) => {
+    event.preventDefault();
+    if(event.target.classList.contains("box-part"))
+    {
+      event.target.classList.add("expand");
+    }
+    else
+    {
+      if(event.target.parentElement )
+      {
+
+      }
+      else{
+        if( event.target.parentElement.parentElement.
+      }
+    }
+    event.target.parentElement.parentElement.classList.add("expand");
+    var elements = document.querySelectorAll('.title');
+    debugger;
+    for (var i=0; i<elements.length; i++){
+      // elements[i].classList.add('hidee');
+      //hide everything except the one we clicked on
+        //if event.target != elements[i] then add a class of hidee
+      //add a class to event.target called expand
+
+      //make a css file and put in hidee and expand classes and put the css in
+      //import that css file at the top of this file
+>>>>>>> e680f06ab268b6a8a179e9f472d5843035116e03
     }
     this.setState({ cards, showNav });
   };
@@ -72,8 +108,14 @@ class AdminPanel extends Component {
 
 export default AdminPanel;
 
+<<<<<<< HEAD
 function Card({ click, show, id, text, src }) {
   if (!show) return null;
+=======
+       <div class="box-part text-center" onClick={this.expand}>
+         <div class="title">
+           <img class="card-img-top" src="https://visualpharm.com/assets/224/Folder-595b40b85ba036ed117dd27b.svg" alt=" image"/>
+>>>>>>> e680f06ab268b6a8a179e9f472d5843035116e03
 
   return (
     <div className="col-sm-6 ">
