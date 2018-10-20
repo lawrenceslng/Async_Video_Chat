@@ -49,6 +49,22 @@ h3{
      font-family: 'Josefin Sans', sans-serif;
 }
 
+/* navBar */
+
+#thoughtArchivesNav{
+  display:inline-block;margin-right:10px;;
+}
+#incomingRequestsNav{
+  display:inline-block;
+}
+#createNewNav{
+  display:inline-block;
+}
+#yourCommunityNav{
+  display:inline-block;
+}
+
+
 .expand {
   animation: expand-animation;
   width: 100%;
