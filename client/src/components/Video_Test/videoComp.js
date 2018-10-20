@@ -227,15 +227,16 @@ export default class Record extends React.Component {
         return (    
             <div>
             <div>
-                {/* {friend} */}
-            <h1>RecordRTC to Node.js</h1>
+                <h2>Step 1: Select who you want to send this video to.</h2>
+                <Select isMulti options={this.state.friends} />
+            {/* <h1>RecordRTC to Node.js</h1> */}
             {vid}<hr />
 
             <hr />
-            {/* friend list with check boxes; need a getFriends function*/}
+                <h2>Step 2: Start Recording, when stopped, video will automatically post to server</h2> 
             <div>
                 {button}
-                <Select isMulti options={this.state.friends} />
+                
                 {/* <button id="btn-stop-recording" onClick={this.btnStopRecording}>Stop Recording</button>  */}
                 <button id="btn-get-video" onClick={this.btnGetVideo}>Get Video</button>
                 <p>{this.state.counter}</p>
