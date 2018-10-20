@@ -3,7 +3,17 @@ import RecordRTC from 'recordrtc';
 import {_xhr} from './video'
 // import axios from "axios";
 import ReactPlayer from 'react-player';
+import Select from 'react-select';
 
+const options = [
+    { value: 'id1', label: 'lasdf' },
+    { value: 'id2', label: 'asdfasdf' },
+    { value: 'id3', label: 'qwerqwera' }
+  ]
+  
+  const MyComponent = () => (
+    <Select options={options} />
+  )
 export default class Record extends React.Component {
   constructor(props) {
     super(props);
@@ -18,7 +28,8 @@ export default class Record extends React.Component {
       pausing: false,
       btnStatus: 'btn-start-recording',
       btnText: 'Start Recording',
-      counter: 0
+      counter: 0,
+      friends: [{id: 0, username: 'l'}]
     }
 }
     tick(){
@@ -138,7 +149,34 @@ export default class Record extends React.Component {
             document.querySelector('video').controls = true;
         });
     }
+    renameProp = (
+        oldProp,
+        newProp,
+    { [oldProp]: old, ...others }
+    ) => ({
+        [newProp]: old,
+        ...others
+    });
 
+    getFriends = () => {
+        return fetch('http://localhost:3001/friends', {headers : { 
+     'Content-Type': 'application/json',
+     'Accept': 'application/json'
+    }}).then((res) => res.json()).then(rj => {
+        console.log(rj);
+        for(var i = 0; i < rj.length; i++)
+        {
+            // var neww = this.renameProp('id','value',rj[i]);
+            // var newww = this.renameProp('username','label',rj[i]);
+            rj[i].value = rj[i].id;
+            rj[i].label = rj[i].username;
+            // console.log(neww);
+            // console.log(newww);
+        }
+         this.setState({friends: rj});
+
+   });
+ }
     componentDidMount(){
         navigator.mediaDevices.getUserMedia({
             audio: true,
@@ -149,10 +187,13 @@ export default class Record extends React.Component {
             document.querySelector('video').camera = camera;
             document.querySelector('video').play();
         });
+        this.getFriends();
     }
     render(){
         let vid;
         let button;
+        let friend;
+        let list;
         if(this.state.src)
         {
             vid = 
@@ -178,20 +219,28 @@ export default class Record extends React.Component {
         {
             button = <button id={this.state.btnStatus} onClick={this.btnStopRecording}>{this.state.btnText}</button>
         }
+        if(this.state.friends)
+        {
+            // debugger;
+        }
+        
         return (    
             <div>
             <div>
+                {/* {friend} */}
             <h1>RecordRTC to Node.js</h1>
             {vid}<hr />
 
             <hr />
-
+            {/* friend list with check boxes; need a getFriends function*/}
             <div>
                 {button}
+                <Select isMulti options={this.state.friends} />
                 {/* <button id="btn-stop-recording" onClick={this.btnStopRecording}>Stop Recording</button>  */}
                 <button id="btn-get-video" onClick={this.btnGetVideo}>Get Video</button>
                 <p>{this.state.counter}</p>
                 {(this.state.isDone) && <button>Click to Go to Next Page</button>}
+                {/* {this.state.friends.length > 0 && this.state.friends.map((x) => <Select id = {x.id} option = {x.username} value={x.username}/>)} */}
             </div>
             </div>
             </div>

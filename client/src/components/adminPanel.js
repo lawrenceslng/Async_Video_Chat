@@ -12,27 +12,29 @@ import React, { Component } from 'react';
 class AdminPanel extends Component {
   constructor(){
     super();
+    this.state = {
+      target: ''
+    }
   }
-  this.state = {
-    target: '';
-  }
+  
   expand = (event) => {
     event.preventDefault();
-    if(event.target.classList.contains("box-part"))
-    {
-      event.target.classList.add("expand");
-    }
-    else
-    {
-      if(event.target.parentElement )
-      {
+    // if(event.target.classList.contains("box-part"))
+    // {
+    //   event.target.classList.add("expand");
+    // }
+    // else
+    // {
+    //   if(event.target.parentElement )
+    //   {
 
-      }
-      else{
-        if( event.target.parentElement.parentElement.
-      }
-    }
-    event.target.parentElement.parentElement.classList.add("expand");
+    //   }
+    //   else{
+    //     if( event.target.parentElement.parentElement.
+    //   }
+    // }
+    // this.setState({target: nameofthebox})
+    // event.target.parentElem.parentElement.classList.add("expand");
     var elements = document.querySelectorAll('.title');
     debugger;
     for (var i=0; i<elements.length; i++){
