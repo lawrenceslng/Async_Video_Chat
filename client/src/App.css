@@ -49,6 +49,43 @@ h3{
      font-family: 'Josefin Sans', sans-serif;
 }
 
+/* navBar */
+
+#thoughtArchivesNav{
+  display:inline-block;margin-right:10px;;
+}
+#incomingRequestsNav{
+  display:inline-block;
+}
+#createNewNav{
+  display:inline-block;
+}
+#yourCommunityNav{
+  display:inline-block;
+}
+
+
+.expand {
+  animation: expand-animation;
+  width: 100%;
+  height: 100%;
+}
+
+
+@keyframes expand-animation {
+  from {
+    transform: scaleX(2);
+  }
+  to {
+    transform: scaleX(2);
+  }
+}
+/* need to figure out how to make sure the element is not being overridden by another css input.   */
+
+.hidee{
+  visibility: hidden;
+}
+
 .box{
     padding:60px 0px;
 }
@@ -88,4 +125,3 @@ h3{
      color:#4183D7;
 }
 /* end css for adminPanel.js*/
-

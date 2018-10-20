@@ -1,138 +1,171 @@
-import React, { Component } from 'react';
-
-
-// onclick= (this.expand)
-//outside of render:
-// expand =(e) => {
-//   e.target (targets the one they clicked on)
-//   hide every other element of the class add a class to e.target to increase width and height
-//   add div to top with nav
-// }
+import React, { Component } from "react";
+import Nav from './nav';
 
 class AdminPanel extends Component {
   constructor(){
     super();
-    this.state = {
-      target: ''
-    }
+
+
+  this.state = {
+    target: '',
+    navBar: false,
+    showSomeOtherThing: false
+    //h2 element and then render the relevant components, otherwise just render the 4 boxes
   }
-  
+}
   expand = (event) => {
     event.preventDefault();
-    // if(event.target.classList.contains("box-part"))
-    // {
-    //   event.target.classList.add("expand");
-    // }
-    // else
-    // {
-    //   if(event.target.parentElement )
-    //   {
-
-    //   }
-    //   else{
-    //     if( event.target.parentElement.parentElement.
-    //   }
-    // }
-    // this.setState({target: nameofthebox})
-    // event.target.parentElem.parentElement.classList.add("expand");
-    var elements = document.querySelectorAll('.title');
-    debugger;
-    for (var i=0; i<elements.length; i++){
-      // elements[i].classList.add('hidee');
-      //hide everything except the one we clicked on
-        //if event.target != elements[i] then add a class of hidee
-      //add a class to event.target called expand
-
-      //make a css file and put in hidee and expand classes and put the css in
-      //import that css file at the top of this file
+    if(event.target.classList.contains("box-part"))
+    {
+      event.target.classList.add("expand");
+    }
+    else
+    {
+      if(event.target.parentElement.classList.contains("box-part"))
+      {
+       event.target.parentElement.classList.add("expand");
+      }
+      else{
+        if(event.target.parentElement.parentElement.classList.contains("box-part"))
+        {
+          event.target.parentElement.parentElement.classList.add("expand");
+        }
+      }
     }
 
-    alert('hi');
+
+    //keep in mind event.target is "<div className="title"><img className="card-img-top" src="https://visualpharm.com/assets/168/Read%20Message-595b40b75ba036ed117d88f5.svg" alt=" image"></div>"
+    event.target.parentElement.parentElement.classList.add("expand");
+
+    var elements = document.querySelectorAll('.title');
+    for (var i=0; i<elements.length; i++){
+
+      if (elements[i].parentElement.getAttribute('id') == event.target.parentElement.getAttribute('id')) {
+        event.target.parentElement.children[0].classList.add("hidee");
+        event.target.parentElement.children[1].classList.add("hidee");
+      }else {
+        elements[i].parentElement.classList.add("hidee");
+      }
+    }
+
+    this.setState({navBar : true});
+
+    // alert('hi');
 
   }
 
   render(){
     return (
-      <div class="box">
-    <div class="container">
-     	<div class="row">
-      <div className="col-sm-6 ">
-       <a href="#"/>
+      <div className="box">
+    <div className="container">
+      {
+        this.state.showSomeOtherThing && <h1>blah blah</h1>
+      }
 
-       <div class="box-part text-center" onClick={this.expand}>
-         <div class="title">
-           <img class="card-img-top" src="https://visualpharm.com/assets/224/Folder-595b40b85ba036ed117dd27b.svg" alt=" image"/>
+{/* navbar section */}
 
-         </div>
-         <div className="text">
-              <span><h2>Thought Archives</h2></span>
-         </div>
-        </div>
-     </div>
+      { this.state.navBar &&
 
-				 <div className="col-sm-6 ">
-					<a href="#"/>
+          <div>
+            <div id="thoughtArchivesNav">
+              <a href="#">
+                <img className="card-img-top" src="https://visualpharm.com/assets/224/Folder-595b40b85ba036ed117dd27b.svg" />
+              </a>
+            </div>
 
-					<div class="box-part text-center">
-						<div class="title" onClick={this.expand}>
-							<img class="card-img-top" src="https://visualpharm.com/assets/168/Read%20Message-595b40b75ba036ed117d88f5.svg" alt=" image"/>
-						</div>
-						<div className="text">
-                <span><h2>Incoming Requests</h2></span>
-						</div>
-					 </div>
-				</div>
 
-        <div className="col-sm-6 ">
-         <a href="#"/>
-         <div class="box-part text-center">
-           <div class="title" onClick={this.expand}>
-             <img class="card-img-top" src="https://visualpharm.com/assets/375/Create-595b40b75ba036ed117d7bbf.svg" alt=" image"/>
+            <div id="incomingRequestsNav">
+              <a href="#">
+                <img className="card-img-top" src="https://visualpharm.com/assets/168/Read%20Message-595b40b75ba036ed117d88f5.svg" />
+              </a>
+            </div>
 
-           </div>
-           <div className="text">
-               <span><h2>Create New</h2></span>
-           </div>
+
+            <div id="createNewNav">
+              <a href="#">
+                <img className="card-img-top" src="https://visualpharm.com/assets/375/Create-595b40b75ba036ed117d7bbf.svg" />
+              </a>
+            </div>
+
+
+            <div id="yourCommunityNav" >
+              <a href="#">
+                <img className="card-img-top" src="https://static.thenounproject.com/png/5040-200.png" />
+              </a>
+            </div>
           </div>
-       </div>
+          }
+{/*start box section*/}
 
-       <div className="col-sm-6 ">
-        <a href="#"/>
+          <div className="row">
+            <div className="col-sm-6 ">
+              <a href="#" />
 
-        <div class="box-part text-center">
-          <div class="title" onClick={this.expand}>
-            <img class="card-img-top" src="https://static.thenounproject.com/png/5040-200.png" alt=" image"/>
+              <div id="thoughtArchives" className="box-part text-center" onClick={this.expand}>
+                <div className="title">
+                  <img className="card-img-top" src="https://visualpharm.com/assets/224/Folder-595b40b85ba036ed117dd27b.svg" />
+
+                </div>
+
+                <div className="text">
+                  <span>
+                    <h2>Thought Archives</h2>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-sm-6 ">
+              <a href="#" />
+
+              <div id="incomingRequests" className="box-part text-center" onClick={this.expand}>
+                <div className="title">
+                  <img className="card-img-top" src="https://visualpharm.com/assets/168/Read%20Message-595b40b75ba036ed117d88f5.svg" />
+                </div>
+                <div className="text">
+                  <span>
+                    <h2>Incoming Requests</h2>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-sm-6 ">
+              <a href="#" />
+              <div id="createNew" className="box-part text-center" onClick={this.expand}>
+                <div className="title">
+                  <img className="card-img-top" src="https://visualpharm.com/assets/375/Create-595b40b75ba036ed117d7bbf.svg" />
+
+                </div>
+                <div className="text">
+                  <span>
+                    <h2>Create New</h2>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-sm-6 ">
+              <a href="#" />
+
+              <div id="yourCommunity" className="box-part text-center" onClick={this.expand}>
+                <div className="title">
+                  <img className="card-img-top" src="https://static.thenounproject.com/png/5040-200.png" />
+
+                </div>
+                <div className="text">
+                  <span>
+                    <h2>Your Community</h2>
+                  </span>
+                </div>
+              </div>
+            </div>
 
           </div>
-          <div className="text">
-               <span><h2>Your Community</h2></span>
+
           </div>
-         </div>
-      </div>
-
-		</div>
-    </div>
-</div>
-)
-  }
-}
-
-// const AdminPanel = () => (
-//
-// )
-
-// function ActionLink() {
-//   function handleClick(e) {
-//     e.preventDefault();
-//     console.log('The link was clicked.');
-//   }
-//
-//   return (
-//     <a href="#" onClick={handleClick}>
-//       prompt('hello');
-//     </a>
-//   );
-// }
-
-
+          </div>
+          )
+          }
+          }
 export default AdminPanel;

@@ -5,6 +5,7 @@ import Carousel from './components/carousel';
 import LoginForm from './components/loginForm';
 import PWMatch from './components/accountCreate';
 import AdminPanel from './components/adminPanel';
+import Nav from './components/nav';
 
 import './App.css';
 
