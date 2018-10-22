@@ -213,7 +213,7 @@ app.get('/usersapi', function (req, res){
 });
 
 app.get('/uploads/:id', function (req, res){
-    console.log(req.sessions);
+    // console.log(req.sessions);
     var fileName = req.params.id;
     var filePath = path.join(__dirname+'/uploads/', fileName);
     console.log("line 189" + filePath);
@@ -323,7 +323,6 @@ app.post("/friends/:id", function(req,res){
 app.post("/uploadFile", function(request,response) {
   var uri = url.parse(request.url).pathname,
       filename = path.join(process.cwd(), uri);
-  console.log('line 223 file name = ' + filename);
   var isWin = !!process.platform.match(/^win/);
 
   if (filename && filename.toString().indexOf(isWin ? '\\uploadFile' : '/uploadFile') != -1 && request.method.toLowerCase() == 'post') {
@@ -385,10 +384,21 @@ app.post("/uploadFile", function(request,response) {
   });
 });
 
+app.post("/uploadFile2", function(req,res) {
+  // console.log("upload 2: " + req.params.id);
+  console.log(req.body.title);
+  console.log(req.body.content);
+  console.log("upload 2: " + req.body.creator);
+  let user_two_id = 3;
+  createConversation(req.body.creator, user_two_id, req.body.title, req.body.content, req.body.id);
+  res.json(req.body.creator);
+  
+});
+
 function uploadFile(request, response) {
   console.log("start of uploadFile");
-  console.log("request = " + request);
-  console.log("response = " + response);
+  // console.log("request = " + request.body);
+  // console.log("response = " + response);
   // parse a file upload
   var mime = require('mime');
   var formidable = require('formidable');
@@ -403,11 +413,11 @@ function uploadFile(request, response) {
   form.maxFieldsSize = 10 * 1024 * 1024;
   form.maxFields = 1000;
   form.multiples = false;
-
+  // console.log("405: " + JSON.stringify(form.parse(request)));
   form.parse(request, function(err, fields, files) {
       if(err) throw err;
       var file = util.inspect(files);
-
+      // console.log(file);
       response.writeHead(200, getHeaders('Content-Type', 'application/json'));
 
       var fileName = file.split('path:')[1].split('\',')[0].split(dir)[1].toString().replace(/\\/g, '').replace(/\//g, '');
@@ -417,12 +427,12 @@ function uploadFile(request, response) {
       //create a function to write file name location to conversations SQL table
 
       //placeholder variables
-      var user_one_id = '1';
-      var user_two_id = '2';
-      var title = 'test title';
-      var content = 'no content for now';
+      // var user_one_id = '1';
+      // var user_two_id = '2';
+      // var title = 'test title';
+      // var content = 'no content for now';
       console.log('line 337 filename: ' + fileName + ' ...... fileURL: ' + fileURL);
-      createConversation(user_one_id, user_two_id, title, content, fileName)
+      // createConversation(user_one_id, user_two_id, title, content, fileName)
       response.write(JSON.stringify({
           fileURL: fileURL
       }));
@@ -453,6 +463,7 @@ function createConversation(user_one_id, user_two_id, title, content, filePath){
   connection.query("INSERT INTO conversations (user_one_id, user_two_id, title, content, fs_path) VALUES (?, ?, ?, ?, ?)", [user_one_id, user_two_id, title, content, filePath],function (error, results, fields) {
     if(error) throw error;
     console.log(results);
+    return results;
   });
 };
 
