@@ -41,13 +41,14 @@ export default class Active_Thoughts extends React.Component {
         return fetch(id).then(function(response){
             console.log('after fetch line 118');
             console.log(response);
-            classThis.setState({
-                // src: response.url,
-                isRecording: false});
             document.querySelector('video').play();
             document.querySelector('video').muted = false;
             document.querySelector('video').controls = true;
         });
+    };
+    reply = (e) => {
+        e.preventDefault();
+        alert("this is a reply button");
     }
     componentDidMount(){
         return fetch("http://localhost:3001/conversations").then(res => res.json()).then(resultingJSON => {
@@ -80,7 +81,8 @@ export default class Active_Thoughts extends React.Component {
 
                             {/* <!-- Modal footer --> */}
                             <div className="modal-footer">
-                              <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-primary" onClick={this.reply}>Reply</button>
+                            <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                             </div>
 
                           </div>
