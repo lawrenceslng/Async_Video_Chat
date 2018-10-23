@@ -31,6 +31,7 @@ export default class Record extends React.Component {
       counter: 0,
       friends: [{id: 0, username: 'l'}],
       selectedOption : null,
+      isComplete: false
     }
 }
     tick(){
@@ -187,13 +188,18 @@ export default class Record extends React.Component {
                     if(rj.success)
                     {
                     //   this.setState({loggedIn: true});
+                        console.log("everything is a success");
+                        classThis.setState({
+                            isComplete: true
+                        });
                     }
                     else{
                     //   this.setState({loggedIn: false});
+                        console.log("everything IS NOT a success");
                     }
                   })
             });
-
+            
         })
         
     };

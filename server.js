@@ -386,11 +386,9 @@ app.post("/uploadFile", function(request,response) {
 
 //this is actual route that relates all users in a particular conversation
 app.post("/uploadFile2", function(req,res) {
-  // console.log("upload 2: " + req.params.id);
   console.log(req.body.title);
   console.log(req.body.content);
   console.log("upload 2: " + req.body.creator);
-  let user_two_id = 3;
   let users = req.body.users;
   console.log(users);
   createConversation(req.body.creator, req.body.title, req.body.content, req.body.id).then(
@@ -400,11 +398,10 @@ app.post("/uploadFile2", function(req,res) {
       {
         createConversationRelations(response,users[i]);
       }
+    res.json({success: true});
     }
   );
-  // console.log("395: " + convId);
-  // createConversationRelation()
-  res.json(req.body.creator);
+  
   
 });
 
