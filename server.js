@@ -384,13 +384,26 @@ app.post("/uploadFile", function(request,response) {
   });
 });
 
+//this is actual route that relates all users in a particular conversation
 app.post("/uploadFile2", function(req,res) {
   // console.log("upload 2: " + req.params.id);
   console.log(req.body.title);
   console.log(req.body.content);
   console.log("upload 2: " + req.body.creator);
   let user_two_id = 3;
-  createConversation(req.body.creator, user_two_id, req.body.title, req.body.content, req.body.id);
+  let users = req.body.users;
+  console.log(users);
+  createConversation(req.body.creator, req.body.title, req.body.content, req.body.id).then(
+    response => {
+      console.log("396: " + response);
+      for(var i = 0; i < users.length; i++)
+      {
+        createConversationRelations(response,users[i]);
+      }
+    }
+  );
+  // console.log("395: " + convId);
+  // createConversationRelation()
   res.json(req.body.creator);
   
 });
@@ -459,14 +472,24 @@ function getHeaders(opt, val) {
   }
 };
 
-function createConversation(user_one_id, user_two_id, title, content, filePath){
-  connection.query("INSERT INTO conversations (user_one_id, user_two_id, title, content, fs_path) VALUES (?, ?, ?, ?, ?)", [user_one_id, user_two_id, title, content, filePath],function (error, results, fields) {
-    if(error) throw error;
-    console.log(results);
-    return results;
-  });
+function createConversation(user_one_id, title, content, filePath){
+  return new Promise(function(resolve, reject) {
+    connection.query("INSERT INTO conversations (user_one_id, title, content, fs_path) VALUES (?, ?, ?, ?)", [user_one_id, title, content, filePath],function (error, results, fields) {
+      if(error) return reject(error);
+      console.log("468: " + results.insertId);
+      resolve(results.insertId);
+    });
+  })
 };
 
+function createConversationRelations(conversation_id, user_id){
+  console.log(conversation_id + " ......... " + user_id);
+  connection.query("INSERT INTO conversation_relation VALUES (?,?)",[conversation_id, user_id], function (err, res, fields){
+    if(err) throw err;
+    console.log(res);
+    return res.insertId;
+  })
+}
 function getFriends(id){
   return new Promise(function(resolve, reject) {
     connection.query(`SELECT user_id, friend_id FROM contacts WHERE user_id = ?`,[id],function (error, results, fields) {
