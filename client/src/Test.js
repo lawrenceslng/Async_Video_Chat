@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 // import recordJS from './components/record';
 import Record from './components/Video_Test/videoComp';
 import Friends from './components/User_Friends/Friends';
+import Thought_Archive from './components/Thought_Archives/archives';
 import './App.css';
 
 class Test extends Component {
@@ -174,7 +175,8 @@ class Test extends Component {
         // </div>
         // <script src="/node_modules/recordrtc/RecordRTC.js"> </script>
         // </div>
-        <Record />
+        <Thought_Archive />
+        // <Record />
         // <Friends />
     );
   }

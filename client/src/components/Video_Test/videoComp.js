@@ -15,25 +15,25 @@ const options = [
     <Select options={options} />
   )
 export default class Record extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      stream: null,
-      url:'',
-      videoRecorder:'',
-      isRecording: false,
-      isUploading: false,
-      isPreview: false,
-      isDone: false,
-      pausing: false,
-      btnStatus: 'btn-start-recording',
-      btnText: 'Start Recording',
-      counter: 0,
-      friends: [{id: 0, username: 'l'}],
-      selectedOption : null,
-      isComplete: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            stream: null,
+            url:'',
+            videoRecorder:'',
+            isRecording: false,
+            isUploading: false,
+            isPreview: false,
+            isDone: false,
+            pausing: false,
+            btnStatus: 'btn-start-recording',
+            btnText: 'Start Recording',
+            counter: 0,
+            friends: [{id: 0, username: 'l'}],
+            selectedOption : null,
+            isComplete: false
+        }
     }
-}
     tick(){
             this.setState(prevState => ({
               counter: prevState.counter + 1
