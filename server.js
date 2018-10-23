@@ -308,6 +308,17 @@ app.get("/friends/:name", function(req,res){
   });
 });
 
+
+//route to get all conversations related to one user
+app.get("/conversations", function(req,res){
+  let user_id = 1;
+  connection.query(`SELECT conversation_id FROM conversation_relation WHERE user_id = ?`, [user_id],function (error, results, fields) {
+    if (error) throw error;
+    console.log(results);
+    res.json(results);
+  });
+});
+
 app.post("/friends/:id", function(req,res){
   var id = req.params.id;
   //userId to be sent via body with jsonwebtoken
@@ -390,6 +401,7 @@ app.post("/uploadFile2", function(req,res) {
   console.log(req.body.content);
   console.log("upload 2: " + req.body.creator);
   let users = req.body.users;
+  users.push(req.body.creator);
   console.log(users);
   createConversation(req.body.creator, req.body.title, req.body.content, req.body.id).then(
     response => {
@@ -401,8 +413,6 @@ app.post("/uploadFile2", function(req,res) {
     res.json({success: true});
     }
   );
-  
-  
 });
 
 function uploadFile(request, response) {
