@@ -10,13 +10,16 @@ export default class Thought_Archive extends React.Component {
         };
     };
     componentDidMount(){
-        return fetch("http://localhost:3001/conversations").then(res => res.json()).then(resultingJSON => this.setState({conversations : resultingJSON}));
+        return fetch("http://localhost:3001/conversations").then(res => res.json()).then(resultingJSON => {
+            console.log(resultingJSON);
+            this.setState({conversations : resultingJSON})});
     };
     render(){
         return (
             <div>
                 <h1>this is my thought archives</h1>
-                {(this.state.conversations) && <span>hello</span>}
+                {(this.state.conversations) && this.state.conversations.map((x) => <div id={x.id}>{x.id}{x.user_one_id}{x.title}{x.content}{x.fs_path}</div>)}
+                
             </div>
         )
     };
