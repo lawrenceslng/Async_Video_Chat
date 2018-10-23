@@ -293,7 +293,10 @@ export default class Record extends React.Component {
             // debugger;
         }
         
-        return (    
+        if(!this.state.isComplete)
+        {
+        return (  
+              
             <div>
             <div>
                 {/* {friend} */}
@@ -313,6 +316,16 @@ export default class Record extends React.Component {
             </div>
             </div>
             </div>
-        )
+            )
+        }
+        else
+        {
+            return (
+                <div>
+                    <h1>This post is complete</h1>
+                </div>
+            )
+        }
+
     }
 }
