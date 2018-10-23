@@ -25,6 +25,7 @@ CREATE TABLE contacts(
 	FOREIGN KEY (friend_id) REFERENCES users(id)
 );
 
+-- need to add status: active/archive for conversations so we know to retrieve appropriate conversation for appropriate box
 -- current setup only allows 1-on-1 chat
 CREATE TABLE conversations(
 	id INT NOT NULL AUTO_INCREMENT,

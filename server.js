@@ -310,6 +310,7 @@ app.get("/friends/:name", function(req,res){
 
 
 //route to get all conversations related to one user
+//need to add condition WHERE status = active
 app.get("/conversations", function(req,res){
   let user_id = 2;
   connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ?`, [user_id],function (error, results, fields) {
