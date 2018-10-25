@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+
 import NavBar from './navBar';
+
 
 class AdminPanel extends Component {
   constructor(){
@@ -8,7 +10,9 @@ class AdminPanel extends Component {
 
   this.state = {
     target: '',
+
     NavBar: false,
+
     showSomeOtherThing: false
     //h2 element and then render the relevant components, otherwise just render the 4 boxes
   }
@@ -48,7 +52,9 @@ class AdminPanel extends Component {
       }
     }
 
+
     this.setState({NavBar : true});
+
 
     // alert('hi');
 
@@ -61,6 +67,7 @@ class AdminPanel extends Component {
       {
         this.state.showSomeOtherThing && <h1>blah blah</h1>
       }
+
 
 {/* navbar section */}
 
@@ -134,9 +141,12 @@ class AdminPanel extends Component {
 
           </div>
 
+
           </div>
           </div>
           )
           }
           }
+
 export default AdminPanel;
+
