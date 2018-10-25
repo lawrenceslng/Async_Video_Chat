@@ -30,8 +30,5 @@ const NavBar = () => (
     </div>
   </div>
 );
-<<<<<<< HEAD
+
 export default NavBar;
-=======
-export default NavBar;
->>>>>>> d875943757716f83ec57b0086860e148da3299bb

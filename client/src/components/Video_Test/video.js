@@ -1,6 +1,8 @@
 import React from 'react'
 
 export const _xhr = (url, data, callback) => {
+console.log("start_xhr")
+console.log(url)
     var request = new XMLHttpRequest();
     console.log(data);
     request.onreadystatechange = function() {

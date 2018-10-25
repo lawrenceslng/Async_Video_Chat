@@ -51,13 +51,13 @@ app.use(morgan('dev'));
 // Initializes the connection variable to sync with a MySQL database
 var connection = mysql.createConnection({
     host: process.env.DB_HOST,
-    
+
     // Your port; if not 3306
     port: 3306,
-    
+
     // Your username
     user: process.env.DB_USER,
-    
+
     // Your password
     password: process.env.DB_PASSWORD,  //placeholder for your own mySQL password that you store in your own .env file
     database: process.env.DB_NAME    //TBD
@@ -74,7 +74,7 @@ app.post('/login', function(req,res){
   console.log(username + " " + password);
   connection.query('SELECT * FROM users WHERE username = ?', [username],function (error, results, fields) {
     if (error) throw error;
-  
+
     //  res.json(results);
     console.log(results);
     if (results.length == 0){
@@ -86,7 +86,7 @@ app.post('/login', function(req,res){
       bcrypt.compare(password, results[0].password, function(err, result) {
       if (result == true){
         // const payload = {
-        //   user: username 
+        //   user: username
         // };
           // var token = jwt.sign(payload, app.get('superSecret'), {
               // expiresInMinutes: 1440 // expires in 24 hours }
@@ -104,9 +104,9 @@ app.post('/login', function(req,res){
               message: 'Enjoy your token!',
               token: token
           });
-             
-    
-        
+
+
+
         // console.log(req.session.user_id + req.session.email + req.session.username + req.session.firstName + req.session.lastName);
         // console.log("got session and sending it back");
         // res.json({success: true});
@@ -133,10 +133,10 @@ app.post("/signup", function(req,res){
       if(error) throw error;
       if(results.length == 0)
       {
-        console.log("no duplicate username or email" + password.length);  
+        console.log("no duplicate username or email" + password.length);
         bcrypt.genSalt(10, function(err, salt) {
           // res.send(salt);
-          bcrypt.hash(password, salt, function(err, p_hash) { 
+          bcrypt.hash(password, salt, function(err, p_hash) {
             connection.query('INSERT INTO users (username, password, first_name, last_name, email) VALUES (?,?,?,?,?)', [username, p_hash, firstName, lastName, email],function (error, results, fields) {
               if (error) throw error;
               console.log(results);
@@ -151,7 +151,7 @@ app.post("/signup", function(req,res){
       }
       else{
         console.log("username/email taken");
-        
+
       }
     });
   });
@@ -196,9 +196,9 @@ app.get('/usersapi', function (req, res){
   // console.log(token);
    // decode token
   //  if (token) {
- 
+
   //    // verifies secret and checks exp
-  //    jwt.verify(token, 'shhhhh', function(err, decoded) {      
+  //    jwt.verify(token, 'shhhhh', function(err, decoded) {
 
     connection.query('SELECT username, first_name, last_name FROM users',function (error, results, fields) {
     if (error) throw error;
@@ -225,7 +225,7 @@ app.get('/uploads/:id', function (req, res){
     if (range) {
       const parts = range.replace(/bytes=/, "").split("-")
       const start = parseInt(parts[0], 10)
-      const end = parts[1] 
+      const end = parts[1]
         ? parseInt(parts[1], 10)
         : fileSize-1
       const chunksize = (end-start)+1
@@ -268,27 +268,27 @@ app.get('/uploads/:id', function (req, res){
     // console.log(search);
     //userId is going to be the user's id
     var userId = 1;
-    var arr = [2,3,4,6];
+    var arr = [2];
     var arrStr = arr.toString();
     console.log(`(${arr.toString()})`);
-    getFriends(userId).then(res => {
-      console.log(res);
-      var query = res.toString();
-      console.log(query);
-      connection.query(`SELECT id, username FROM users WHERE id IN (${query})`,function (err, results, fields2) {
-            if(err) throw err;
-            console.log(results);
-            response.send(results);
-        //     arr.push(res);
-            
-          });
-      
-    });
+    // getFriends(userId).then(res => {
+    //   console.log(res);
+    //   var query = res.toString();
+    //   console.log(query);
+    //   connection.query(`SELECT id, username FROM users WHERE id IN (${query})`,function (err, results, fields2) {
+    //         if(err) throw err;
+    //         console.log(results);
+    //         response.send(results);
+    //     //     arr.push(res);
+    //
+    //       });
+    //
+    // });
     //syntax for multiple value query
     // connection.query(`SELECT username FROM users WHERE id IN (${arr.toString()})`,function (err, res, fields2) {
     //     if(err) throw err;
     //     console.log(res);
-        
+
     //   });
       // console.log(arr);
       // response.json(arr);
@@ -466,7 +466,7 @@ function getFriends(id){
       {
         console.log(results[i].friend_id);
         arr.push(results[i].friend_id);
-       
+
       }
       console.log('get friends line 444: ' + arr);
       resolve(arr);

@@ -64,7 +64,7 @@ class AdminPanel extends Component {
 
 {/* navbar section */}
 
-      { this.state.NavBar && <NavBar/>} 
+      { this.state.NavBar && <NavBar/>}
 
 {/*start box section*/}
 
@@ -139,8 +139,5 @@ class AdminPanel extends Component {
           )
           }
           }
-<<<<<<< HEAD
+
 export default AdminPanel;
-=======
-export default AdminPanel;
->>>>>>> d875943757716f83ec57b0086860e148da3299bb
