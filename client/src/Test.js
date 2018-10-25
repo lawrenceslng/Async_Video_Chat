@@ -175,8 +175,8 @@ class Test extends Component {
         // </div>
         // <script src="/node_modules/recordrtc/RecordRTC.js"> </script>
         // </div>
-        <Active_Thoughts />
-        // <Record />
+        // <Active_Thoughts />
+        <Record />
         // <Friends />
     );
   }

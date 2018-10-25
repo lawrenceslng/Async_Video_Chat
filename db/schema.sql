@@ -34,6 +34,7 @@ CREATE TABLE conversations(
 	title VARCHAR(255) NOT NULL,
 	content TEXT,
 	fs_path TEXT,
+	stat ENUM('active', 'archive'),
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_one_id) REFERENCES users(id)
 	-- FOREIGN KEY (user_two_id) REFERENCES users(id)
@@ -59,4 +60,4 @@ CREATE TABLE conversations_reply(
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (c_id_fk) REFERENCES conversations(id)
-)
+);
