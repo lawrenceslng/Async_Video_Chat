@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import Nav from './nav';
+
+import NavBar from './navBar';
+
 
 class AdminPanel extends Component {
   constructor(){
@@ -8,7 +10,9 @@ class AdminPanel extends Component {
 
   this.state = {
     target: '',
-    navBar: false,
+
+    NavBar: false,
+
     showSomeOtherThing: false
     //h2 element and then render the relevant components, otherwise just render the 4 boxes
   }
@@ -48,7 +52,9 @@ class AdminPanel extends Component {
       }
     }
 
-    this.setState({navBar : true});
+
+    this.setState({NavBar : true});
+
 
     // alert('hi');
 
@@ -62,39 +68,11 @@ class AdminPanel extends Component {
         this.state.showSomeOtherThing && <h1>blah blah</h1>
       }
 
+
 {/* navbar section */}
 
-      { this.state.navBar &&
+      { this.state.NavBar && <NavBar/>} 
 
-          <div>
-            <div id="thoughtArchivesNav">
-              <a href="#">
-                <img className="card-img-top" src="https://visualpharm.com/assets/224/Folder-595b40b85ba036ed117dd27b.svg" />
-              </a>
-            </div>
-
-
-            <div id="incomingRequestsNav">
-              <a href="#">
-                <img className="card-img-top" src="https://visualpharm.com/assets/168/Read%20Message-595b40b75ba036ed117d88f5.svg" />
-              </a>
-            </div>
-
-
-            <div id="createNewNav">
-              <a href="#">
-                <img className="card-img-top" src="https://visualpharm.com/assets/375/Create-595b40b75ba036ed117d7bbf.svg" />
-              </a>
-            </div>
-
-
-            <div id="yourCommunityNav" >
-              <a href="#">
-                <img className="card-img-top" src="https://static.thenounproject.com/png/5040-200.png" />
-              </a>
-            </div>
-          </div>
-          }
 {/*start box section*/}
 
           <div className="row">
@@ -163,9 +141,12 @@ class AdminPanel extends Component {
 
           </div>
 
+
           </div>
           </div>
           )
           }
           }
+
 export default AdminPanel;
+

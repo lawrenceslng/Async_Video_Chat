@@ -125,3 +125,11 @@ h3{
      color:#4183D7;
 }
 /* end css for adminPanel.js*/
+
+
+.thoughtBox{
+  cursor: pointer;
+  border: 1px black solid;
+  background-color: lightgray;
+  margin: 5px;
+}

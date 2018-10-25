@@ -15,23 +15,25 @@ const options = [
     <Select options={options} />
   )
 export default class Record extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      stream: null,
-      url:'',
-      videoRecorder:'',
-      isRecording: false,
-      isUploading: false,
-      isPreview: false,
-      isDone: false,
-      pausing: false,
-      btnStatus: 'btn-start-recording',
-      btnText: 'Start Recording',
-      counter: 0,
-      friends: [{id: 0, username: 'l'}]
+    constructor(props) {
+        super(props);
+        this.state = {
+            stream: null,
+            url:'',
+            videoRecorder:'',
+            isRecording: false,
+            isUploading: false,
+            isPreview: false,
+            isDone: false,
+            pausing: false,
+            btnStatus: 'btn-start-recording',
+            btnText: 'Start Recording',
+            counter: 0,
+            friends: [{id: 0, username: 'l'}],
+            selectedOption : null,
+            isComplete: false
+        }
     }
-}
     tick(){
             this.setState(prevState => ({
               counter: prevState.counter + 1
@@ -91,8 +93,23 @@ export default class Record extends React.Component {
         // .catch(function(err) { console.log(err.name + ": " + err.message); });
     };
 
+    handleChange = (selectedOption) => {
+        this.setState({ selectedOption });
+        console.log(`Option selected:`, selectedOption);
+      }
+
     btnStopRecording = (e) => {
         e.preventDefault();
+        // this.setState({ selectedOption: 'test' });
+        // alert(`Option selected:`, this.state.selectedOption);
+        console.log(this.state.selectedOption.length);
+        let users = [];
+        for(var i = 0; i < this.state.selectedOption.length; i++)
+        {
+            console.log(this.state.selectedOption[i].id);
+            users.push(this.state.selectedOption[i].id);
+        }
+        // debugger;
         let classThis = this;
         console.log("clicked");
         clearInterval(this.interval);
@@ -109,14 +126,42 @@ export default class Record extends React.Component {
             var file = new File([recorderBlob], fileName, {
                 type: 'video/webm'
             });
+            // debugger;
+            console.log(users);
+            // let users = classThis.state.selectedOption;
             console.log('line 86 file name before request: ' + fileName);
             _xhr('http://localhost:3001/uploadFile', file, function(responseText) {
                 var fileURL = JSON.parse(responseText).fileURL;
-
                 console.info('fileURL', fileURL);
                 var id = fileURL.substring(30);
+                let creator = 1;
+                let title = 'test1';
+                let content ='no content';
                 // debugger;
-                // fetch(`http://localhost:3001/uploads/${id}`).then(res => re);
+                // return fetch('http://localhost:3001/uploadFile2', {
+                //     method: "POST", // *GET, POST, PUT, DELETE, etc.
+                //     mode: "no-cors", // no-cors, cors, *same-origin
+                //     headers: {
+                //         'Accept': 'application/json',
+                //         "Content-Type": "application/json; charset=utf-8",
+                //         // "Content-Type": "application/x-www-form-urlencoded",
+                //     },
+                //     body: JSON.stringify(creator), // body data type must match "Content-Type" header
+                // }).then((res) => {res.json();
+                console.log(creator);
+                console.log(title);
+                console.log(content);
+                // fetch('http://localhost:3001/uploadFile2/'+creator, {
+                //     method: "POST", // *GET, POST, PUT, DELETE, etc.
+                //     mode: "no-cors", // no-cors, cors, *same-origin
+                //     headers: {
+                //         'Accept': 'application/json',
+                //         "Content-Type": "application/json; charset=utf-8",
+                //         // "Content-Type": "application/x-www-form-urlencoded",
+                //     },
+                //     body: JSON.stringify({field: 'field1'}), // body data type must match "Content-Type" header
+                // }).then((res) => res.json());
+                // debugger;
                 console.log("after fetch");
                 classThis.setState({
                     stream: null,
@@ -127,10 +172,34 @@ export default class Record extends React.Component {
                     btnStatus: 'btn-start-recording',
                     btnText: 'Start Recording'
                 });
+                // fetch(`http://localhost:3001/uploads/${id}`).then(res => re);
+            
                 // document.querySelector('video').classList.add('autoplay');
-
+                return fetch("http://localhost:3001/uploadFile2", {
+                    method: 'POST',
+                    headers: {
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({creator,title,content,id,users})
+                  }).then(res => res.json()).then(rj => {
+                    console.log(rj);
+                    // debugger;
+                    if(rj.success)
+                    {
+                    //   this.setState({loggedIn: true});
+                        console.log("everything is a success");
+                        classThis.setState({
+                            isComplete: true
+                        });
+                    }
+                    else{
+                    //   this.setState({loggedIn: false});
+                        console.log("everything IS NOT a success");
+                    }
+                  })
             });
-
+            
         })
         
     };
@@ -224,7 +293,10 @@ export default class Record extends React.Component {
             // debugger;
         }
         
-        return (    
+        if(!this.state.isComplete)
+        {
+        return (  
+              
             <div>
             <div>
                 {/* {friend} */}
@@ -235,7 +307,7 @@ export default class Record extends React.Component {
             {/* friend list with check boxes; need a getFriends function*/}
             <div>
                 {button}
-                <Select isMulti options={this.state.friends} />
+                <Select isMulti options={this.state.friends} value={this.state.selectedOption} onChange={this.handleChange} />
                 {/* <button id="btn-stop-recording" onClick={this.btnStopRecording}>Stop Recording</button>  */}
                 <button id="btn-get-video" onClick={this.btnGetVideo}>Get Video</button>
                 <p>{this.state.counter}</p>
@@ -244,6 +316,16 @@ export default class Record extends React.Component {
             </div>
             </div>
             </div>
-        )
+            )
+        }
+        else
+        {
+            return (
+                <div>
+                    <h1>This post is complete</h1>
+                </div>
+            )
+        }
+
     }
 }
