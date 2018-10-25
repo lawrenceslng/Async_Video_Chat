@@ -213,7 +213,7 @@ app.get('/usersapi', function (req, res){
 });
 
 app.get('/uploads/:id', function (req, res){
-    console.log(req.sessions);
+    // console.log(req.sessions);
     var fileName = req.params.id;
     var filePath = path.join(__dirname+'/uploads/', fileName);
     console.log("line 189" + filePath);
@@ -308,6 +308,18 @@ app.get("/friends/:name", function(req,res){
   });
 });
 
+
+//route to get all conversations related to one user
+//need to add condition WHERE status = active
+app.get("/conversations", function(req,res){
+  let user_id = 2;
+  connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ?`, [user_id],function (error, results, fields) {
+    if (error) throw error;
+    console.log(results);
+    res.json(results);
+  });
+});
+
 app.post("/friends/:id", function(req,res){
   var id = req.params.id;
   //userId to be sent via body with jsonwebtoken
@@ -323,7 +335,6 @@ app.post("/friends/:id", function(req,res){
 app.post("/uploadFile", function(request,response) {
   var uri = url.parse(request.url).pathname,
       filename = path.join(process.cwd(), uri);
-  console.log('line 223 file name = ' + filename);
   var isWin = !!process.platform.match(/^win/);
 
   if (filename && filename.toString().indexOf(isWin ? '\\uploadFile' : '/uploadFile') != -1 && request.method.toLowerCase() == 'post') {
@@ -385,10 +396,30 @@ app.post("/uploadFile", function(request,response) {
   });
 });
 
+//this is actual route that relates all users in a particular conversation
+app.post("/uploadFile2", function(req,res) {
+  console.log(req.body.title);
+  console.log(req.body.content);
+  console.log("upload 2: " + req.body.creator);
+  let users = req.body.users;
+  users.push(req.body.creator);
+  console.log(users);
+  createConversation(req.body.creator, req.body.title, req.body.content, req.body.id).then(
+    response => {
+      console.log("396: " + response);
+      for(var i = 0; i < users.length; i++)
+      {
+        createConversationRelations(response,users[i]);
+      }
+    res.json({success: true});
+    }
+  );
+});
+
 function uploadFile(request, response) {
   console.log("start of uploadFile");
-  console.log("request = " + request);
-  console.log("response = " + response);
+  // console.log("request = " + request.body);
+  // console.log("response = " + response);
   // parse a file upload
   var mime = require('mime');
   var formidable = require('formidable');
@@ -403,11 +434,11 @@ function uploadFile(request, response) {
   form.maxFieldsSize = 10 * 1024 * 1024;
   form.maxFields = 1000;
   form.multiples = false;
-
+  // console.log("405: " + JSON.stringify(form.parse(request)));
   form.parse(request, function(err, fields, files) {
       if(err) throw err;
       var file = util.inspect(files);
-
+      // console.log(file);
       response.writeHead(200, getHeaders('Content-Type', 'application/json'));
 
       var fileName = file.split('path:')[1].split('\',')[0].split(dir)[1].toString().replace(/\\/g, '').replace(/\//g, '');
@@ -417,12 +448,12 @@ function uploadFile(request, response) {
       //create a function to write file name location to conversations SQL table
 
       //placeholder variables
-      var user_one_id = '1';
-      var user_two_id = '2';
-      var title = 'test title';
-      var content = 'no content for now';
+      // var user_one_id = '1';
+      // var user_two_id = '2';
+      // var title = 'test title';
+      // var content = 'no content for now';
       console.log('line 337 filename: ' + fileName + ' ...... fileURL: ' + fileURL);
-      createConversation(user_one_id, user_two_id, title, content, fileName)
+      // createConversation(user_one_id, user_two_id, title, content, fileName)
       response.write(JSON.stringify({
           fileURL: fileURL
       }));
@@ -449,13 +480,24 @@ function getHeaders(opt, val) {
   }
 };
 
-function createConversation(user_one_id, user_two_id, title, content, filePath){
-  connection.query("INSERT INTO conversations (user_one_id, user_two_id, title, content, fs_path) VALUES (?, ?, ?, ?, ?)", [user_one_id, user_two_id, title, content, filePath],function (error, results, fields) {
-    if(error) throw error;
-    console.log(results);
-  });
+function createConversation(user_one_id, title, content, filePath){
+  return new Promise(function(resolve, reject) {
+    connection.query("INSERT INTO conversations (user_one_id, title, content, fs_path) VALUES (?, ?, ?, ?)", [user_one_id, title, content, filePath],function (error, results, fields) {
+      if(error) return reject(error);
+      console.log("468: " + results.insertId);
+      resolve(results.insertId);
+    });
+  })
 };
 
+function createConversationRelations(conversation_id, user_id){
+  console.log(conversation_id + " ......... " + user_id);
+  connection.query("INSERT INTO conversation_relation VALUES (?,?)",[conversation_id, user_id], function (err, res, fields){
+    if(err) throw err;
+    console.log(res);
+    return res.insertId;
+  })
+}
 function getFriends(id){
   return new Promise(function(resolve, reject) {
     connection.query(`SELECT user_id, friend_id FROM contacts WHERE user_id = ?`,[id],function (error, results, fields) {
