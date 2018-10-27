@@ -35,6 +35,7 @@ CREATE TABLE conversations(
 	content TEXT,
 	fs_path TEXT,
 	stat ENUM('active', 'archive'),
+	share ENUM('public', 'group'),
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_one_id) REFERENCES users(id)
 	-- FOREIGN KEY (user_two_id) REFERENCES users(id)

@@ -100,6 +100,7 @@ export default class Record extends React.Component {
 
     btnStopRecording = (e) => {
         e.preventDefault();
+        //also MUST have recipients for videos else errors out
         // this.setState({ selectedOption: 'test' });
         // alert(`Option selected:`, this.state.selectedOption);
         console.log(this.state.selectedOption.length);
@@ -233,17 +234,23 @@ export default class Record extends React.Component {
      'Accept': 'application/json'
     }}).then((res) => res.json()).then(rj => {
         console.log(rj);
-        for(var i = 0; i < rj.length; i++)
-        {
+        // if(rj.length == 0)
+        // {
+        //     this.setState({friends: null});
+        // }
+        // else
+        // {
+            for(var i = 0; i < rj.length; i++)
+            {
             // var neww = this.renameProp('id','value',rj[i]);
             // var newww = this.renameProp('username','label',rj[i]);
-            rj[i].value = rj[i].id;
-            rj[i].label = rj[i].username;
+                rj[i].value = rj[i].id;
+                rj[i].label = rj[i].username;
             // console.log(neww);
             // console.log(newww);
-        }
-         this.setState({friends: rj});
-
+            }
+            this.setState({friends: rj});
+        // }
    });
  }
     componentDidMount(){
@@ -263,6 +270,7 @@ export default class Record extends React.Component {
         let button;
         let friend;
         let list;
+        let addFriendsButton;
         if(this.state.src)
         {
             vid = 
@@ -288,9 +296,9 @@ export default class Record extends React.Component {
         {
             button = <button id={this.state.btnStatus} onClick={this.btnStopRecording}>{this.state.btnText}</button>
         }
-        if(this.state.friends)
+        if(this.state.friends.length == 0)
         {
-            // debugger;
+            addFriendsButton = <button>Add a Friend Yo</button>
         }
         
         if(!this.state.isComplete)
@@ -307,7 +315,9 @@ export default class Record extends React.Component {
             {/* friend list with check boxes; need a getFriends function*/}
             <div>
                 {button}
-                <Select isMulti options={this.state.friends} value={this.state.selectedOption} onChange={this.handleChange} />
+                {/* this does not work  */}
+                <button>Add a Friend Yo</button>
+                {this.state.friends.length > 0 && <Select isMulti options={this.state.friends} value={this.state.selectedOption} onChange={this.handleChange} />}
                 {/* <button id="btn-stop-recording" onClick={this.btnStopRecording}>Stop Recording</button>  */}
                 <button id="btn-get-video" onClick={this.btnGetVideo}>Get Video</button>
                 <p>{this.state.counter}</p>

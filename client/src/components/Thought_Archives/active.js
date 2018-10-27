@@ -51,7 +51,7 @@ export default class Active_Thoughts extends React.Component {
         alert("this is a reply button");
     }
     componentDidMount(){
-        return fetch("http://localhost:3001/conversations").then(res => res.json()).then(resultingJSON => {
+        return fetch("http://localhost:3001/conversations_active").then(res => res.json()).then(resultingJSON => {
             console.log(resultingJSON);
             this.setState({conversations : resultingJSON})});
     };

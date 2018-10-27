@@ -273,16 +273,23 @@ app.get('/uploads/:id', function (req, res){
     console.log(`(${arr.toString()})`);
     getFriends(userId).then(res => {
       console.log(res);
-      var query = res.toString();
-      console.log(query);
-      connection.query(`SELECT id, username FROM users WHERE id IN (${query})`,function (err, results, fields2) {
-            if(err) throw err;
-            console.log(results);
-            response.send(results);
-        //     arr.push(res);
-            
-          });
-      
+      if(res.length == 0)
+      {
+        response.send([]);
+      }
+      else
+      {
+        var query = res.toString();
+        console.log(query);
+        //need to add condition where query is empty
+        connection.query(`SELECT id, username FROM users WHERE id IN (${query})`,function (err, results, fields2) {
+          if(err) throw err;
+          console.log(results);
+          response.send(results);
+      //     arr.push(res);
+          
+        });
+      } 
     });
     //syntax for multiple value query
     // connection.query(`SELECT username FROM users WHERE id IN (${arr.toString()})`,function (err, res, fields2) {
@@ -311,7 +318,16 @@ app.get("/friends/:name", function(req,res){
 
 //route to get all conversations related to one user
 //need to add condition WHERE status = active
-app.get("/conversations", function(req,res){
+app.get("/conversations_archived", function(req,res){
+  let user_id = 2;
+  connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ?`, [user_id],function (error, results, fields) {
+    if (error) throw error;
+    console.log(results);
+    res.json(results);
+  });
+});
+
+app.get("/conversations_active", function(req,res){
   let user_id = 2;
   connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ?`, [user_id],function (error, results, fields) {
     if (error) throw error;
@@ -482,7 +498,7 @@ function getHeaders(opt, val) {
 
 function createConversation(user_one_id, title, content, filePath){
   return new Promise(function(resolve, reject) {
-    connection.query("INSERT INTO conversations (user_one_id, title, content, fs_path) VALUES (?, ?, ?, ?)", [user_one_id, title, content, filePath],function (error, results, fields) {
+    connection.query("INSERT INTO conversations (user_one_id, title, content, fs_path, stat) VALUES (?, ?, ?, ?, ?)", [user_one_id, title, content, filePath, 'active'],function (error, results, fields) {
       if(error) return reject(error);
       console.log("468: " + results.insertId);
       resolve(results.insertId);
