@@ -9,6 +9,8 @@ export default class Active_Thoughts extends React.Component {
             
         };
     };
+
+    //add button to archive conversation if you are the creator
     populate = (e) => {
         e.preventDefault();
         let convId = e.target.getAttribute('data-conversation_id');
@@ -29,9 +31,29 @@ export default class Active_Thoughts extends React.Component {
         });
         console.log(filepath);
         console.log(this.state.filepath);
-        
-        // this.getVideo();
     };
+
+    archive = (e) => {
+        e.preventDefault();
+        let classThis = this;
+        //get conversation id from HTML
+        let convId = e.target.parentElement.parentElement.children[0].childNodes[0].innerHTML;
+        // debugger;
+        console.log("LINE 43: " + convId);
+        // go to server with conversation ID and hit up archive route
+        return fetch("http://localhost:3001/archive/" + convId, 
+            {method: 'POST',
+            headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+            }})
+        .then(res => res.json()).then(resultingJSON => {
+            console.log(resultingJSON);
+            console.log("after archive");
+            classThis.componentDidMount();
+        });
+    };
+
     getVideo = (id) => {
         console.log("get Video function");
         //hit upload/:id where :id is filename
@@ -49,6 +71,7 @@ export default class Active_Thoughts extends React.Component {
     reply = (e) => {
         e.preventDefault();
         alert("this is a reply button");
+        //I know the conversation ID, all I have to do is have a recordRTC session and on stop record, post this video
     }
     componentDidMount(){
         return fetch("http://localhost:3001/conversations_active").then(res => res.json()).then(resultingJSON => {
@@ -81,6 +104,8 @@ export default class Active_Thoughts extends React.Component {
 
                             {/* <!-- Modal footer --> */}
                             <div className="modal-footer">
+                            {/* if localstorage matches with this.state.creator */}
+                            {(this.state.creator == 1) && <button className="btn btn-danger" data-dismiss="modal" onClick={this.archive}>Archive</button>}    
                             <button type="button" className="btn btn-primary" onClick={this.reply}>Reply</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                             </div>

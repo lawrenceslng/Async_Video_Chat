@@ -319,7 +319,7 @@ app.get("/friends/:name", function(req,res){
 //route to get all conversations related to one user
 //need to add condition WHERE status = active
 app.get("/conversations_archived", function(req,res){
-  let user_id = 2;
+  let user_id = 1; //this will be changed to take in jsonwebtoken id
   connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ?`, [user_id],function (error, results, fields) {
     if (error) throw error;
     console.log(results);
@@ -328,9 +328,21 @@ app.get("/conversations_archived", function(req,res){
 });
 
 app.get("/conversations_active", function(req,res){
-  let user_id = 2;
-  connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ?`, [user_id],function (error, results, fields) {
+  let user_id = 1;  //this will be changed to take in jsonwebtoken id
+  connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ? AND stat = 'active'`, [user_id],function (error, results, fields) {
     if (error) throw error;
+    console.log(results);
+    res.json(results);
+  });
+});
+
+app.post("/archive/:id", function(req,res){
+  //let id be conversation id
+  let id = req.params.id;
+  console.log("archive route conv id: " + id);
+  //connect to conversations WHERE conversations_id equal id and update the stat from active to archive
+  connection.query(`UPDATE conversations SET stat = 'archive' WHERE id = ?`, [id], function (err, results, fields){
+    if(err) throw err;
     console.log(results);
     res.json(results);
   });

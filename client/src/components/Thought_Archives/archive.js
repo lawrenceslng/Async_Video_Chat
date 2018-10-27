@@ -51,7 +51,7 @@ export default class Archived_Thoughts extends React.Component {
         alert("this is a reply button");
     }
     componentDidMount(){
-        return fetch("http://localhost:3001/conversations").then(res => res.json()).then(resultingJSON => {
+        return fetch("http://localhost:3001/conversations_archive").then(res => res.json()).then(resultingJSON => {
             console.log(resultingJSON);
             this.setState({conversations : resultingJSON})});
     };
@@ -59,6 +59,7 @@ export default class Archived_Thoughts extends React.Component {
         return (
             <div>
                 <h1>These are archived conversations I am a part of.</h1>
+                
             </div>
         )
     };

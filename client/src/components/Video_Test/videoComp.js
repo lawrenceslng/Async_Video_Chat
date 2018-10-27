@@ -135,10 +135,10 @@ export default class Record extends React.Component {
                 var fileURL = JSON.parse(responseText).fileURL;
                 console.info('fileURL', fileURL);
                 var id = fileURL.substring(30);
-                let creator = 1;
-                let title = document.querySelector('title');
+                let creator = 1; //creator will get ID number from localStorage after issue of jsonwebtoken
+                let title = document.querySelector('[name="title"]').value;
                 console.log(title);
-                let content ='no content';
+                let content = document.querySelector('[name="content"]').value;
                 debugger;
                 // return fetch('http://localhost:3001/uploadFile2', {
                 //     method: "POST", // *GET, POST, PUT, DELETE, etc.
