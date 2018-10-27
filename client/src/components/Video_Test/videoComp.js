@@ -30,7 +30,7 @@ export default class Record extends React.Component {
             btnText: 'Start Recording',
             counter: 0,
             friends: [{id: 0, username: 'l'}],
-            selectedOption : null,
+            selectedOption : [],
             isComplete: false
         }
     }
@@ -270,7 +270,6 @@ export default class Record extends React.Component {
         let button;
         let friend;
         let list;
-        let addFriendsButton;
         if(this.state.src)
         {
             vid = 
@@ -298,7 +297,7 @@ export default class Record extends React.Component {
         }
         if(this.state.friends.length == 0)
         {
-            addFriendsButton = <button>Add a Friend Yo</button>
+            //debugger
         }
         
         if(!this.state.isComplete)
@@ -316,8 +315,9 @@ export default class Record extends React.Component {
             <div>
                 {button}
                 {/* this does not work  */}
-                <button>Add a Friend Yo</button>
-                {this.state.friends.length > 0 && <Select isMulti options={this.state.friends} value={this.state.selectedOption} onChange={this.handleChange} />}
+                {this.state.friends.length == 0 && <button>Add a Friend Yo</button>}
+                {this.state.friends.length > 0 && <div>If you do not select any friends the thought parcel will only be visible to you
+                    <Select isMulti options={this.state.friends} value={this.state.selectedOption} onChange={this.handleChange} /></div>}
                 {/* <button id="btn-stop-recording" onClick={this.btnStopRecording}>Stop Recording</button>  */}
                 <button id="btn-get-video" onClick={this.btnGetVideo}>Get Video</button>
                 <p>{this.state.counter}</p>
