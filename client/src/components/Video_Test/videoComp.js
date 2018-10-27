@@ -136,9 +136,10 @@ export default class Record extends React.Component {
                 console.info('fileURL', fileURL);
                 var id = fileURL.substring(30);
                 let creator = 1;
-                let title = 'test1';
+                let title = document.querySelector('title');
+                console.log(title);
                 let content ='no content';
-                // debugger;
+                debugger;
                 // return fetch('http://localhost:3001/uploadFile2', {
                 //     method: "POST", // *GET, POST, PUT, DELETE, etc.
                 //     mode: "no-cors", // no-cors, cors, *same-origin
@@ -309,7 +310,12 @@ export default class Record extends React.Component {
                 {/* {friend} */}
             <h1>RecordRTC to Node.js</h1>
             {vid}<hr />
-
+            <form>
+                Title:<br/>
+                <input type="text" name="title"/><br/>
+                Description:<br/>
+                <input type="text" name="content"/>
+            </form>
             <hr />
             {/* friend list with check boxes; need a getFriends function*/}
             <div>
