@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import NavBar from './navBar';
+import Record from './Video_Test/videoComp'
 
+// -import record class from videocomp to adminPanel. videoComp.js should show up on click when we hit CreateNew in admin panel.
 
 class AdminPanel extends Component {
   constructor(){
@@ -12,8 +14,10 @@ class AdminPanel extends Component {
 
     NavBar: false,
 
-    showSomeOtherThing: false
-    //h2 element and then render the relevant components, otherwise just render the 4 boxes
+    showSomeOtherThing: false,
+
+    record: false
+    //h2 element and then render the relevant components, else if just render the 4 boxes-
   }
 }
   expand = (event) => {
@@ -40,6 +44,12 @@ class AdminPanel extends Component {
     //keep in mind event.target is "<div className="title"><img className="card-img-top" src="https://visualpharm.com/assets/168/Read%20Message-595b40b75ba036ed117d88f5.svg" alt=" image"></div>"
     event.target.parentElement.parentElement.classList.add("expand");
 
+    debugger;
+
+    if (event.target.classList.contains('show-record')){
+      this.setState ({record: true})
+    }
+
     var elements = document.querySelectorAll('.title');
     for (var i=0; i<elements.length; i++){
 
@@ -53,7 +63,7 @@ class AdminPanel extends Component {
 
 
 
-    this.setState({NavBar : true});
+    this.setState({NavBar : true, showSomeOtherThing: true});
 
 
     // alert('hi');
@@ -65,10 +75,11 @@ class AdminPanel extends Component {
       <div className="box">
     <div className="container">
       {
-        this.state.showSomeOtherThing && <h1>blah blah</h1>
+        this.state.record && <Record/>
       }
 
 
+{/* this is where we will render certain components for certain cards. The record component should render for the createNew card- on click. */}
 
 {/* navbar section */}
 
@@ -104,7 +115,7 @@ class AdminPanel extends Component {
                 </div>
                 <div className="text">
                   <span>
-                    <h2>Incoming Requests</h2>
+                    <h2>Active Thoughts</h2>
                   </span>
                 </div>
               </div>
@@ -112,9 +123,9 @@ class AdminPanel extends Component {
 
             <div className="col-sm-6 ">
               <a href="#" />
-              <div id="createNew" className="box-part text-center" onClick={this.expand}>
-                <div className="title">
-                  <img className="card-img-top" src="https://visualpharm.com/assets/375/Create-595b40b75ba036ed117d7bbf.svg" />
+              <div id="createNew" className="box-part text-center show-record" onClick={this.expand}>
+                <div className="title  show-record">
+                  <img className="card-img-top show-record" src="https://visualpharm.com/assets/375/Create-595b40b75ba036ed117d7bbf.svg" />
 
                 </div>
                 <div className="text">
