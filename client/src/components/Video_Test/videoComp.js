@@ -139,7 +139,7 @@ export default class Record extends React.Component {
                 let title = document.querySelector('[name="title"]').value;
                 console.log(title);
                 let content = document.querySelector('[name="content"]').value;
-                debugger;
+                // debugger;
                 // return fetch('http://localhost:3001/uploadFile2', {
                 //     method: "POST", // *GET, POST, PUT, DELETE, etc.
                 //     mode: "no-cors", // no-cors, cors, *same-origin
