@@ -4,26 +4,29 @@ import RecordRTC from 'recordrtc';
 import {_xhr} from '../Video_Test/video'
 //this will retrieve all conversations related to this particular user
 //hit up conversations, conversation_relation
+
+const initState = {
+    stream: null,
+    url:'',
+    videoRecorder:'',
+    isRecording: false,
+    isUploading: false,
+    isPreview: false,
+    isDone: false,
+    pausing: false,
+    btnStatus: 'btn-start-recording',
+    btnText: 'Start Recording',
+    counter: 0,
+    isComplete: false,
+    conversationId: 0,
+    thoughts: [],
+    currentVidLoc: 0
+};
+
 export default class Active_Thoughts extends React.Component {
     constructor(){
         super();
-        this.state = {
-            stream: null,
-            url:'',
-            videoRecorder:'',
-            isRecording: false,
-            isUploading: false,
-            isPreview: false,
-            isDone: false,
-            pausing: false,
-            btnStatus: 'btn-start-recording',
-            btnText: 'Start Recording',
-            counter: 0,
-            isComplete: false,
-            conversationId: 0,
-            thoughts: [],
-            currentVidLoc: 0
-        };
+        this.state = initState;
     };
 
     tick(){
@@ -31,10 +34,13 @@ export default class Active_Thoughts extends React.Component {
           counter: prevState.counter + 1
         }));
     };
-
+    reset() {
+        this.setState(initState);
+    };
     //add button to archive conversation if you are the creator
     populate = (e) => {
         e.preventDefault();
+        this.reset();
         let convId = e.target.getAttribute('data-conversation_id');
         let title = e.target.getAttribute('data-title');
         let content = e.target.getAttribute('data-content');
@@ -58,6 +64,7 @@ export default class Active_Thoughts extends React.Component {
                 content: content,
                 creator: creator,
                 filepath: this.state.thoughts[this.state.thoughts.length-1],
+                originalFilepath: filepath,
                 src: 'http://localhost:3001/uploads/'+this.state.thoughts[this.state.thoughts.length-1],
                 conversationId: convId,
                 currentVidLoc: this.state.thoughts.length-1
@@ -254,10 +261,45 @@ export default class Active_Thoughts extends React.Component {
     previousVid = (e) => {
         e.preventDefault();
         console.log(this.state.currentVidLoc);
+        if(this.state.currentVidLoc > 0){
+            let newVidLoc = this.state.currentVidLoc - 1;
+            this.getVideo(this.state.thoughts[newVidLoc]);
+            this.setState({
+                filepath: this.state.thoughts[newVidLoc],
+                src: 'http://localhost:3001/uploads/'+this.state.thoughts[newVidLoc],
+                currentVidLoc: newVidLoc
+            });
+        }
+        else{
+            this.getVideo(this.state.originalFilepath);
+            this.setState({
+                filepath: this.state.originalFilepath,
+                src: 'http://localhost:3001/uploads/'+this.state.originalFilepath,
+                currentVidLoc: -1
+            });
+        }
     };
 
     nextVid = (e) => {
         e.preventDefault();
+        console.log(this.state.currentVidLoc);
+        if(this.state.currentVidLoc < this.state.thoughts.length-1){
+            let newVidLoc = this.state.currentVidLoc + 1;
+            this.getVideo(this.state.thoughts[newVidLoc]);
+            this.setState({
+                filepath: this.state.thoughts[newVidLoc],
+                src: 'http://localhost:3001/uploads/'+this.state.thoughts[newVidLoc],
+                currentVidLoc: newVidLoc
+            });
+        }
+        // else{
+        //     this.getVideo(this.state.originalFilepath);
+        //     this.setState({
+        //         filepath: this.state.originalFilepath,
+        //         src: 'http://localhost:3001/uploads/'+this.state.originalFilepath,
+        //         currentVidLoc: -1
+        //     });
+        // }
     };
         //next up: able to see all videos related to a thought (need to search server for conv_reply as well)
     componentDidMount(){
