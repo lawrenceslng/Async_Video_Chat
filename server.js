@@ -320,19 +320,35 @@ app.get("/friends/:name", function(req,res){
 //need to add condition WHERE status = active
 app.get("/conversations_archived", function(req,res){
   let user_id = 1; //this will be changed to take in jsonwebtoken id
-  connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ?`, [user_id],function (error, results, fields) {
+  connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ? AND stat = 'archive'`, [user_id],function (error, results, fields) {
     if (error) throw error;
     console.log(results);
     res.json(results);
   });
 });
 
-app.get("/conversations_active", function(req,res){
+//need to add info to get conversation reply table info as well
+app.get("/conversations_active", function(req,response){
   let user_id = 1;  //this will be changed to take in jsonwebtoken id
-  connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ? AND stat = 'active'`, [user_id],function (error, results, fields) {
-    if (error) throw error;
-    console.log(results);
-    res.json(results);
+  getConversation(user_id, 'active').then(res => {
+    console.log(res);
+    // var arr = [];
+    // for(var i = 0; i < res.length; i++)
+    // {
+    //   arr.push({i: getAllThoughts(res[i].id)});
+    //   console.log(arr);
+    // }
+    
+    response.json(res)
+  });
+
+});
+
+app.get("/relevant_thoughts/:id", function(req,response){
+  console.log("here at relevant_thoughts" + req.params.id);
+  getAllThoughts(req.params.id).then(res => {
+    console.log(res);
+    response.json(res);
   });
 });
 
@@ -556,6 +572,28 @@ function getFriends(id){
   });
 })
 };
+
+//idea is to get all filepaths of all video and send it to front-end; front-end stores filepaths in array 
+function getConversation(user_id, status){
+  return new Promise(function(resolve, reject) {
+    connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ? AND stat = ?`, [user_id, status],function (error, results, fields) {
+      if (error) return reject(error);
+        console.log(results);
+        resolve (results);
+      });
+  })
+};
+
+function getAllThoughts(conv_id){
+  return new Promise(function(resolve, reject) {
+  connection.query(`SELECT conversations_reply.fs_path FROM conversations_reply WHERE conversations_reply.c_id_fk = ?`,[conv_id],function(err,res,fields){
+    if(err) return reject(err);
+    // console.log(res);
+    resolve(res);
+  })
+})
+};
+
 app.listen(PORT, function() {
   console.log('🌎 ==> Now listening on PORT %s! Visit http://localhost:%s in your browser!', PORT, PORT);
 });

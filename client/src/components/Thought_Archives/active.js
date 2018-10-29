@@ -20,7 +20,9 @@ export default class Active_Thoughts extends React.Component {
             btnText: 'Start Recording',
             counter: 0,
             isComplete: false,
-            conversationId: 0
+            conversationId: 0,
+            thoughts: [],
+            currentVidLoc: 0
         };
     };
 
@@ -39,19 +41,40 @@ export default class Active_Thoughts extends React.Component {
         let creator = e.target.getAttribute('data-creator');
         let filepath = e.target.getAttribute('data-filepath');
         console.log(filepath);
-        // alert(v);
-        this.getVideo(filepath);
-        this.setState({
-            modalId: convId,
-            title: title,
-            content: content,
-            creator: creator,
-            filepath: filepath,
-            src: 'http://localhost:3001/uploads/'+filepath,
-            conversationId: convId
+        fetch("http://localhost:3001/relevant_thoughts/"+convId).then(res => res.json()).then(RESJ => {
+            console.log('43: ' + RESJ[0].fs_path);
+            for(var i = 0; i < RESJ.length; i++)
+            {
+                console.log(RESJ[i].fs_path);
+                this.setState(prevState => ({
+                    thoughts: [...prevState.thoughts, RESJ[i].fs_path]
+                  }));
+                // this.state.thoughts.push(RESJ[i].fs_path);
+            }
+            this.getVideo(this.state.thoughts[this.state.thoughts.length-1]);
+            this.setState({
+                modalId: convId,
+                title: title,
+                content: content,
+                creator: creator,
+                filepath: this.state.thoughts[this.state.thoughts.length-1],
+                src: 'http://localhost:3001/uploads/'+this.state.thoughts[this.state.thoughts.length-1],
+                conversationId: convId,
+                currentVidLoc: this.state.thoughts.length-1
+            });
         });
-        console.log(filepath);
-        console.log(this.state.filepath);
+        // this.getVideo(filepath);
+        // this.setState({
+        //     modalId: convId,
+        //     title: title,
+        //     content: content,
+        //     creator: creator,
+        //     filepath: filepath,
+        //     src: 'http://localhost:3001/uploads/'+filepath,
+        //     conversationId: convId
+        // });
+        console.log('54: ' + filepath);
+        console.log('55: ' + this.state.filepath);
     };
 
     archive = (e) => {
@@ -80,10 +103,10 @@ export default class Active_Thoughts extends React.Component {
         console.log("get Video function");
         //hit upload/:id where :id is filename
         var id = id;
-        // console.log(id);
+        console.log(id);
         let classThis = this;
         return fetch(id).then(function(response){
-            console.log('after fetch line 118');
+            console.log('after fetch line 87');
             console.log(response);
             document.querySelector('video').play();
             document.querySelector('video').muted = false;
@@ -156,9 +179,9 @@ export default class Active_Thoughts extends React.Component {
                     console.log(video.poster);
             // })
             // .catch(function(err) { console.log(err.name + ": " + err.message); });
-        };
+    };
 
-        btnStopRecording = (e) => {
+    btnStopRecording = (e) => {
             e.preventDefault();
             let classThis = this;
             console.log("clicked");
@@ -225,12 +248,26 @@ export default class Active_Thoughts extends React.Component {
                 
             })
             
-        };
+    };
+
+    //this.state.thoughts will store all filepaths of the thoughts in that conv_id, and next and prev will select which item is active
+    previousVid = (e) => {
+        e.preventDefault();
+        console.log(this.state.currentVidLoc);
+    };
+
+    nextVid = (e) => {
+        e.preventDefault();
+    };
+        //next up: able to see all videos related to a thought (need to search server for conv_reply as well)
     componentDidMount(){
         return fetch("http://localhost:3001/conversations_active").then(res => res.json()).then(resultingJSON => {
-            console.log(resultingJSON);
-            this.setState({conversations : resultingJSON})});
+                console.log(resultingJSON);
+                this.setState({conversations : resultingJSON})
+            });
     };
+    
+ 
     render(){
         let button;
         if(this.state.btnStatus == 'btn-start-recording')
@@ -261,8 +298,8 @@ export default class Active_Thoughts extends React.Component {
                             {/* <!-- Modal body --> */}
                             <div className="modal-body">
                                 {this.state.filepath}
-                                {(!this.state.isRecording) && 
-                                <ReactPlayer url={this.state.src} playing controls/>}
+                                {(!this.state.isRecording) && <div>
+                                <ReactPlayer url={this.state.src} playing controls/><button onClick={this.previousVid}>Prev</button><button onClick={this.nextVid}>Next</button></div>}
                                 {(this.state.isRecording) && <div>
                                     <video id="record" width="500" height="281">
                                     <source src={this.state.src} type='video/webm' />
