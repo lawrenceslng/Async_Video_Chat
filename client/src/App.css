@@ -52,16 +52,29 @@ h3{
 /* navBar */
 
 #thoughtArchivesNav{
-  display:inline-block;margin-right:10px;;
-}
-#incomingRequestsNav{
   display:inline-block;
+  width: 275px;
+  margin-right: 10px;
+  }
+
+
+#activeThoughtsNav{
+  display:inline-block;
+  width: 275px;
+  margin-right: 10px;
+
 }
 #createNewNav{
   display:inline-block;
+  width: 275px;
+  margin-right: 10px;
+
 }
 #yourCommunityNav{
   display:inline-block;
+  width: 275px;
+  margin-right: 10px;
+
 }
 
 
@@ -124,6 +137,7 @@ h3{
 .fa{
      color:#4183D7;
 }
+
 /* end css for adminPanel.js*/
 
 

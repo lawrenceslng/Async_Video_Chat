@@ -35,7 +35,7 @@ class Friends extends Component {
       {
           //nothing
           this.setState({results: {}});
-          var textnode = document.createTextNode("");  
+          var textnode = document.createTextNode("");
           document.querySelector('.list-of-matching-search').appendChild(textnode);
       }
       else
@@ -43,10 +43,10 @@ class Friends extends Component {
         return fetch(`http://localhost:3001/friends/${this.state.searchStr}`,{method: 'GET'}).then((res) => res.json()).then(rj => {
             console.log(rj);
             this.setState({results: rj});
-           
+
             //get length of rj, create a li item for each with an Add friends button
         })
-      }   
+      }
   }
 
   addFriend = (e) => {
@@ -61,7 +61,7 @@ class Friends extends Component {
       });
   }
   getFriends = () => {
-       return fetch('http://localhost:3001/friends', {headers : { 
+       return fetch('http://localhost:3001/friends', {headers : {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
    }}).then((res) => res.json()).then(rj => {
@@ -70,7 +70,7 @@ class Friends extends Component {
   });
 }
   componentDidMount(){
-    return fetch('http://localhost:3001/friends', {headers : { 
+    return fetch('http://localhost:3001/friends', {headers : {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
        }}).then((res) => res.json()).then(rj => {
@@ -82,7 +82,7 @@ class Friends extends Component {
   render(){
     return(
         <div className="FriendFinder">
-            <div className="container">
+            // <div className="container">
      	    <div className="row">
                 <div className="col-sm-6 ">
                 {/* list of friends of user */}
@@ -91,7 +91,7 @@ class Friends extends Component {
                 </div>
                 <div className="col-sm-6 ">
                 {/* searchable form for friends */}
-                <span>Here's gonna be your searchable field</span>
+                <span>Heres gonna be your searchable field </span>
                 <form id='friend-search'>
                     <input type='text' name='username' ref={input => this.search = input} onChange={this.handleInputChange}></input>
                 </form>
@@ -99,17 +99,17 @@ class Friends extends Component {
                 <div className='list-of-matching-search'>
                     {/* //use array.map */}
                     {this.state.results.length > 0 && this.state.results.map((x) => <div id={x.id} name={x.name} key={x.id}>{x.username}<button id={x.id} onClick={this.addFriend}>Add Friend</button></div>)}
-                    
+
                 </div>
                 </div>
             </div>
         </div>
-     	    
-                
-      
+
+
+
         </div>
       )
-    
+
   }
 }
 

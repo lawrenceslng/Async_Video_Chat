@@ -17,33 +17,33 @@ class Test extends Component {
   constructor(){
    super();
 //    this.state = {
-    
+
 //     };
   };
-  
+
 //   componentDidMount(){
 //     // fetching DOM references
 //     var btnStartRecording = document.querySelector('#btn-start-recording');
 //     var btnStopRecording  = document.querySelector('#btn-stop-recording');
-    
+
 //     var videoElement = document.querySelector('video');
-    
+
 //     var progressBar = document.querySelector('#progress-bar');
 //     var percentage = document.querySelector('#percentage');
-    
+
 //     var recorder;
 //   }
-    
+
 
 //     // reusable helpers
-    
+
 //     // this function submits recorded blob to nodejs server
 //     postFiles() {
 //         var blob = recorder.getBlob();
 
 //         // getting unique identifier for the file name
 //         var fileName = generateRandomString() + '.webm';
-        
+
 //         var file = new File([blob], fileName, {
 //             type: 'video/webm'
 //         });
@@ -62,10 +62,10 @@ class Test extends Component {
 
 //             document.querySelector('#footer-h2').innerHTML = '<a href="' + videoElement.src + '">' + videoElement.src + '</a>';
 //         });
-        
+
 //         if(mediaStream) mediaStream.stop();
 //     }
-    
+
 //     // XHR2/FormData
 //    xhr(url, data, callback) {
 //         var request = new XMLHttpRequest();
@@ -74,13 +74,13 @@ class Test extends Component {
 //                 callback(request.responseText);
 //             }
 //         };
-                
+
 //         request.upload.onprogress = function(event) {
 //             progressBar.max = event.total;
 //             progressBar.value = event.loaded;
 //             progressBar.innerHTML = 'Upload Progress ' + Math.round(event.loaded / event.total * 100) + "%";
 //         };
-                
+
 //         request.upload.onload = function() {
 //             percentage.style.display = 'none';
 //             progressBar.style.display = 'none';
@@ -110,7 +110,7 @@ class Test extends Component {
 //             audio: true,
 //             video: true
 //         };
-        
+
 //         navigator.getUserMedia(session, success_callback, function(error) {
 //             alert('Unable to capture your camera. Please check console logs.');
 //             console.error(error);
@@ -124,18 +124,18 @@ class Test extends Component {
 //         let mediaStream;
 //         captureUserMedia(function(stream) {
 //             mediaStream = stream;
-            
+
 //             videoElement.src = window.URL.createObjectURL(stream);
 //             videoElement.play();
 //             videoElement.muted = true;
 //             videoElement.controls = false;
-            
+
 //             recorder = RecordRTC(stream, {
 //                 type: 'video'
 //             });
-            
+
 //             recorder.startRecording();
-            
+
 //             // enable stop-recording button
 //             btnStopRecording.disabled = false;
 //         });
@@ -146,7 +146,7 @@ class Test extends Component {
 //         e.preventDefault();
 //         btnStartRecording.disabled = false;
 //         btnStopRecording.disabled = true;
-        
+
 //         recorder.stopRecording(postFiles);
 //     };
 
@@ -160,14 +160,14 @@ class Test extends Component {
         // <div className="app">
         // <h1>RecordRTC to Node.js</h1>
         // <p>
-        //     <video></video> 
+        //     <video></video>
         // </p><hr />
-        
+
         // <div>
         //     <label id="percentage">0%</label>
         //     {/* <progress id="progress-bar" value=0></progress><br /> */}
         // </div>
-            
+
         // <hr />
 
         // <div>
