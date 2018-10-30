@@ -48,8 +48,24 @@ export default class Active_Thoughts extends React.Component {
         let filepath = e.target.getAttribute('data-filepath');
         console.log(filepath);
         fetch("http://localhost:3001/relevant_thoughts/"+convId).then(res => res.json()).then(RESJ => {
-            console.log('43: ' + RESJ[0].fs_path);
-            for(var i = 0; i < RESJ.length; i++)
+            // console.log('43: ' + RESJ[0].fs_path);
+            if(RESJ.length == 0)
+            {
+                this.getVideo(filepath);
+                this.setState({
+                    modalId: convId,
+                    title: title,
+                    content: content,
+                    creator: creator,
+                    filepath: filepath,
+                    originalFilepath: filepath,
+                    src: 'http://localhost:3001/uploads/'+filepath,
+                    conversationId: convId,
+                    currentVidLoc: 0
+                });
+            }
+            else{
+                for(var i = 0; i < RESJ.length; i++)
             {
                 console.log(RESJ[i].fs_path);
                 this.setState(prevState => ({
@@ -69,6 +85,7 @@ export default class Active_Thoughts extends React.Component {
                 conversationId: convId,
                 currentVidLoc: this.state.thoughts.length-1
             });
+            } 
         });
         // this.getVideo(filepath);
         // this.setState({
