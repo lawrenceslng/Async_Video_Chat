@@ -331,13 +331,6 @@ app.get("/conversations_active", function(req,response){
   let user_id = 1;  //this will be changed to take in jsonwebtoken id
   getConversation(user_id, 'active').then(res => {
     console.log(res);
-    // var arr = [];
-    // for(var i = 0; i < res.length; i++)
-    // {
-    //   arr.push({i: getAllThoughts(res[i].id)});
-    //   console.log(arr);
-    // }
-    
     response.json(res)
   });
 
