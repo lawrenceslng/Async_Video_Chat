@@ -53,19 +53,28 @@ h3{
 
 #thoughtArchivesNav{
   display:inline-block;
-  margin-right:10px;
-}
+  width: 275px;
+  margin-right: 10px;
+  }
+
+
 #activeThoughtsNav{
   display:inline-block;
-  margin-right:10px;
+  width: 275px;
+  margin-right: 10px;
+
 }
 #createNewNav{
   display:inline-block;
-  margin-right:10px;
+  width: 275px;
+  margin-right: 10px;
+
 }
 #yourCommunityNav{
   display:inline-block;
-  margin-right:10px;
+  width: 275px;
+  margin-right: 10px;
+
 }
 
 

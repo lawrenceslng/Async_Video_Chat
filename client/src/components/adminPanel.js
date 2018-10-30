@@ -52,15 +52,15 @@ class AdminPanel extends Component {
     event.target.parentElement.parentElement.classList.add("expand");
 
     if (event.target.classList.contains('show-record')){
-      this.setState ({record: true})
+      this.setState ({record: true, activeThoughts: false, friends: false})
     }
 
     if (event.target.classList.contains('show-active-thoughts')){
-      this.setState ({activeThoughts: true})
+      this.setState ({activeThoughts: true, record: false, friends: false})
     }
 
     if (event.target.classList.contains('show-friends')){
-      this.setState ({friends: true})
+      this.setState ({friends: true, record: false, activeThoughts: false})
     }
 
     var elements = document.querySelectorAll('.title');
@@ -88,12 +88,10 @@ class AdminPanel extends Component {
       <div className="box">
     <div className="container">
 
-      {this.state.NavBar && <NavBar/>}
+      {this.state.NavBar && <NavBar expand={this.expand} />}
       {this.state.record && <Record/>}
       {this.state.activeThoughts && <Active_Thoughts/>}
       {this.state.friends && <Friends/>}
-
-
 
 
 {/*start box section*/}
@@ -170,5 +168,5 @@ class AdminPanel extends Component {
           )
           }
           }
-
+// export expand;
 export default AdminPanel;
