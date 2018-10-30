@@ -318,12 +318,11 @@ app.get("/friends/:name", function(req,res){
 
 //route to get all conversations related to one user
 //need to add condition WHERE status = active
-app.get("/conversations_archived", function(req,res){
+app.get("/conversations_archive", function(req,response){
   let user_id = 1; //this will be changed to take in jsonwebtoken id
-  connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ? AND stat = 'archive'`, [user_id],function (error, results, fields) {
-    if (error) throw error;
-    console.log(results);
-    res.json(results);
+  getConversation(user_id, 'archive').then(res => {
+    console.log(res);    
+    response.json(res);
   });
 });
 
