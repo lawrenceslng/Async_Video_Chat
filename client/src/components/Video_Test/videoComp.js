@@ -30,7 +30,7 @@ export default class Record extends React.Component {
             btnText: 'Start Recording',
             counter: 0,
             friends: [{id: 0, username: 'l'}],
-            selectedOption : null,
+            selectedOption : [],
             isComplete: false
         }
     }
@@ -100,6 +100,7 @@ export default class Record extends React.Component {
 
     btnStopRecording = (e) => {
         e.preventDefault();
+        //also MUST have recipients for videos else errors out
         // this.setState({ selectedOption: 'test' });
         // alert(`Option selected:`, this.state.selectedOption);
         console.log(this.state.selectedOption.length);
@@ -134,9 +135,10 @@ export default class Record extends React.Component {
                 var fileURL = JSON.parse(responseText).fileURL;
                 console.info('fileURL', fileURL);
                 var id = fileURL.substring(30);
-                let creator = 1;
-                let title = 'test1';
-                let content ='no content';
+                let creator = 1; //creator will get ID number from localStorage after issue of jsonwebtoken
+                let title = document.querySelector('[name="title"]').value;
+                console.log(title);
+                let content = document.querySelector('[name="content"]').value;
                 // debugger;
                 // return fetch('http://localhost:3001/uploadFile2', {
                 //     method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -233,17 +235,23 @@ export default class Record extends React.Component {
      'Accept': 'application/json'
     }}).then((res) => res.json()).then(rj => {
         console.log(rj);
-        for(var i = 0; i < rj.length; i++)
-        {
+        // if(rj.length == 0)
+        // {
+        //     this.setState({friends: null});
+        // }
+        // else
+        // {
+            for(var i = 0; i < rj.length; i++)
+            {
             // var neww = this.renameProp('id','value',rj[i]);
             // var newww = this.renameProp('username','label',rj[i]);
-            rj[i].value = rj[i].id;
-            rj[i].label = rj[i].username;
+                rj[i].value = rj[i].id;
+                rj[i].label = rj[i].username;
             // console.log(neww);
             // console.log(newww);
-        }
-         this.setState({friends: rj});
-
+            }
+            this.setState({friends: rj});
+        // }
    });
  }
     componentDidMount(){
@@ -288,9 +296,9 @@ export default class Record extends React.Component {
         {
             button = <button id={this.state.btnStatus} onClick={this.btnStopRecording}>{this.state.btnText}</button>
         }
-        if(this.state.friends)
+        if(this.state.friends.length == 0)
         {
-            // debugger;
+            //debugger
         }
         
         if(!this.state.isComplete)
@@ -302,12 +310,20 @@ export default class Record extends React.Component {
                 {/* {friend} */}
             <h1>RecordRTC to Node.js</h1>
             {vid}<hr />
-
+            <form>
+                Title:<br/>
+                <input type="text" name="title"/><br/>
+                Description:<br/>
+                <input type="text" name="content"/>
+            </form>
             <hr />
             {/* friend list with check boxes; need a getFriends function*/}
             <div>
                 {button}
-                <Select isMulti options={this.state.friends} value={this.state.selectedOption} onChange={this.handleChange} />
+                {/* this does not work  */}
+                {this.state.friends.length == 0 && <button>Add a Friend Yo</button>}
+                {this.state.friends.length > 0 && <div>If you do not select any friends the thought parcel will only be visible to you
+                    <Select isMulti options={this.state.friends} value={this.state.selectedOption} onChange={this.handleChange} /></div>}
                 {/* <button id="btn-stop-recording" onClick={this.btnStopRecording}>Stop Recording</button>  */}
                 <button id="btn-get-video" onClick={this.btnGetVideo}>Get Video</button>
                 <p>{this.state.counter}</p>

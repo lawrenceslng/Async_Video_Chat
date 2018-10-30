@@ -271,19 +271,26 @@ app.get('/uploads/:id', function (req, res){
     var arr = [2];
     var arrStr = arr.toString();
     console.log(`(${arr.toString()})`);
-    // getFriends(userId).then(res => {
-    //   console.log(res);
-    //   var query = res.toString();
-    //   console.log(query);
-    //   connection.query(`SELECT id, username FROM users WHERE id IN (${query})`,function (err, results, fields2) {
-    //         if(err) throw err;
-    //         console.log(results);
-    //         response.send(results);
-    //     //     arr.push(res);
-    //
-    //       });
-    //
-    // });
+    getFriends(userId).then(res => {
+      console.log(res);
+      if(res.length == 0)
+      {
+        response.send([]);
+      }
+      else
+      {
+        var query = res.toString();
+        console.log(query);
+        //need to add condition where query is empty
+        connection.query(`SELECT id, username FROM users WHERE id IN (${query})`,function (err, results, fields2) {
+          if(err) throw err;
+          console.log(results);
+          response.send(results);
+      //     arr.push(res);
+          
+        });
+      } 
+    });
     //syntax for multiple value query
     // connection.query(`SELECT username FROM users WHERE id IN (${arr.toString()})`,function (err, res, fields2) {
     //     if(err) throw err;
@@ -311,10 +318,39 @@ app.get("/friends/:name", function(req,res){
 
 //route to get all conversations related to one user
 //need to add condition WHERE status = active
-app.get("/conversations", function(req,res){
-  let user_id = 2;
-  connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ?`, [user_id],function (error, results, fields) {
-    if (error) throw error;
+app.get("/conversations_archive", function(req,response){
+  let user_id = 1; //this will be changed to take in jsonwebtoken id
+  getConversation(user_id, 'archive').then(res => {
+    console.log(res);    
+    response.json(res);
+  });
+});
+
+//need to add info to get conversation reply table info as well
+app.get("/conversations_active", function(req,response){
+  let user_id = 1;  //this will be changed to take in jsonwebtoken id
+  getConversation(user_id, 'active').then(res => {
+    console.log(res);
+    response.json(res)
+  });
+
+});
+
+app.get("/relevant_thoughts/:id", function(req,response){
+  console.log("here at relevant_thoughts" + req.params.id);
+  getAllThoughts(req.params.id).then(res => {
+    console.log(res);
+    response.json(res);
+  });
+});
+
+app.post("/archive/:id", function(req,res){
+  //let id be conversation id
+  let id = req.params.id;
+  console.log("archive route conv id: " + id);
+  //connect to conversations WHERE conversations_id equal id and update the stat from active to archive
+  connection.query(`UPDATE conversations SET stat = 'archive' WHERE id = ?`, [id], function (err, results, fields){
+    if(err) throw err;
     console.log(results);
     res.json(results);
   });
@@ -416,6 +452,19 @@ app.post("/uploadFile2", function(req,res) {
   );
 });
 
+app.post("/conversation_reply", function(req,res){
+  //all I need is create a conversation reply
+  console.log(req.body.user_id);
+  console.log(req.body.content);
+  console.log(req.body.conv_id);
+  console.log(req.body.id);
+  connection.query("INSERT INTO conversations_reply (user_id, content, fs_path, c_id_fk) VALUES (?, ?, ?, ?)", [req.body.user_id, req.body.content, req.body.id, req.body.conv_id],function (error, results, fields) {
+    if(error) throw error;
+    console.log("conv_reply " + results.insertId);
+    res.json({success:true});
+  })
+});
+
 function uploadFile(request, response) {
   console.log("start of uploadFile");
   // console.log("request = " + request.body);
@@ -482,7 +531,7 @@ function getHeaders(opt, val) {
 
 function createConversation(user_one_id, title, content, filePath){
   return new Promise(function(resolve, reject) {
-    connection.query("INSERT INTO conversations (user_one_id, title, content, fs_path) VALUES (?, ?, ?, ?)", [user_one_id, title, content, filePath],function (error, results, fields) {
+    connection.query("INSERT INTO conversations (user_one_id, title, content, fs_path, stat) VALUES (?, ?, ?, ?, ?)", [user_one_id, title, content, filePath, 'active'],function (error, results, fields) {
       if(error) return reject(error);
       console.log("468: " + results.insertId);
       resolve(results.insertId);
@@ -515,6 +564,28 @@ function getFriends(id){
   });
 })
 };
+
+//idea is to get all filepaths of all video and send it to front-end; front-end stores filepaths in array 
+function getConversation(user_id, status){
+  return new Promise(function(resolve, reject) {
+    connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ? AND stat = ?`, [user_id, status],function (error, results, fields) {
+      if (error) return reject(error);
+        console.log(results);
+        resolve (results);
+      });
+  })
+};
+
+function getAllThoughts(conv_id){
+  return new Promise(function(resolve, reject) {
+  connection.query(`SELECT conversations_reply.fs_path FROM conversations_reply WHERE conversations_reply.c_id_fk = ?`,[conv_id],function(err,res,fields){
+    if(err) return reject(err);
+    // console.log(res);
+    resolve(res);
+  })
+})
+};
+
 app.listen(PORT, function() {
   console.log('🌎 ==> Now listening on PORT %s! Visit http://localhost:%s in your browser!', PORT, PORT);
 });

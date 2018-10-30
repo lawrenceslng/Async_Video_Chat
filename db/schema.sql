@@ -30,11 +30,12 @@ CREATE TABLE contacts(
 CREATE TABLE conversations(
 	id INT NOT NULL AUTO_INCREMENT,
 	user_one_id INT NOT NULL, 
-	-- user_two_id INT NOT NULL,
 	title VARCHAR(255) NOT NULL,
 	content TEXT,
 	fs_path TEXT,
 	stat ENUM('active', 'archive'),
+	share ENUM('public', 'group'),
+	date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_one_id) REFERENCES users(id)
 	-- FOREIGN KEY (user_two_id) REFERENCES users(id)
@@ -57,6 +58,7 @@ CREATE TABLE conversations_reply(
 	content TEXT,
 	fs_path TEXT,
 	c_id_fk INT NOT NULL,
+	date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (c_id_fk) REFERENCES conversations(id)

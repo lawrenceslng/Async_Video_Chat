@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import Record from './components/Video_Test/videoComp';
 import Friends from './components/User_Friends/Friends';
 import Active_Thoughts from './components/Thought_Archives/active';
+import Archived_Thoughts from './components/Thought_Archives/archive';
 import './App.css';
 
 class Test extends Component {
@@ -175,8 +176,9 @@ class Test extends Component {
         // </div>
         // <script src="/node_modules/recordrtc/RecordRTC.js"> </script>
         // </div>
-        // <Active_Thoughts />
-        <Record />
+        <Active_Thoughts />
+        // <Archived_Thoughts />
+        // <Record />
         // <Friends />
     );
   }

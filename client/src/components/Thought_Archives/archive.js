@@ -4,7 +4,6 @@ import RecordRTC from 'recordrtc';
 import {_xhr} from '../Video_Test/video'
 //this will retrieve all conversations related to this particular user
 //hit up conversations, conversation_relation
-
 const initState = {
     stream: null,
     url:'',
@@ -23,21 +22,21 @@ const initState = {
     currentVidLoc: 0
 };
 
-export default class Active_Thoughts extends React.Component {
+export default class Archived_Thoughts extends React.Component {
     constructor(){
         super();
         this.state = initState;
     };
-
-    tick(){
-        this.setState(prevState => ({
-          counter: prevState.counter + 1
-        }));
-    };
+    
+    // tick(){
+    //     this.setState(prevState => ({
+    //       counter: prevState.counter + 1
+    //     }));
+    // };
     reset() {
         this.setState(initState);
     };
-    //add button to archive conversation if you are the creator
+
     populate = (e) => {
         e.preventDefault();
         this.reset();
@@ -100,181 +99,20 @@ export default class Active_Thoughts extends React.Component {
         console.log('54: ' + filepath);
         console.log('55: ' + this.state.filepath);
     };
-
-    archive = (e) => {
-        e.preventDefault();
-        let classThis = this;
-        //get conversation id from HTML
-        let convId = e.target.parentElement.parentElement.children[0].childNodes[0].innerHTML;
-        console.log(this.state.conversationId);
-        // debugger;
-        console.log("LINE 43: " + convId);
-        // go to server with conversation ID and hit up archive route
-        return fetch("http://localhost:3001/archive/" + convId, 
-            {method: 'POST',
-            headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-            }})
-        .then(res => res.json()).then(resultingJSON => {
-            console.log(resultingJSON);
-            console.log("after archive");
-            classThis.componentDidMount();
-        });
-    };
-
     getVideo = (id) => {
         console.log("get Video function");
         //hit upload/:id where :id is filename
         var id = id;
-        console.log(id);
+        // console.log(id);
         let classThis = this;
         return fetch(id).then(function(response){
-            console.log('after fetch line 87');
+            console.log('after fetch line 118');
             console.log(response);
             document.querySelector('video').play();
             document.querySelector('video').muted = false;
             document.querySelector('video').controls = true;
         });
     };
-    reply = (e) => {
-        e.preventDefault();
-        // alert("this is a reply button");
-        //I know the conversation ID, all I have to do is have a recordRTC session and on stop record, post this video
-        this.setState({isRecording: true});
-        navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: true
-        }).then(function(camera) {
-            
-            document.querySelector('video').muted = true;
-            document.querySelector('video').srcObject = camera;
-            document.querySelector('video').camera = camera;
-            document.querySelector('video').play();
-        });
-        //have recordRTC replace modal body, modal footer replaced by record/stop record
-    };
-    btnStartRecording = (e) => {
-        // debugger;
-            let classThis = this;
-            // console.log(this.state.stream);
-            // console.log(this.state.isRecording);
-            e.preventDefault();
-            // let session = {
-            //     audio: true,
-            //     video: true
-            // }; 
-            // navigator.mediaDevices.getUserMedia(session)
-            // .then(function(mediaStream) {
-                var video = document.querySelector('video');
-                // if (typeof video.srcObject == "object") {
-                //     video.srcObject = mediaStream;
-                //   } else {
-                //     video.src = URL.createObjectURL(mediaStream);
-                //   }
-                // console.log('mediaStream Line 80 = ' + mediaStream);
-                // video.play();
-    
-                    const videoRecorder = RecordRTC(video.camera, {
-                        type: 'video',
-                        video: {
-                            width: 640,
-                            height: 480
-                        },
-                        canvas: {
-                            width: 640,
-                            height: 480
-                        }
-                    })
-                    console.log(videoRecorder);
-                    videoRecorder.startRecording();
-                    this.interval = setInterval(() => classThis.tick(), 1000);
-    
-                    classThis.setState({
-                        stream: video.camera,
-                        videoRecorder: videoRecorder,
-                        isRecording: true,
-                        btnStatus: 'btn-stop-recording',
-                        btnText: 'Stop Recording'
-                    });
-                    console.log(classThis.state.stream);
-                    console.log(videoRecorder);
-                    // console.log(video.src);
-                    console.log(video.poster);
-            // })
-            // .catch(function(err) { console.log(err.name + ": " + err.message); });
-    };
-
-    btnStopRecording = (e) => {
-            e.preventDefault();
-            let classThis = this;
-            console.log("clicked");
-            clearInterval(this.interval);
-            classThis.state.videoRecorder.stopRecording(function() {
-                // var recordedBlob = classThis.state.videoRecorder.blob; // blob property
-            
-                var recorderBlob = classThis.state.videoRecorder.getBlob(); // getBlob method
-                // console.log(recordedBlob);
-                console.log(recorderBlob);
-                // console.log(classThis.state.stream)
-                if(classThis.state.stream) classThis.state.stream.stop();
-                var fileName = 'test_vid.webm';
-                    
-                var file = new File([recorderBlob], fileName, {
-                    type: 'video/webm'
-                });
-                // debugger;
-                // console.log(users);
-                // let users = classThis.state.selectedOption;
-                console.log('line 86 file name before request: ' + fileName);
-                _xhr('http://localhost:3001/uploadFile', file, function(responseText) {
-                    var fileURL = JSON.parse(responseText).fileURL;
-                    console.info('fileURL', fileURL);
-                    var id = fileURL.substring(30);
-                    let user_id = 1; //user_id will get ID number from localStorage after issue of jsonwebtoken
-                    let content = "no content";
-                    let conv_id = classThis.state.conversationId;
-                    // debugger;
-                    console.log("after fetch");
-                    classThis.setState({
-                        stream: null,
-                        videoRecorder: '',
-                        isRecording: false,
-                        isDone: true,
-                        src: fileURL,
-                        btnStatus: 'btn-start-recording',
-                        btnText: 'Start Recording'
-                    });
-                    return fetch("http://localhost:3001/conversation_reply", {
-                        method: 'POST',
-                        headers: {
-                          'Accept': 'application/json',
-                          'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({user_id,content,conv_id,id})
-                      }).then(res => res.json()).then(rj => {
-                        console.log(rj);
-                        // debugger;
-                        if(rj.success)
-                        {
-                        //   this.setState({loggedIn: true});
-                            console.log("everything is a success");
-                            classThis.setState({
-                                isComplete: true
-                            });
-                        }
-                        else{
-                        //   this.setState({loggedIn: false});
-                            console.log("everything IS NOT a success");
-                        }
-                      })
-                });
-                
-            })
-            
-    };
-
-    //this.state.thoughts will store all filepaths of the thoughts in that conv_id, and next and prev will select which item is active
     previousVid = (e) => {
         e.preventDefault();
         console.log(this.state.currentVidLoc);
@@ -318,15 +156,15 @@ export default class Active_Thoughts extends React.Component {
         //     });
         // }
     };
-        //next up: able to see all videos related to a thought (need to search server for conv_reply as well)
-    componentDidMount(){
-        return fetch("http://localhost:3001/conversations_active").then(res => res.json()).then(resultingJSON => {
-                console.log(resultingJSON);
-                this.setState({conversations : resultingJSON})
-            });
+    reply = (e) => {
+        e.preventDefault();
+        alert("this is a reply button");
     };
-    
- 
+    componentDidMount(){
+        return fetch("http://localhost:3001/conversations_archive").then(res => res.json()).then(resultingJSON => {
+            console.log(resultingJSON);
+            this.setState({conversations : resultingJSON})});
+    };
     render(){
         let button;
         if(this.state.btnStatus == 'btn-start-recording')
@@ -339,7 +177,7 @@ export default class Active_Thoughts extends React.Component {
         }
         return (
             <div>
-                <h1>these are my active conversations</h1>
+                <h1>These are archived conversations I am a part of.</h1>
                 <button id='2' onClick={this.populate}>Test</button>
                 {(this.state.conversations) && this.state.conversations.map((x) => <div className='thoughtBox' id={x.id} key={x.id}data-toggle="modal" data-target="#myModal" onClick={this.populate} data-conversation_id={x.id} data-creator={x.user_one_id} data-title={x.title} data-content={x.content}data-filepath={x.fs_path}>Conversation-id={x.id}...creator={x.user_one_id}.......title={x.title}.......content={x.content}......filepath={x.fs_path}</div>)}
                 {/* when user clicks on a button, opens up a modal where the last video message in that conversation resides and buttons that say exit/reply/close */}
@@ -378,7 +216,7 @@ export default class Active_Thoughts extends React.Component {
                           </div>
                         </div>
                     </div>
-                </div>
+            </div>
         )
     };
 }
