@@ -3,6 +3,7 @@ import NavBar from './navBar';
 import Record from './Video_Test/videoComp'
 import Active_Thoughts from './Active_Thoughts/active'
 import Friends from './User_Friends/Friends'
+import Archived_Thoughts from './Thought_Archives/archive'
 
 // -import record class from videocomp to adminPanel. videoComp.js should show up on click when we hit CreateNew in admin panel.
 
@@ -44,24 +45,34 @@ class AdminPanel extends Component {
         {
           event.target.parentElement.parentElement.classList.add("expand");
         }
+        else{
+          if(event.target.parentElement.parentElement.parentElement.classList.contains("box-part"))
+          {
+            event.target.parentElement.parentElement.parentElement.classList.add("expand");
+          }
+        }
       }
     }
 
 
     //keep in mind event.target is "<div className="title"><img className="card-img-top" src="https://visualpharm.com/assets/168/Read%20Message-595b40b75ba036ed117d88f5.svg" alt=" image"></div>"
-    event.target.parentElement.parentElement.classList.add("expand");
+    // event.target.parentElement.parentElement.classList.add("expand");
 
     if (event.target.classList.contains('show-record')){
-      this.setState ({record: true, activeThoughts: false, friends: false})
-    }
+     this.setState ({record: true, activeThoughts: false, friends: false, archiveThoughts: false})
+   }
 
-    if (event.target.classList.contains('show-active-thoughts')){
-      this.setState ({activeThoughts: true, record: false, friends: false})
-    }
+   else if (event.target.classList.contains('show-active-thoughts')){
+     this.setState ({activeThoughts: true, record: false, friends: false, archiveThoughts: false})
+   }
 
-    if (event.target.classList.contains('show-friends')){
-      this.setState ({friends: true, record: false, activeThoughts: false})
-    }
+   else if (event.target.classList.contains('show-friends')){
+     this.setState ({friends: true, record: false, activeThoughts: false, archiveThoughts: false})
+   }
+
+   else if (event.target.classList.contains('show-archived-thoughts')){
+     this.setState ({friends: false, record: false, activeThoughts: false, archiveThoughts: true})
+   }
 
     var elements = document.querySelectorAll('.title');
     for (var i=0; i<elements.length; i++){
@@ -89,6 +100,7 @@ class AdminPanel extends Component {
     <div className="container">
 
       {this.state.NavBar && <NavBar expand={this.expand} />}
+      {this.state.archiveThoughts && <Archived_Thoughts/>}
       {this.state.record && <Record/>}
       {this.state.activeThoughts && <Active_Thoughts/>}
       {this.state.friends && <Friends/>}
@@ -97,10 +109,10 @@ class AdminPanel extends Component {
 {/*start box section*/}
 
           <div className="row">
-            <div className="col-sm-6 ">
+            <div className="col-sm-6 show-archived-thoughts">
               <a href="#" />
 
-              <div id="thoughtArchives" className="box-part text-center" onClick={this.expand}>
+              <div id="thoughtArchives" className="box-part text-center show-archived-thoughts" onClick={this.expand}>
                 <div className="title">
                   <img className="card-img-top" src="https://visualpharm.com/assets/224/Folder-595b40b85ba036ed117dd27b.svg" />
 
@@ -114,7 +126,7 @@ class AdminPanel extends Component {
               </div>
             </div>
 
-            <div className="col-sm-6 ">
+            <div className="col-sm-6 show-active-thoughts">
               <a href="#" />
 
               <div id="activeThoughts" className="box-part text-center show-active-thoughts" onClick={this.expand}>
@@ -129,7 +141,7 @@ class AdminPanel extends Component {
               </div>
             </div>
 
-            <div className="col-sm-6 ">
+            <div className="col-sm-6 show-record">
               <a href="#" />
               <div id="createNew" className="box-part text-center show-record" onClick={this.expand}>
                 <div className="title  show-record">
@@ -144,7 +156,7 @@ class AdminPanel extends Component {
               </div>
             </div>
 
-            <div className="col-sm-6 ">
+            <div className="col-sm-6 show-friends">
               <a href="#" />
 
               <div id="yourCommunity" className="box-part text-center show-friends" onClick={this.expand}>
