@@ -108,7 +108,8 @@ app.post('/login', function(req,res){
           res.status(200).json({
               success: true,
               message: 'Enjoy your token!',
-              token: token
+              token: token,
+              id: payload.id
           });
 
 
@@ -155,7 +156,7 @@ app.post("/signup", function(req,res){
                 };
       
                 var token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '4h' });
-                res.json({success:true, token: token});
+                res.json({success:true, token: token, id: payload.id});
               });
             })
           })
@@ -246,7 +247,7 @@ app.get('/usersapi',verifyToken, function (req, res){
   // }
 });
 
-app.get('/uploads/:id',verifyToken, function (req, res){
+app.get('/uploads/:id', function (req, res){
     // console.log(req.sessions);
     var fileName = req.params.id;
     var filePath = path.join(__dirname+'/uploads/', fileName);

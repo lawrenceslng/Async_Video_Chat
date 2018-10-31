@@ -46,6 +46,7 @@ class App extends Component {
         {
           this.setState({loggedIn: true}, function(){
             localStorage.setItem('token', rj.token);
+            localStorage.setItem('id', rj.id);
           });
         }
         else{
@@ -81,6 +82,7 @@ class App extends Component {
           {
             this.setState({loggedIn: true}, function(){
               localStorage.setItem('token', rj.token);
+              localStorage.setItem('id', rj.id);
             });
           }
           else{

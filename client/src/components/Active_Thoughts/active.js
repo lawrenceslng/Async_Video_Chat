@@ -340,6 +340,7 @@ export default class Active_Thoughts extends React.Component {
             "x-access-token": this.props.token()
            }}).then(res => res.json()).then(resultingJSON => {
                 console.log(resultingJSON);
+                // debugger;
                 this.setState({conversations : resultingJSON})
             });
     };
@@ -388,7 +389,7 @@ export default class Active_Thoughts extends React.Component {
                             {/* <!-- Modal footer --> */}
                             <div className="modal-footer">
                             {/* if localstorage matches with this.state.creator */}
-                            {(this.state.creator == 1) && <button className="btn btn-danger" data-dismiss="modal" onClick={this.archive}>Archive</button>}    
+                            {(this.state.creator == localStorage.getItem("id")) && <button className="btn btn-danger" data-dismiss="modal" onClick={this.archive}>Archive</button>}    
                             <button type="button" className="btn btn-primary" onClick={this.reply}>Reply</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                             </div>
