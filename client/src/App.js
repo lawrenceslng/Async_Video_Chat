@@ -13,12 +13,15 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      loggedIn: true,
-      accountCreated: false,
-      token: ""
+      loggedIn: false,
+      accountCreated: false
     };
 
-  }
+  };
+
+  getToken = () => {
+    return localStorage.getItem('token');
+  };
 
   buttonClick = (e) => {
     e.preventDefault();
@@ -41,7 +44,9 @@ class App extends Component {
         // debugger
         if(rj.success)
         {
-          this.setState({loggedIn: true, token: rj.token});
+          this.setState({loggedIn: true}, function(){
+            localStorage.setItem('token', rj.token);
+          });
         }
         else{
           alert("wrong password, try again");
@@ -74,7 +79,9 @@ class App extends Component {
           // debugger;
           if(rj.success)
           {
-            this.setState({loggedIn: true});
+            this.setState({loggedIn: true}, function(){
+              localStorage.setItem('token', rj.token);
+            });
           }
           else{
             this.setState({loggedIn: false});
@@ -157,7 +164,7 @@ class App extends Component {
         // code for AdminPanel here
         <div className="App">
           <button onClick={this.getUsers} className="btn btn-primary">Get Users</button>
-          <AdminPanel />
+          <AdminPanel token={this.getToken}/>
         </div>
       )
     }

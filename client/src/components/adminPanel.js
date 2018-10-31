@@ -7,8 +7,8 @@ import Friends from './User_Friends/Friends'
 // -import record class from videocomp to adminPanel. videoComp.js should show up on click when we hit CreateNew in admin panel.
 
 class AdminPanel extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
 
 
   this.state = {
@@ -89,9 +89,9 @@ class AdminPanel extends Component {
     <div className="container">
 
       {this.state.NavBar && <NavBar expand={this.expand} />}
-      {this.state.record && <Record/>}
-      {this.state.activeThoughts && <Active_Thoughts/>}
-      {this.state.friends && <Friends/>}
+      {this.state.record && <Record token={this.props.token}/>}
+      {this.state.activeThoughts && <Active_Thoughts token={this.props.token}/>}
+      {this.state.friends && <Friends token={this.props.token}/>}
 
 
 {/*start box section*/}

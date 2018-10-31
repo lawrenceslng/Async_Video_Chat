@@ -39,7 +39,10 @@ export default class Record extends React.Component {
               counter: prevState.counter + 1
             }));
 
-    }
+    };
+    getToken = () => {
+        return localStorage.getItem('token');
+      };
 // UI events handling
 //start a counter and have a recording animation during this
     btnStartRecording = (e) => {
@@ -230,9 +233,11 @@ export default class Record extends React.Component {
     });
 
     getFriends = () => {
+        var token = this.getToken();
         return fetch('http://localhost:3001/friends', {headers : { 
      'Content-Type': 'application/json',
-     'Accept': 'application/json'
+     'Accept': 'application/json',
+     "x-access-token": token
     }}).then((res) => res.json()).then(rj => {
         console.log(rj);
         // if(rj.length == 0)
