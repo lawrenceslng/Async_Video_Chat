@@ -10,8 +10,8 @@ import React, { Component } from 'react';
 // }
 
 class Friends extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
         searchStr: '',
         friends: [{
@@ -30,6 +30,7 @@ class Friends extends Component {
     // this.getInfo();
   };
   getInfo = () => {
+    var token = this.props.token();
       console.log(this.state.searchStr);
       if(this.state.searchStr === '')
       {
@@ -40,7 +41,11 @@ class Friends extends Component {
       }
       else
       {
-        return fetch(`http://localhost:3001/friends/${this.state.searchStr}`,{method: 'GET'}).then((res) => res.json()).then(rj => {
+        return fetch(`http://localhost:3001/friends/${this.state.searchStr}`,{method: 'GET',headers : {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            "x-access-token": token
+           }}).then((res) => res.json()).then(rj => {
             console.log(rj);
             this.setState({results: rj});
 
@@ -54,25 +59,36 @@ class Friends extends Component {
       //gets User ID from ID in button
       console.log(e.target.id);
       var id = e.target.id;
+      var token = this.props.token();
       //do POST fetch call to server
-      fetch(`http://localhost:3001/friends/`+id,{method: 'POST'}).then((res) => res.json()).then(rj => {
+      console.log('line 64: '+token);
+      console.log('line 65: ' + JSON.stringify({token}));
+      fetch(`http://localhost:3001/friends/`+id,{method: 'POST',  headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },body: JSON.stringify({token})}).then((res) => res.json()).then(rj => {
           console.log(rj);
           this.getFriends();
       });
   }
   getFriends = () => {
+      var token = this.props.token();
+      console.log(token);
        return fetch('http://localhost:3001/friends', {headers : {
     'Content-Type': 'application/json',
-    'Accept': 'application/json'
+    'Accept': 'application/json',
+    "x-access-token": token
    }}).then((res) => res.json()).then(rj => {
        console.log(rj);
         this.setState({friends: rj});
   });
 }
   componentDidMount(){
+    var token = this.props.token();
     return fetch('http://localhost:3001/friends', {headers : {
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        "x-access-token": token
        }}).then((res) => res.json()).then(rj => {
            console.log(rj);
             this.setState({friends: rj});

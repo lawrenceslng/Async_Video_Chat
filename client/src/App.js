@@ -154,7 +154,7 @@ class App extends Component {
     })
     .then(res => res.json())
     .then(rj => console.log(rj));
-  }
+  };
 
   render(){
 

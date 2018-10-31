@@ -40,7 +40,7 @@ app.use(express.static("public"));
   //allow the api to be accessed by other apps
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-access-token");
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
     next();
 });
@@ -171,7 +171,9 @@ app.post("/signup", function(req,res){
 // ALL AUTHENTICATED ROUTE GOES BELOW THIS
 function verifyToken(req, res, next) {
   // check header or url parameters or post parameters for token
+  console.log("verify token reqbody: " + req.body.token);
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  console.log("verify token: " + token);
   if (token) {
       jwt.verify(token, process.env.JWT_SECRET, (err, decod) => {
           if (err) {
@@ -298,11 +300,19 @@ app.get('/uploads/:id',verifyToken, function (req, res){
   app.get("/friends",verifyToken, function(req,response){
     // var search = req.params.name;
     console.log("get Friends route");
+    console.log(req.decoded);
+    // get the decoded payload ignoring signature, no secretOrPrivateKey needed
+    // var decoded = jwt.decode(token);
+
+    // get the decoded payload and header
+    // var decoded = jwt.decode(token, {complete: true});
+    // console.log(decoded.header);
+    // console.log(decoded.payload)
     //userId is going to be the user's id
-    var userId = 1;
-    var arr = [2];
-    var arrStr = arr.toString();
-    console.log(`(${arr.toString()})`);
+    var userId = req.decoded.id;
+    // var arr = [2];
+    // var arrStr = arr.toString();
+    // console.log(`(${arr.toString()})`);
     getFriends(userId).then(res => {
       console.log(res);
       if(res.length == 0)
@@ -351,7 +361,7 @@ app.get("/friends/:name",verifyToken, function(req,res){
 //route to get all conversations related to one user
 //need to add condition WHERE status = active
 app.get("/conversations_archive",verifyToken, function(req,response){
-  let user_id = 1; //this will be changed to take in jsonwebtoken id
+  let user_id = req.decoded.id; //this will be changed to take in jsonwebtoken id
   getConversation(user_id, 'archive').then(res => {
     console.log(res);    
     response.json(res);
@@ -360,7 +370,7 @@ app.get("/conversations_archive",verifyToken, function(req,response){
 
 //need to add info to get conversation reply table info as well
 app.get("/conversations_active",verifyToken, function(req,response){
-  let user_id = 1;  //this will be changed to take in jsonwebtoken id
+  let user_id = req.decoded.id;  //this will be changed to take in jsonwebtoken id
   getConversation(user_id, 'active').then(res => {
     console.log(res);
     response.json(res)
@@ -391,7 +401,7 @@ app.post("/archive/:id",verifyToken, function(req,res){
 app.post("/friends/:id",verifyToken, function(req,res){
   var id = req.params.id;
   //userId to be sent via body with jsonwebtoken
-  var userId = 1;
+  var userId = req.decoded.id;
   console.log(id);
   connection.query(`INSERT INTO contacts (user_id,friend_id) VALUES (?,?)`,[userId,id],function (error, results, fields) {
     if (error) throw error;
@@ -468,11 +478,11 @@ app.post("/uploadFile",verifyToken, function(request,response) {
 app.post("/uploadFile2",verifyToken, function(req,res) {
   console.log(req.body.title);
   console.log(req.body.content);
-  console.log("upload 2: " + req.body.creator);
+  console.log("upload 2: " + req.decoded.id);
   let users = req.body.users;
-  users.push(req.body.creator);
+  users.push(req.decoded.id);
   console.log(users);
-  createConversation(req.body.creator, req.body.title, req.body.content, req.body.id).then(
+  createConversation(req.decoded.id, req.body.title, req.body.content, req.body.id).then(
     response => {
       console.log("396: " + response);
       for(var i = 0; i < users.length; i++)
