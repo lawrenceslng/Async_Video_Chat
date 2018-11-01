@@ -5,32 +5,31 @@ const LoginForm = (props) => {
     {
     return (
     <form id="form"  onSubmit={props.buttonClick}>
-        <div className="form-group row registration-form" >
-            <div className="col-7">
-                <label htmlFor="username"><b>Username</b></label>
-                <input id="username" type="text" placeholder="Enter Username" name="username"  required />
+        <div className="form-group row registration-form" class= "createAccount" >
+            <div className="col-3">
+                <label htmlFor="username"><b></b></label>
+                <input id="username" type="text" placeholder="Create Username" name="username"  required />
                 <br />
-                <label htmlFor="first_name"><b>First Name</b></label>
-                <input id="firstName" type="text" placeholder="Enter your first name" name="first_name"  required />
+                <label htmlFor="first_name"><b></b></label>
+                <input id="firstName" type="text" placeholder="Enter First Name" name="first_name"  required />
                 <br />
-                <label htmlFor="last_name"><b>Last Name</b></label>
-                <input id="lastName" type="text" placeholder="Enter your last name" name="last_name"  required />
+                <label htmlFor="last_name"><b></b></label>
+                <input id="lastName" type="text" placeholder="Enter Last Name" name="last_name"  required />
                 <br />
-                <label htmlFor="email"><b>Email</b></label>
-                <input id="email" type="email" placeholder="Enter Email" name="email" required />
+                <label htmlFor="email"><b></b></label>
+                <input id="email" type="email" placeholder="Enter Email Address" name="email" required />
                 <br />
-                <label htmlFor="password"><b>Password</b></label>
-                <input id="pw" className="pw" type="password" placeholder="Enter Password" name="password" value= {props.val} required />
+                <label htmlFor="password"><b></b></label>
+                <input id="pw" className="pw" type="password" minlength="8" maxlength="16" placeholder="Create Password" name="password" value= {props.val} required />
                 <br />
-                <label htmlFor="password_reenter"><b>Re-Enter Password</b></label>
-                <input id="repw"  className="repw" type="password" placeholder="Enter Password" name="password_reenter" required />
-                <hr />
-                <span className="font-weight-light">Password must be between 8 - 16 characters in length</span>
-                <br /><br />
+                <label htmlFor="password_reenter"><b></b></label>
+                <input id="repw"  className="repw" type="password" minlength="8" maxlength="16" placeholder="Re-enter Password" name="password_reenter" required />
+                <br />
                 <button id="createAccount" type="submit" className="btn btn-primary">Create Account!</button>
+                <br /><br />
             </div>
         </div>
-        <div class="shadow"></div>
+      <div class="shadow"></div>
     </form>
     )
     }
