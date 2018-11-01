@@ -39,7 +39,10 @@ export default class Record extends React.Component {
               counter: prevState.counter + 1
             }));
 
-    }
+    };
+    // getToken = () => {
+    //     return localStorage.getItem('token');
+    //   };
 // UI events handling
 //start a counter and have a recording animation during this
     btnStartRecording = (e) => {
@@ -104,6 +107,7 @@ export default class Record extends React.Component {
         // this.setState({ selectedOption: 'test' });
         // alert(`Option selected:`, this.state.selectedOption);
         console.log(this.state.selectedOption.length);
+        var token = this.props.token();
         let users = [];
         for(var i = 0; i < this.state.selectedOption.length; i++)
         {
@@ -131,11 +135,11 @@ export default class Record extends React.Component {
             console.log(users);
             // let users = classThis.state.selectedOption;
             console.log('line 86 file name before request: ' + fileName);
-            _xhr('http://localhost:3001/uploadFile', file, function(responseText) {
+            _xhr('http://localhost:3001/uploadFile', file, token, function(responseText) {
                 var fileURL = JSON.parse(responseText).fileURL;
                 console.info('fileURL', fileURL);
                 var id = fileURL.substring(30);
-                let creator = 1; //creator will get ID number from localStorage after issue of jsonwebtoken
+                // let creator = token; //creator will get ID number from localStorage after issue of jsonwebtoken
                 let title = document.querySelector('[name="title"]').value;
                 console.log(title);
                 let content = document.querySelector('[name="content"]').value;
@@ -150,7 +154,7 @@ export default class Record extends React.Component {
                 //     },
                 //     body: JSON.stringify(creator), // body data type must match "Content-Type" header
                 // }).then((res) => {res.json();
-                console.log(creator);
+                // console.log(creator);
                 console.log(title);
                 console.log(content);
                 // fetch('http://localhost:3001/uploadFile2/'+creator, {
@@ -183,7 +187,7 @@ export default class Record extends React.Component {
                       'Accept': 'application/json',
                       'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({creator,title,content,id,users})
+                    body: JSON.stringify({token, title,content,id,users})
                   }).then(res => res.json()).then(rj => {
                     console.log(rj);
                     // debugger;
@@ -207,9 +211,14 @@ export default class Record extends React.Component {
     };
     btnGetVideo = () => {
         console.log("get Video button clicked");
+        var token = this.props.token();
         var id = this.state.src;
         let classThis = this;
-        return fetch(id).then(function(response){
+        return fetch(id,{headers : { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            "x-access-token": token
+           }}).then(function(response){
             console.log('after fetch line 118');
             console.log(response);
             classThis.setState({
@@ -230,9 +239,11 @@ export default class Record extends React.Component {
     });
 
     getFriends = () => {
+        var token = this.props.token();
         return fetch('http://localhost:3001/friends', {headers : { 
      'Content-Type': 'application/json',
-     'Accept': 'application/json'
+     'Accept': 'application/json',
+     "x-access-token": token
     }}).then((res) => res.json()).then(rj => {
         console.log(rj);
         // if(rj.length == 0)
@@ -301,8 +312,8 @@ export default class Record extends React.Component {
             //debugger
         }
         
-        if(!this.state.isComplete)
-        {
+        // if(!this.state.isComplete)
+        // {
         return (  
               
             <div>
@@ -334,14 +345,14 @@ export default class Record extends React.Component {
             </div>
             )
         }
-        else
-        {
-            return (
-                <div>
-                    <h1>This post is complete</h1>
-                </div>
-            )
-        }
+        // else
+        // {
+        //     return (
+        //         <div>
+        //             <h1>This post is complete</h1>
+        //         </div>
+        //     )
+        // }
 
     }
-}
+// }

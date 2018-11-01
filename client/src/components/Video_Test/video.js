@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const _xhr = (url, data, callback) => {
+export const _xhr = (url, data, token, callback) => {
 console.log("start_xhr")
 console.log(url)
     var request = new XMLHttpRequest();
@@ -12,7 +12,7 @@ console.log(url)
         }
     };
     request.open('POST', url);
-    // request.setRequestHeader("Content-type", "multipart/form-data");
+    request.setRequestHeader("x-access-token", token);
     var formData = new FormData();
     formData.append('video_file', data);
     // formData.append('users', data2);

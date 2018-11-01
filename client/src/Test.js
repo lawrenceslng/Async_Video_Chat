@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 // import recordJS from './components/record';
 import Record from './components/Video_Test/videoComp';
 import Friends from './components/User_Friends/Friends';
-import Active_Thoughts from './components/Thought_Archives/active';
+import Active_Thoughts from './components/Active_Thoughts/active';
 import Archived_Thoughts from './components/Thought_Archives/archive';
 import './App.css';
 

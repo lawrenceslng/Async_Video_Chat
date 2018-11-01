@@ -13,12 +13,15 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      loggedIn: true,
-      accountCreated: false,
-      token: ""
+      loggedIn: false,
+      accountCreated: false
     };
 
-  }
+  };
+
+  getToken = () => {
+    return localStorage.getItem('token');
+  };
 
   buttonClick = (e) => {
     e.preventDefault();
@@ -41,7 +44,10 @@ class App extends Component {
         // debugger
         if(rj.success)
         {
-          this.setState({loggedIn: true, token: rj.token});
+          this.setState({loggedIn: true}, function(){
+            localStorage.setItem('token', rj.token);
+            localStorage.setItem('id', rj.id);
+          });
         }
         else{
           alert("wrong password, try again");
@@ -74,7 +80,10 @@ class App extends Component {
           // debugger;
           if(rj.success)
           {
-            this.setState({loggedIn: true});
+            this.setState({loggedIn: true}, function(){
+              localStorage.setItem('token', rj.token);
+              localStorage.setItem('id', rj.id);
+            });
           }
           else{
             this.setState({loggedIn: false});
@@ -147,8 +156,15 @@ class App extends Component {
     })
     .then(res => res.json())
     .then(rj => console.log(rj));
-  }
+  };
 
+  componentDidMount() {
+    var token = localStorage.getItem("token");
+    //hit up check-login-status
+    return fetch("http://localhost:3001/check-login", {method: 'POST', headers: {'Accept': 'application/json',
+    'Content-Type': 'application/json'},
+    body: JSON.stringify({token})}).then((res) => res.json()).then(resultingJSON => {console.log(resultingJSON)});
+  };
   render(){
 
   if(this.state.loggedIn)
@@ -157,7 +173,7 @@ class App extends Component {
         // code for AdminPanel here
         <div className="App">
           <button onClick={this.getUsers} className="btn btn-primary">Get Users</button>
-          <AdminPanel />
+          <AdminPanel token={this.getToken}/>
         </div>
       )
     }

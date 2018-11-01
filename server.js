@@ -40,7 +40,7 @@ app.use(express.static("public"));
   //allow the api to be accessed by other apps
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-access-token");
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
     next();
 });
@@ -91,18 +91,25 @@ app.post('/login', function(req,res){
           // var token = jwt.sign(payload, app.get('superSecret'), {
               // expiresInMinutes: 1440 // expires in 24 hours }
           // );
-          req.session.user_id = results[0].id;
-          req.session.email = results[0].email;
-          req.session.username = results[0].username;
-          req.session.firstName = results[0].first_name;
-          req.session.lastName = results[0].last_name;
+          // req.session.user_id = results[0].id;
+          // req.session.email = results[0].email;
+          // req.session.username = results[0].username;
+          // req.session.firstName = results[0].first_name;
+          // req.session.lastName = results[0].last_name;
           //signing token will need to be updated with user info
-          var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
+          var payload = {
+            id: results[0].id,
+            username: results[0].username
+          };
+
+          var token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '4h' });
+          // var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
             // return the information including token as JSON
           res.status(200).json({
               success: true,
               message: 'Enjoy your token!',
-              token: token
+              token: token,
+              id: payload.id
           });
 
 
@@ -122,6 +129,10 @@ app.post('/login', function(req,res){
   });
 });
 
+app.post("/check-login", verifyToken, function(req,res){
+    console.log("check-login: " + req.decoded);
+    res.send()
+});
 app.post("/signup", function(req,res){
     console.log(req.body);
     var username = req.body.username;
@@ -143,7 +154,13 @@ app.post("/signup", function(req,res){
               connection.query('SELECT id FROM users WHERE username = ?', [username],function (error, results, fields) {
                 if(error) throw error;
                 console.log(results[0].id);
-                res.json({success:true});
+                var payload = {
+                  id: results[0].id,
+                  username: results[0].username
+                };
+      
+                var token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '4h' });
+                res.json({success:true, token: token, id: payload.id});
               });
             })
           })
@@ -157,6 +174,28 @@ app.post("/signup", function(req,res){
   });
 
 // ALL AUTHENTICATED ROUTE GOES BELOW THIS
+function verifyToken(req, res, next) {
+  // check header or url parameters or post parameters for token
+  console.log("verify token reqbody: " + req.body.token);
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  console.log("verify token: " + token);
+  if (token) {
+      jwt.verify(token, process.env.JWT_SECRET, (err, decod) => {
+          if (err) {
+              res.status(403).json({
+                  message: "Wrong Token"
+              });
+          } else {
+              req.decoded = decod;
+              next();
+          }
+      });
+  } else {
+      res.status(403).json({
+          message: "No Token"
+      });
+  }
+};
 // app.use((req, res, next)=>{
 //     // check header or url parameters or post parameters for token
 //     console.log(req.body);
@@ -183,13 +222,13 @@ app.post("/signup", function(req,res){
 //     }
 // });
 
-app.get('/logout', function(req, res){
+app.get('/logout',verifyToken, function(req, res){
   req.session.destroy(function(err){
     res.json({success: true});
   })
 });
 
-app.get('/usersapi', function (req, res){
+app.get('/usersapi',verifyToken, function (req, res){
    // check header or url parameters or post parameters for token
   //  var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.authorization;
   //  console.log(req.headers.authorization);
@@ -263,14 +302,22 @@ app.get('/uploads/:id', function (req, res){
     }
   });
 
-  app.get("/friends", function(req,response){
+  app.get("/friends",verifyToken, function(req,response){
     // var search = req.params.name;
-    // console.log(search);
+    console.log("get Friends route");
+    console.log(req.decoded);
+    // get the decoded payload ignoring signature, no secretOrPrivateKey needed
+    // var decoded = jwt.decode(token);
+
+    // get the decoded payload and header
+    // var decoded = jwt.decode(token, {complete: true});
+    // console.log(decoded.header);
+    // console.log(decoded.payload)
     //userId is going to be the user's id
-    var userId = 1;
-    var arr = [2];
-    var arrStr = arr.toString();
-    console.log(`(${arr.toString()})`);
+    var userId = req.decoded.id;
+    // var arr = [2];
+    // var arrStr = arr.toString();
+    // console.log(`(${arr.toString()})`);
     getFriends(userId).then(res => {
       console.log(res);
       if(res.length == 0)
@@ -305,7 +352,7 @@ app.get('/uploads/:id', function (req, res){
 });
 
 //route to get friends by username
-app.get("/friends/:name", function(req,res){
+app.get("/friends/:name",verifyToken, function(req,res){
   var search = req.params.name;
   console.log(search);
   connection.query(`SELECT id, username, first_name, last_name FROM users WHERE username LIKE ?`,['%'+search+'%'],function (error, results, fields) {
@@ -318,8 +365,8 @@ app.get("/friends/:name", function(req,res){
 
 //route to get all conversations related to one user
 //need to add condition WHERE status = active
-app.get("/conversations_archive", function(req,response){
-  let user_id = 1; //this will be changed to take in jsonwebtoken id
+app.get("/conversations_archive",verifyToken, function(req,response){
+  let user_id = req.decoded.id; //this will be changed to take in jsonwebtoken id
   getConversation(user_id, 'archive').then(res => {
     console.log(res);    
     response.json(res);
@@ -327,8 +374,8 @@ app.get("/conversations_archive", function(req,response){
 });
 
 //need to add info to get conversation reply table info as well
-app.get("/conversations_active", function(req,response){
-  let user_id = 1;  //this will be changed to take in jsonwebtoken id
+app.get("/conversations_active",verifyToken, function(req,response){
+  let user_id = req.decoded.id;  //this will be changed to take in jsonwebtoken id
   getConversation(user_id, 'active').then(res => {
     console.log(res);
     response.json(res)
@@ -336,7 +383,7 @@ app.get("/conversations_active", function(req,response){
 
 });
 
-app.get("/relevant_thoughts/:id", function(req,response){
+app.get("/relevant_thoughts/:id",verifyToken, function(req,response){
   console.log("here at relevant_thoughts" + req.params.id);
   getAllThoughts(req.params.id).then(res => {
     console.log(res);
@@ -344,7 +391,7 @@ app.get("/relevant_thoughts/:id", function(req,response){
   });
 });
 
-app.post("/archive/:id", function(req,res){
+app.post("/archive/:id",verifyToken, function(req,res){
   //let id be conversation id
   let id = req.params.id;
   console.log("archive route conv id: " + id);
@@ -356,10 +403,10 @@ app.post("/archive/:id", function(req,res){
   });
 });
 
-app.post("/friends/:id", function(req,res){
+app.post("/friends/:id",verifyToken, function(req,res){
   var id = req.params.id;
   //userId to be sent via body with jsonwebtoken
-  var userId = 1;
+  var userId = req.decoded.id;
   console.log(id);
   connection.query(`INSERT INTO contacts (user_id,friend_id) VALUES (?,?)`,[userId,id],function (error, results, fields) {
     if (error) throw error;
@@ -368,7 +415,7 @@ app.post("/friends/:id", function(req,res){
   });
 })
 
-app.post("/uploadFile", function(request,response) {
+app.post("/uploadFile",verifyToken, function(request,response) {
   var uri = url.parse(request.url).pathname,
       filename = path.join(process.cwd(), uri);
   var isWin = !!process.platform.match(/^win/);
@@ -433,14 +480,14 @@ app.post("/uploadFile", function(request,response) {
 });
 
 //this is actual route that relates all users in a particular conversation
-app.post("/uploadFile2", function(req,res) {
+app.post("/uploadFile2",verifyToken, function(req,res) {
   console.log(req.body.title);
   console.log(req.body.content);
-  console.log("upload 2: " + req.body.creator);
+  console.log("upload 2: " + req.decoded.id);
   let users = req.body.users;
-  users.push(req.body.creator);
+  users.push(req.decoded.id);
   console.log(users);
-  createConversation(req.body.creator, req.body.title, req.body.content, req.body.id).then(
+  createConversation(req.decoded.id, req.body.title, req.body.content, req.body.id).then(
     response => {
       console.log("396: " + response);
       for(var i = 0; i < users.length; i++)
@@ -452,7 +499,7 @@ app.post("/uploadFile2", function(req,res) {
   );
 });
 
-app.post("/conversation_reply", function(req,res){
+app.post("/conversation_reply",verifyToken, function(req,res){
   //all I need is create a conversation reply
   console.log(req.body.user_id);
   console.log(req.body.content);

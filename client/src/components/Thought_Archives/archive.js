@@ -23,8 +23,8 @@ const initState = {
 };
 
 export default class Archived_Thoughts extends React.Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = initState;
     };
     
@@ -161,7 +161,12 @@ export default class Archived_Thoughts extends React.Component {
         alert("this is a reply button");
     };
     componentDidMount(){
-        return fetch("http://localhost:3001/conversations_archive").then(res => res.json()).then(resultingJSON => {
+
+        return fetch("http://localhost:3001/conversations_archive",{headers : { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            "x-access-token": this.props.token()
+           }}).then(res => res.json()).then(resultingJSON => {
             console.log(resultingJSON);
             this.setState({conversations : resultingJSON})});
     };
