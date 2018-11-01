@@ -7,6 +7,7 @@ import PWMatch from './components/accountCreate';
 import AdminPanel from './components/adminPanel';
 
 import './App.css';
+import './loginForm.css';
 
 class App extends Component {
   // pass in initial states
@@ -14,9 +15,8 @@ class App extends Component {
     super();
     this.state = {
       loggedIn: false,
-      accountCreated: false
+      accountCreated: false,
     };
-
   };
 
   getToken = () => {
@@ -143,20 +143,20 @@ class App extends Component {
   }
 
   //route to get all users when users search for friends to connect
-  getUsers = (e) => {
-    e.preventDefault();
-    console.log(this.state.token);
-    return fetch("http://localhost:3001/usersapi", {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': this.state.token
-      }
-    })
-    .then(res => res.json())
-    .then(rj => console.log(rj));
-  };
+  // getUsers = (e) => {
+  //   e.preventDefault();
+  //   console.log(this.state.token);
+  //   return fetch("http://localhost:3001/usersapi", {
+  //     method: 'GET',
+  //     headers: {
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json',
+  //       'Authorization': this.state.token
+  //     }
+  //   })
+  //   .then(res => res.json())
+  //   .then(rj => console.log(rj));
+  // };
 
   componentDidMount() {
     var token = localStorage.getItem("token");
@@ -172,7 +172,6 @@ class App extends Component {
       return (
         // code for AdminPanel here
         <div className="App">
-          <button onClick={this.getUsers} className="btn btn-primary">Get Users</button>
           <AdminPanel token={this.getToken}/>
         </div>
       )
@@ -181,7 +180,6 @@ class App extends Component {
     {
       return (
         <div className="App">
-        <button onClick={this.getUsers} className="btn btn-primary">Get Users</button>
           <Header />
           <Carousel />
           <div className="loginBox">

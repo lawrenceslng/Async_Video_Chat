@@ -55,7 +55,9 @@ class AdminPanel extends Component {
         else{
           if(event.target.parentElement.parentElement.parentElement.classList.contains("box-part"))
           {
+
             targ = event.target.parentElement.parentElement.parentElement;
+
             event.target.parentElement.parentElement.parentElement.classList.add("expand");
           }
         }
@@ -65,6 +67,8 @@ class AdminPanel extends Component {
     // debugger;
     //keep in mind event.target is "<div className="title"><img className="card-img-top" src="https://visualpharm.com/assets/168/Read%20Message-595b40b75ba036ed117d88f5.svg" alt=" image"></div>"
     // event.target.parentElement.parentElement.classList.add("expand");
+
+
 
     if (targ.classList.contains('show-record')){
       this.setState ({record: true, activeThoughts: false, friends: false, archiveThoughts: false})
@@ -81,6 +85,7 @@ class AdminPanel extends Component {
     else if (targ.classList.contains('show-archive-thoughts')){
       this.setState ({friends: false, record: false, activeThoughts: false, archiveThoughts: true})
     }
+
 
     var elements = document.querySelectorAll('.title');
     for (var i=0; i<elements.length; i++){
@@ -114,13 +119,16 @@ class AdminPanel extends Component {
       {this.state.archiveThoughts && <Archived_Thoughts token={this.props.token}/>}
 
 
+
 {/*start box section*/}
 
           <div className="row">
+
             <div className="col-sm-6 show-archive-thoughts">
               <a href="#" />
 
               <div id="thoughtArchives" className="box-part text-center show-archive-thoughts" onClick={this.expand}>
+
                 <div className="title">
                   <img className="card-img-top" src="https://visualpharm.com/assets/224/Folder-595b40b85ba036ed117dd27b.svg" />
 
