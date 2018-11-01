@@ -7,13 +7,14 @@ import PWMatch from './components/accountCreate';
 import AdminPanel from './components/adminPanel';
 
 import './App.css';
+import './loginForm.css';
 
 class App extends Component {
   // pass in initial states
   constructor(){
     super();
     this.state = {
-      loggedIn: true,
+      loggedIn: false,
       accountCreated: false,
       token: ""
     };

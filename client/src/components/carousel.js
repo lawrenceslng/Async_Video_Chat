@@ -1,4 +1,8 @@
 import React from "react";
+import picture1 from './Images/bubbles2.jpeg'
+
+
+
 
 const Carousel = () => (
 
@@ -6,23 +10,15 @@ const Carousel = () => (
         {/* <!-- Indicators --> */}
           <ol className="carousel-indicators">
             <li data-target="#myCarousel" data-slide-to="0" className="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
           </ol>
 
           {/* <!-- Wrapper for slides --> */}
           <div className="carousel-inner">
             <div className="item active">
-              <img src="https://via.placeholder.com/600x600" alt="Los Angeles" />
+              <img src={picture1} alt="picture1" />
             </div>
 
-            <div className="item">
-              <img src="https://via.placeholder.com/600x600" alt="Chicago" />
-            </div>
 
-            <div className="item">
-              <img src="https://via.placeholder.com/600x600" alt="New York" />
-            </div>
           </div>
 
           {/* <!-- Left and right controls --> */}
