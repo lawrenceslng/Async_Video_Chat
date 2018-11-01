@@ -24,8 +24,8 @@ const initState = {
 };
 
 export default class Active_Thoughts extends React.Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = initState;
     };
 
@@ -46,8 +46,14 @@ export default class Active_Thoughts extends React.Component {
         let content = e.target.getAttribute('data-content');
         let creator = e.target.getAttribute('data-creator');
         let filepath = e.target.getAttribute('data-filepath');
+        var token = this.props.token();
         console.log(filepath);
-        fetch("http://localhost:3001/relevant_thoughts/"+convId).then(res => res.json()).then(RESJ => {
+        fetch("http://localhost:3001/relevant_thoughts/"+convId,{
+            headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "x-access-token": token
+            }} ).then(res => res.json()).then(RESJ => {
             // console.log('43: ' + RESJ[0].fs_path);
             if(RESJ.length == 0)
             {
@@ -104,6 +110,7 @@ export default class Active_Thoughts extends React.Component {
     archive = (e) => {
         e.preventDefault();
         let classThis = this;
+        var token = this.props.token();
         //get conversation id from HTML
         let convId = e.target.parentElement.parentElement.children[0].childNodes[0].innerHTML;
         console.log(this.state.conversationId);
@@ -115,7 +122,7 @@ export default class Active_Thoughts extends React.Component {
             headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-            }})
+            }, body: JSON.stringify({token})})
         .then(res => res.json()).then(resultingJSON => {
             console.log(resultingJSON);
             console.log("after archive");
@@ -129,7 +136,14 @@ export default class Active_Thoughts extends React.Component {
         var id = id;
         console.log(id);
         let classThis = this;
-        return fetch(id).then(function(response){
+        var token = this.props.token();
+        console.log(token);
+        return fetch("http://localhost:3001/uploads/"+id,{
+        headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      "x-access-token": token
+        }}).then(function(response){
             console.log('after fetch line 87');
             console.log(response);
             document.querySelector('video').play();
@@ -320,8 +334,13 @@ export default class Active_Thoughts extends React.Component {
     };
         //next up: able to see all videos related to a thought (need to search server for conv_reply as well)
     componentDidMount(){
-        return fetch("http://localhost:3001/conversations_active").then(res => res.json()).then(resultingJSON => {
+        return fetch("http://localhost:3001/conversations_active",{headers : { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            "x-access-token": this.props.token()
+           }}).then(res => res.json()).then(resultingJSON => {
                 console.log(resultingJSON);
+                // debugger;
                 this.setState({conversations : resultingJSON})
             });
     };
@@ -370,7 +389,7 @@ export default class Active_Thoughts extends React.Component {
                             {/* <!-- Modal footer --> */}
                             <div className="modal-footer">
                             {/* if localstorage matches with this.state.creator */}
-                            {(this.state.creator == 1) && <button className="btn btn-danger" data-dismiss="modal" onClick={this.archive}>Archive</button>}    
+                            {(this.state.creator == localStorage.getItem("id")) && <button className="btn btn-danger" data-dismiss="modal" onClick={this.archive}>Archive</button>}    
                             <button type="button" className="btn btn-primary" onClick={this.reply}>Reply</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                             </div>

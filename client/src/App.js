@@ -16,10 +16,12 @@ class App extends Component {
     this.state = {
       loggedIn: false,
       accountCreated: false,
-      token: ""
     };
+  };
 
-  }
+  getToken = () => {
+    return localStorage.getItem('token');
+  };
 
   buttonClick = (e) => {
     e.preventDefault();
@@ -42,7 +44,10 @@ class App extends Component {
         // debugger
         if(rj.success)
         {
-          this.setState({loggedIn: true, token: rj.token});
+          this.setState({loggedIn: true}, function(){
+            localStorage.setItem('token', rj.token);
+            localStorage.setItem('id', rj.id);
+          });
         }
         else{
           alert("wrong password, try again");
@@ -75,7 +80,10 @@ class App extends Component {
           // debugger;
           if(rj.success)
           {
-            this.setState({loggedIn: true});
+            this.setState({loggedIn: true}, function(){
+              localStorage.setItem('token', rj.token);
+              localStorage.setItem('id', rj.id);
+            });
           }
           else{
             this.setState({loggedIn: false});
@@ -135,21 +143,28 @@ class App extends Component {
   }
 
   //route to get all users when users search for friends to connect
-  getUsers = (e) => {
-    e.preventDefault();
-    console.log(this.state.token);
-    return fetch("http://localhost:3001/usersapi", {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': this.state.token
-      }
-    })
-    .then(res => res.json())
-    .then(rj => console.log(rj));
-  }
+  // getUsers = (e) => {
+  //   e.preventDefault();
+  //   console.log(this.state.token);
+  //   return fetch("http://localhost:3001/usersapi", {
+  //     method: 'GET',
+  //     headers: {
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json',
+  //       'Authorization': this.state.token
+  //     }
+  //   })
+  //   .then(res => res.json())
+  //   .then(rj => console.log(rj));
+  // };
 
+  componentDidMount() {
+    var token = localStorage.getItem("token");
+    //hit up check-login-status
+    return fetch("http://localhost:3001/check-login", {method: 'POST', headers: {'Accept': 'application/json',
+    'Content-Type': 'application/json'},
+    body: JSON.stringify({token})}).then((res) => res.json()).then(resultingJSON => {console.log(resultingJSON)});
+  };
   render(){
 
   if(this.state.loggedIn)
@@ -157,8 +172,7 @@ class App extends Component {
       return (
         // code for AdminPanel here
         <div className="App">
-          <button onClick={this.getUsers} className="btn btn-primary">Get Users</button>
-          <AdminPanel />
+          <AdminPanel token={this.getToken}/>
         </div>
       )
     }
@@ -166,7 +180,6 @@ class App extends Component {
     {
       return (
         <div className="App">
-        <button onClick={this.getUsers} className="btn btn-primary">Get Users</button>
           <Header />
           <Carousel />
           <div className="loginBox">

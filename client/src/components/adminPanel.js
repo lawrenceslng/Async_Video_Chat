@@ -8,8 +8,8 @@ import Archived_Thoughts from './Thought_Archives/archive'
 // -import record class from videocomp to adminPanel. videoComp.js should show up on click when we hit CreateNew in admin panel.
 
 class AdminPanel extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
 
 
   this.state = {
@@ -23,56 +23,69 @@ class AdminPanel extends Component {
 
     activeThoughts: false,
 
-    friends: false
+    friends: false,
+
+    archiveThoughts: false
 
     //h2 element and then render the relevant components, else if just render the 4 boxes-
   }
 }
   expand = (event) => {
     event.preventDefault();
+    // debugger;
+    var targ;
     if(event.target.classList.contains("box-part"))
     {
+      targ = event.target;
       event.target.classList.add("expand");
     }
     else
     {
       if(event.target.parentElement.classList.contains("box-part"))
       {
+        targ = event.target.parentElement;
        event.target.parentElement.classList.add("expand");
       }
       else{
         if(event.target.parentElement.parentElement.classList.contains("box-part"))
         {
+          targ = event.target.parentElement.parentElement;
           event.target.parentElement.parentElement.classList.add("expand");
         }
         else{
           if(event.target.parentElement.parentElement.parentElement.classList.contains("box-part"))
           {
+
+            targ = event.target.parentElement.parentElement.parentElement;
+
             event.target.parentElement.parentElement.parentElement.classList.add("expand");
           }
         }
       }
     }
 
-
+    // debugger;
     //keep in mind event.target is "<div className="title"><img className="card-img-top" src="https://visualpharm.com/assets/168/Read%20Message-595b40b75ba036ed117d88f5.svg" alt=" image"></div>"
     // event.target.parentElement.parentElement.classList.add("expand");
 
-    if (event.target.classList.contains('show-record')){
-     this.setState ({record: true, activeThoughts: false, friends: false, archiveThoughts: false})
-   }
 
-   else if (event.target.classList.contains('show-active-thoughts')){
-     this.setState ({activeThoughts: true, record: false, friends: false, archiveThoughts: false})
-   }
 
-   else if (event.target.classList.contains('show-friends')){
-     this.setState ({friends: true, record: false, activeThoughts: false, archiveThoughts: false})
-   }
+    if (targ.classList.contains('show-record')){
+      this.setState ({record: true, activeThoughts: false, friends: false, archiveThoughts: false})
+    }
 
-   else if (event.target.classList.contains('show-archived-thoughts')){
-     this.setState ({friends: false, record: false, activeThoughts: false, archiveThoughts: true})
-   }
+    else if (targ.classList.contains('show-active-thoughts')){
+      this.setState ({activeThoughts: true, record: false, friends: false, archiveThoughts: false})
+    }
+
+    else if (targ.classList.contains('show-friends')){
+      this.setState ({friends: true, record: false, activeThoughts: false, archiveThoughts: false})
+    }
+
+    else if (targ.classList.contains('show-archive-thoughts')){
+      this.setState ({friends: false, record: false, activeThoughts: false, archiveThoughts: true})
+    }
+
 
     var elements = document.querySelectorAll('.title');
     for (var i=0; i<elements.length; i++){
@@ -100,19 +113,22 @@ class AdminPanel extends Component {
     <div className="container">
 
       {this.state.NavBar && <NavBar expand={this.expand} />}
-      {this.state.archiveThoughts && <Archived_Thoughts/>}
-      {this.state.record && <Record/>}
-      {this.state.activeThoughts && <Active_Thoughts/>}
-      {this.state.friends && <Friends/>}
+      {this.state.record && <Record token={this.props.token}/>}
+      {this.state.activeThoughts && <Active_Thoughts token={this.props.token}/>}
+      {this.state.friends && <Friends token={this.props.token}/>}
+      {this.state.archiveThoughts && <Archived_Thoughts token={this.props.token}/>}
+
 
 
 {/*start box section*/}
 
           <div className="row">
-            <div className="col-sm-6 show-archived-thoughts">
+
+            <div className="col-sm-6 show-archive-thoughts">
               <a href="#" />
 
-              <div id="thoughtArchives" className="box-part text-center show-archived-thoughts" onClick={this.expand}>
+              <div id="thoughtArchives" className="box-part text-center show-archive-thoughts" onClick={this.expand}>
+
                 <div className="title">
                   <img className="card-img-top" src="https://visualpharm.com/assets/224/Folder-595b40b85ba036ed117dd27b.svg" />
 
