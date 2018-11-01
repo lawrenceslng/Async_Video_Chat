@@ -158,6 +158,13 @@ class App extends Component {
     .then(rj => console.log(rj));
   };
 
+  componentDidMount() {
+    var token = localStorage.getItem("token");
+    //hit up check-login-status
+    return fetch("http://localhost:3001/check-login", {method: 'POST', headers: {'Accept': 'application/json',
+    'Content-Type': 'application/json'},
+    body: JSON.stringify({token})}).then((res) => res.json()).then(resultingJSON => {console.log(resultingJSON)});
+  };
   render(){
 
   if(this.state.loggedIn)

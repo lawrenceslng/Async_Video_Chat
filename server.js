@@ -129,6 +129,10 @@ app.post('/login', function(req,res){
   });
 });
 
+app.post("/check-login", verifyToken, function(req,res){
+    console.log("check-login: " + req.decoded);
+    res.send()
+});
 app.post("/signup", function(req,res){
     console.log(req.body);
     var username = req.body.username;
