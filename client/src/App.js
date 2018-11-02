@@ -27,6 +27,7 @@ class App extends Component {
     e.preventDefault();
     // alert("submit");
     console.log(e.target.children[0].className);
+    // debugger;
     if(e.target.children[0].className.includes("login-form"))
     {
       let username = document.getElementById("username").value;
@@ -122,6 +123,11 @@ class App extends Component {
   logOut = (e) => {
     e.preventDefault();
     console.log(e.target.className);
+    console.log(localStorage.getItem("token"));
+    localStorage.removeItem("token");
+    localStorage.removeItem("id");
+    console.log(localStorage.getItem("token"));
+    // debugger;
     return fetch("http://localhost:3001/logout", {
       method: 'GET',
       headers: {
@@ -160,10 +166,36 @@ class App extends Component {
 
   componentDidMount() {
     var token = localStorage.getItem("token");
+    var id = localStorage.getItem("id");
+    console.log(token + ", " + id);
     //hit up check-login-status
-    return fetch("http://localhost:3001/check-login", {method: 'POST', headers: {'Accept': 'application/json',
+    return fetch("http://localhost:3001/check-login", 
+    {method: 'POST', 
+    headers: {'Accept': 'application/json',
     'Content-Type': 'application/json'},
-    body: JSON.stringify({token})}).then((res) => res.json()).then(resultingJSON => {console.log(resultingJSON)});
+    body: JSON.stringify({token})}).then((res) => {
+      console.log(res.status);
+      if(res.status == '403')
+      {
+        this.setState({loggedIn: false});
+        console.log("logged in false");
+        // break;
+      }
+      else
+      {
+        this.setState({loggedIn: true});
+        console.log("logged in true!");
+        // res.json();
+      }
+      })
+    // .then(resultingJSON => {
+    //   console.log(resultingJSON);
+    //   if(resultingJSON.success){
+    //     this.setState({loggedIn: true});
+    //   }
+    //   else{
+    //     this.setState({loggedIn: false});
+    //   }});
   };
   render(){
 
@@ -172,6 +204,7 @@ class App extends Component {
       return (
         // code for AdminPanel here
         <div className="App">
+          <button onClick={this.logOut}>Logout</button>
           <AdminPanel token={this.getToken}/>
         </div>
       )
