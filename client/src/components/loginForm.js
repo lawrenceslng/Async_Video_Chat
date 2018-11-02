@@ -30,7 +30,7 @@ const LoginForm = (props) => {
                 <button id="createAccount" type="submit" className="btn btn-primary">Create Account!</button>
             </div>
         </div>
-        <div class="shadow"></div>
+        <div className="shadow"></div>
     </form>
     )
     }
@@ -38,7 +38,7 @@ const LoginForm = (props) => {
     {
         return(
         <form id="form" onSubmit={props.buttonClick}>
-            <div  className="form-group row login-form" class="login">
+            <div className="form-group row login-form login">
                 <div className="col-7">
                 <label htmlFor="username"><b></b></label>
                 <input id="username" type="text" placeholder="Username" name="username" required />
@@ -49,7 +49,7 @@ const LoginForm = (props) => {
                 <button id="login" type="submit" className="btn btn-primary">Login</button>
                 </div>
             </div>
-            <div class="shadow"></div>
+            <div className="shadow"></div>
         </form>
         )
 
