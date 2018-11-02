@@ -131,7 +131,9 @@ app.post('/login', function(req,res){
 
 app.post("/check-login", verifyToken, function(req,res){
     console.log("check-login: " + req.decoded);
-    res.send()
+    res.status(200).json({
+      success: true
+  });
 });
 app.post("/signup", function(req,res){
     console.log(req.body);
@@ -222,10 +224,8 @@ function verifyToken(req, res, next) {
 //     }
 // });
 
-app.get('/logout',verifyToken, function(req, res){
-  req.session.destroy(function(err){
+app.get('/logout', function(req, res){
     res.json({success: true});
-  })
 });
 
 app.get('/usersapi',verifyToken, function (req, res){
