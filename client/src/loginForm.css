@@ -202,6 +202,16 @@ button[type="submit"] {
   width: 270px;
 }
 
+.shadow2 {
+  background: #000;
+  border-radius: 12px 12px 4px 4px;
+  box-shadow: 0 0 20px 10px #000;
+  height: 12px;
+  margin: 30px auto;
+  opacity: 0.2;
+  width: 375px;
+}
+
 
 button[type="submit"]:active {
   top:3px;
