@@ -9,6 +9,10 @@ import logo from './Images/Thought-Parcel-logo.png'
 
 const Carousel = () => (
 <div id="hello">
+<div className="logoFrontPage">
+
+<img src={logo} alt="picture1" />
+</div>
       <img id="ParcelMascot" src={picture1} alt="picture1" />
     <div className="shadow2">
     </div>
