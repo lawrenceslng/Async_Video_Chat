@@ -114,7 +114,6 @@ class AdminPanel extends Component {
       return (
         <div className="box">
       <div className="container">
-
         {this.state.NavBar && <NavBar expand={this.expand} />}
         {this.state.record && <Record token={this.props.token}/>}
         {this.state.activeThoughts && <Active_Thoughts token={this.props.token}/>}

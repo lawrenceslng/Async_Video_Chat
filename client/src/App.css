@@ -189,10 +189,24 @@ h3{
 .thoughtBox{
   cursor: pointer;
   border: 1px black solid;
-  background-color: lightgray;
+  background-color: rgb(165,136,85);
   margin: 5px;
+  padding: 5px;
+  height:150px;
+  width: 750px;
+  display: inline-block;
 }
 
+.parcelBox{
+  height: 105px;
+  width: 105px;
+  display: block;
+  margin-left: 100px;
+  /* margin-right: auto; */
+  border-radius: 5px;
+  float: left;
+  margin-top: 18px;
+}
 /* css for active_Thoughts*/
 
 #conversationsDiv{
@@ -201,7 +215,8 @@ h3{
   padding-top: 20px;
   margin-right: 20px;
   margin-left: -10px;
-
+  text-align: center;
+  overflow: auto;
 }
 
 /* css for your Community*/
