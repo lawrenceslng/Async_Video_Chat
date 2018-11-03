@@ -334,7 +334,7 @@ export default class Active_Thoughts extends React.Component {
     };
         //next up: able to see all videos related to a thought (need to search server for conv_reply as well)
     componentDidMount(){
-        return fetch("http://localhost:3001/conversations_active",{headers : { 
+        return fetch("https://enigmatic-plains-24739.herokuapp.com/conversations_active",{headers : { 
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             "x-access-token": this.props.token()
