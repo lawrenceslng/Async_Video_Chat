@@ -50,17 +50,17 @@ app.use(morgan('dev'));
 
 // Initializes the connection variable to sync with a MySQL database
 var connection = mysql.createConnection({
-    host: 'us-cdbr-iron-east-01.cleardb.net',
+    host: process.env.DB_HOST,
 
     // Your port; if not 3306
     port: 3306,
 
     // Your username
-    user: 'bb836f0f8cfae8',
+    user: process.env.DB_USER,
 
     // Your password
-    password: '904c2ee2',  //placeholder for your own mySQL password that you store in your own .env file
-    database: 'heroku_59ee1519a36c90e'   //TBD
+    password: process.env.DB_PASSWORD,  //placeholder for your own mySQL password that you store in your own .env file
+    database: process.env.DB_NAME   //TBD
 });
 
 if (process.env.NODE_ENV === 'production') {
