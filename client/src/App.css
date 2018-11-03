@@ -149,3 +149,45 @@ h3{
   background-color: lightgray;
   margin: 5px;
 }
+
+
+
+/* css for CreateNew*/
+
+.recorderPage {
+  background-color: white;
+}
+
+.recorderPage h1{
+  padding-top: 20px;
+
+}
+
+.recorderPage body{
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.recorderPage #recorderForm {
+/* background-color:  */
+margin-left: 300px;
+margin-right: 300px;
+}
+
+.recorderPage h4{
+padding-top: 20px;
+}
+
+.recorderPage #record{
+  background: black;
+  border-radius: 2px 12px 4px 4px;
+  box-shadow: 0 0 20px 10px #000;
+  height: 250px;
+  margin: 30px auto;
+  width: 400px;
+}
+
+.recorderPage #friendSelect2{
+  width: 450px;
+  margin-left: 400px;
+  padding: 20px;
+}
