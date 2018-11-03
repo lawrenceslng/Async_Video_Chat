@@ -333,7 +333,7 @@ app.get('/uploads/:id', function (req, res){
       if(res.length == 0)
       {
         var result = [];
-        response.status(200).json({result});
+        response.status(200).json(result);
       }
       else
       {

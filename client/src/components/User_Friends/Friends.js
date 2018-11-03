@@ -41,7 +41,7 @@ class Friends extends Component {
       }
       else
       {
-        return fetch(`https://enigmatic-plains-24739.herokuapp.com/friends/${this.state.searchStr}`,{method: 'GET',headers : {
+        return fetch(`http://localhost:3001/friends/${this.state.searchStr}`,{method: 'GET',headers : {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             "x-access-token": token
@@ -63,7 +63,7 @@ class Friends extends Component {
       //do POST fetch call to server
       console.log('line 64: '+token);
       console.log('line 65: ' + JSON.stringify({token}));
-      fetch(`https://enigmatic-plains-24739.herokuapp.com/friends/`+id,{method: 'POST',  headers: {
+      fetch(`http://localhost:3001/friends/`+id,{method: 'POST',  headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },body: JSON.stringify({token})}).then((res) => res.json()).then(rj => {
@@ -74,7 +74,7 @@ class Friends extends Component {
   getFriends = () => {
       var token = this.props.token();
       console.log(token);
-       return fetch('https://enigmatic-plains-24739.herokuapp.com/friends', {headers : {
+       return fetch('http://localhost:3001/friends', {headers : {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     "x-access-token": token
@@ -85,7 +85,7 @@ class Friends extends Component {
 }
   componentDidMount(){
     var token = this.props.token();
-    return fetch('https://enigmatic-plains-24739.herokuapp.com/friends', {headers : {
+    return fetch('http://localhost:3001/friends', {headers : {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         "x-access-token": token
