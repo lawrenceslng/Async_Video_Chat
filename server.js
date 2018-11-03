@@ -17,7 +17,7 @@ var jwt = require('jsonwebtoken');
 var url = require('url');
     // path = require('path'),
     // fs = require('fs');
-var PORT = 3001;
+var PORT = process.env.PORT || 3001;
 var app = express();
 
 // set the app up with bodyparser
