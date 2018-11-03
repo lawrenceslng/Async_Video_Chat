@@ -1,3 +1,22 @@
+/* logo in adminPanel*/
+
+.logo img {
+  height: 80px;
+  width: 300px;
+  margin-top: -100px;
+  margin-right: 1000px;
+}
+
+/* logout button*/
+
+.App #button{
+  background-color: red;
+}
+
+
+/* end logout button*/
+
+
 .App {
   text-align: center;
 }
@@ -171,9 +190,12 @@ h3{
   margin-left: -10px;
 }
 
+.list-of-matching-search {
+  margin-top: 20px;
+}
+
 
 /* css for thought archives*/
-
 
 
 #archiveDiv {
@@ -188,13 +210,10 @@ h3{
 
 .recorderPage {
   background-color: white;
+  height: 1000px;
+  padding-top: 20px;
   margin-right: 20px;
   margin-left: -10px;
-}
-
-.recorderPage h1{
-  padding-top: 20px;
-
 }
 
 .recorderPage body{
@@ -222,6 +241,7 @@ padding-top: 20px;
 
 .recorderPage #friendSelect2{
   width: 450px;
-  margin-left: 400px;
+  margin-left: 410px;
   padding: 20px;
+  position: absolute;
 }

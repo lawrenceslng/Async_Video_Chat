@@ -98,22 +98,22 @@ class Friends extends Component {
   render(){
     return(
         <div className="FriendFinder">
-            // <div className="container">
+             <div className="container">
      	    <div className="row">
                 <div className="col-sm-6 ">
                 {/* list of friends of user */}
-                <div>Here are your current Friends: </div>
+                <div><h1>Your Community</h1> </div>
                 {this.state.friends.map((x) => <div id={x.id} key={x.id}>{x.username}</div>)}
                 </div>
                 <div className="col-sm-6 ">
                 {/* searchable form for friends */}
-                <span>Heres gonna be your searchable field </span>
+                <span><h1>Search</h1></span>
                 <form id='friend-search'>
                     <input type='text' name='username' ref={input => this.search = input} onChange={this.handleInputChange}></input>
                 </form>
                 {/* <p>{this.state.searchStr}</p> */}
                 <div className='list-of-matching-search'>
-                    {/* //use array.map */}
+                    {/* use array.map */}
                     {this.state.results.length > 0 && this.state.results.map((x) => <div id={x.id} name={x.name} key={x.id}>{x.username}<button id={x.id} onClick={this.addFriend}>Add Friend</button></div>)}
 
                 </div>

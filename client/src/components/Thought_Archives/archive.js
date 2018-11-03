@@ -182,7 +182,7 @@ export default class Archived_Thoughts extends React.Component {
         }
         return (
             <div id="archiveDiv">
-                <h1>These are archived conversations I am a part of.</h1>
+                <h1>Your Archived Thoughts</h1>
                 <button id='2' onClick={this.populate}>Test</button>
                 {(this.state.conversations) && this.state.conversations.map((x) => <div className='thoughtBox' id={x.id} key={x.id}data-toggle="modal" data-target="#myModal" onClick={this.populate} data-conversation_id={x.id} data-creator={x.user_one_id} data-title={x.title} data-content={x.content}data-filepath={x.fs_path}>Conversation-id={x.id}...creator={x.user_one_id}.......title={x.title}.......content={x.content}......filepath={x.fs_path}</div>)}
                 {/* when user clicks on a button, opens up a modal where the last video message in that conversation resides and buttons that say exit/reply/close */}
