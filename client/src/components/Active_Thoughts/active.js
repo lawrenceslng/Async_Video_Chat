@@ -242,6 +242,7 @@ export default class Active_Thoughts extends React.Component {
             e.preventDefault();
             let classThis = this;
             console.log("clicked");
+            var token = this.props.token();
             clearInterval(this.interval);
             classThis.state.videoRecorder.stopRecording(function() {
                 // var recordedBlob = classThis.state.videoRecorder.blob; // blob property
@@ -252,7 +253,7 @@ export default class Active_Thoughts extends React.Component {
                 // console.log(classThis.state.stream)
                 if(classThis.state.stream) classThis.state.stream.stop();
                 var fileName = 'test_vid.webm';
-
+                
                 var file = new File([recorderBlob], fileName, {
                     type: 'video/webm'
                 });
@@ -260,11 +261,11 @@ export default class Active_Thoughts extends React.Component {
                 // console.log(users);
                 // let users = classThis.state.selectedOption;
                 console.log('line 86 file name before request: ' + fileName);
-                _xhr('http://localhost:3001/uploadFile', file, function(responseText) {
+                _xhr('http://localhost:3001/uploadFile', file, token, function(responseText) {
                     var fileURL = JSON.parse(responseText).fileURL;
                     console.info('fileURL', fileURL);
                     var id = fileURL.substring(30);
-                    let user_id = 1; //user_id will get ID number from localStorage after issue of jsonwebtoken
+                    // let user_id = 1; //user_id will get ID number from localStorage after issue of jsonwebtoken
                     let content = "no content";
                     let conv_id = classThis.state.conversationId;
                     // debugger;
@@ -284,7 +285,7 @@ export default class Active_Thoughts extends React.Component {
                           'Accept': 'application/json',
                           'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({user_id,content,conv_id,id})
+                        body: JSON.stringify({token,content,conv_id,id})
                       }).then(res => res.json()).then(rj => {
                         console.log(rj);
                         // debugger;
@@ -379,7 +380,7 @@ export default class Active_Thoughts extends React.Component {
             <div className = 'row' id="conversationsDiv">
                 <h1>Your Active Conversations</h1>
                 {/* <button id='2' onClick={this.populate}>Test</button> */}
-                {(this.state.conversations) && this.state.conversations.map((x) => <div className='thoughtBox row' id={x.id} key={x.id} data-toggle="modal" data-target="#myModal" onClick={this.populate} data-conversation_id={x.id} data-creator={x.user_one_id} data-title={x.title} data-content={x.content}data-filepath={x.fs_path}><img src={parcelBox}className='parcelBox col-4'/><span className='col-8'>From: {x.username} <br/>Title: {x.title}</span></div>)}
+                {(this.state.conversations) && this.state.conversations.map((x) => <div className='thoughtBox row' id={x.id} key={x.id} data-toggle="modal" data-target="#myModal" onClick={this.populate} data-conversation_id={x.id} data-creator={x.user_one_id} data-title={x.title} data-content={x.content}data-filepath={x.fs_path}><img src={parcelBox}className='parcelBox col-4'/><span className='col-8' style={{fontSize:25}}>From: {x.username} <br/>Title: {x.title}</span></div>)}
                 {/* when user clicks on a button, opens up a modal where the last video message in that conversation resides and buttons that say exit/reply/close */}
                 {/* <!-- The Modal --> */}
                     <div className="modal" id="myModal">
