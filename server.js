@@ -332,7 +332,8 @@ app.get('/uploads/:id', function (req, res){
       console.log(res);
       if(res.length == 0)
       {
-        response.send([]);
+        var result = [];
+        response.status(200).json({result});
       }
       else
       {
@@ -342,7 +343,7 @@ app.get('/uploads/:id', function (req, res){
         connection.query(`SELECT id, username FROM users WHERE id IN (${query})`,function (err, results, fields2) {
           if(err) throw err;
           console.log(results);
-          response.send(results);
+          response.status(200).json(results);
       //     arr.push(res);
           
         });
