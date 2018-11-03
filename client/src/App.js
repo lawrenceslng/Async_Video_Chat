@@ -14,7 +14,7 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      loggedIn: false,
+      loggedIn: true,
       accountCreated: false,
     };
   };
@@ -169,8 +169,8 @@ class App extends Component {
     var id = localStorage.getItem("id");
     console.log(token + ", " + id);
     //hit up check-login-status
-    return fetch("http://localhost:3001/check-login", 
-    {method: 'POST', 
+    return fetch("http://localhost:3001/check-login",
+    {method: 'POST',
     headers: {'Accept': 'application/json',
     'Content-Type': 'application/json'},
     body: JSON.stringify({token})}).then((res) => {

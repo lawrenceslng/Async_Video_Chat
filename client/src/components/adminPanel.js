@@ -4,6 +4,7 @@ import Record from './Video_Test/videoComp'
 import Active_Thoughts from './Active_Thoughts/active'
 import Friends from './User_Friends/Friends'
 import Archived_Thoughts from './Thought_Archives/archive'
+import logo from './Images/Thought-Parcel-logo.png'
 
 // -import record class from videocomp to adminPanel. videoComp.js should show up on click when we hit CreateNew in admin panel.
 
@@ -122,6 +123,9 @@ class AdminPanel extends Component {
 
 {/*start box section*/}
 
+<div className = "logo">
+<img src={logo} alt="picture1" />
+ </div>
           <div className="row">
 
             <div className="col-sm-6 show-archive-thoughts">
