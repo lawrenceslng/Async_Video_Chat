@@ -169,7 +169,7 @@ class App extends Component {
     var id = localStorage.getItem("id");
     console.log(token + ", " + id);
     //hit up check-login-status
-    return fetch("http://localhost:3001/check-login", 
+    return fetch("https://enigmatic-plains-24739.herokuapp.com/check-login", 
     {method: 'POST', 
     headers: {'Accept': 'application/json',
     'Content-Type': 'application/json'},
