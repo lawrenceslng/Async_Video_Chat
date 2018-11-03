@@ -85,7 +85,7 @@ class Friends extends Component {
 }
   componentDidMount(){
     var token = this.props.token();
-    return fetch('https://enigmatic-plains-24739.herokuapp.com/friends', {headers : {
+    return fetch('http://localhost:3001/friends', {headers : {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         "x-access-token": token
