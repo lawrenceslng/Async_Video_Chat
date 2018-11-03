@@ -91,7 +91,7 @@ export default class Active_Thoughts extends React.Component {
                 conversationId: convId,
                 currentVidLoc: this.state.thoughts.length-1
             });
-            } 
+            }
         });
         // this.getVideo(filepath);
         // this.setState({
@@ -117,7 +117,7 @@ export default class Active_Thoughts extends React.Component {
         // debugger;
         console.log("LINE 43: " + convId);
         // go to server with conversation ID and hit up archive route
-        return fetch("http://localhost:3001/archive/" + convId, 
+        return fetch("http://localhost:3001/archive/" + convId,
             {method: 'POST',
             headers: {
           'Accept': 'application/json',
@@ -160,7 +160,7 @@ export default class Active_Thoughts extends React.Component {
             audio: true,
             video: true
         }).then(function(camera) {
-            
+
             document.querySelector('video').muted = true;
             document.querySelector('video').srcObject = camera;
             document.querySelector('video').camera = camera;
@@ -177,7 +177,7 @@ export default class Active_Thoughts extends React.Component {
             // let session = {
             //     audio: true,
             //     video: true
-            // }; 
+            // };
             // navigator.mediaDevices.getUserMedia(session)
             // .then(function(mediaStream) {
                 var video = document.querySelector('video');
@@ -188,7 +188,7 @@ export default class Active_Thoughts extends React.Component {
                 //   }
                 // console.log('mediaStream Line 80 = ' + mediaStream);
                 // video.play();
-    
+
                     const videoRecorder = RecordRTC(video.camera, {
                         type: 'video',
                         video: {
@@ -203,7 +203,7 @@ export default class Active_Thoughts extends React.Component {
                     console.log(videoRecorder);
                     videoRecorder.startRecording();
                     this.interval = setInterval(() => classThis.tick(), 1000);
-    
+
                     classThis.setState({
                         stream: video.camera,
                         videoRecorder: videoRecorder,
@@ -226,14 +226,14 @@ export default class Active_Thoughts extends React.Component {
             clearInterval(this.interval);
             classThis.state.videoRecorder.stopRecording(function() {
                 // var recordedBlob = classThis.state.videoRecorder.blob; // blob property
-            
+
                 var recorderBlob = classThis.state.videoRecorder.getBlob(); // getBlob method
                 // console.log(recordedBlob);
                 console.log(recorderBlob);
                 // console.log(classThis.state.stream)
                 if(classThis.state.stream) classThis.state.stream.stop();
                 var fileName = 'test_vid.webm';
-                    
+
                 var file = new File([recorderBlob], fileName, {
                     type: 'video/webm'
                 });
@@ -283,9 +283,9 @@ export default class Active_Thoughts extends React.Component {
                         }
                       })
                 });
-                
+
             })
-            
+
     };
 
     //this.state.thoughts will store all filepaths of the thoughts in that conv_id, and next and prev will select which item is active
@@ -334,7 +334,7 @@ export default class Active_Thoughts extends React.Component {
     };
         //next up: able to see all videos related to a thought (need to search server for conv_reply as well)
     componentDidMount(){
-        return fetch("http://localhost:3001/conversations_active",{headers : { 
+        return fetch("http://localhost:3001/conversations_active",{headers : {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             "x-access-token": this.props.token()
@@ -344,8 +344,8 @@ export default class Active_Thoughts extends React.Component {
                 this.setState({conversations : resultingJSON})
             });
     };
-    
- 
+
+
     render(){
         let button;
         if(this.state.btnStatus == 'btn-start-recording')
@@ -357,8 +357,8 @@ export default class Active_Thoughts extends React.Component {
             button = <button id={this.state.btnStatus} onClick={this.btnStopRecording}>{this.state.btnText}</button>
         }
         return (
-            <div>
-                <h1>these are my active conversations</h1>
+            <div id="conversationsDiv">
+                <h1>Your Active Conversations</h1>
                 <button id='2' onClick={this.populate}>Test</button>
                 {(this.state.conversations) && this.state.conversations.map((x) => <div className='thoughtBox' id={x.id} key={x.id}data-toggle="modal" data-target="#myModal" onClick={this.populate} data-conversation_id={x.id} data-creator={x.user_one_id} data-title={x.title} data-content={x.content}data-filepath={x.fs_path}>Conversation-id={x.id}...creator={x.user_one_id}.......title={x.title}.......content={x.content}......filepath={x.fs_path}</div>)}
                 {/* when user clicks on a button, opens up a modal where the last video message in that conversation resides and buttons that say exit/reply/close */}
@@ -389,7 +389,7 @@ export default class Active_Thoughts extends React.Component {
                             {/* <!-- Modal footer --> */}
                             <div className="modal-footer">
                             {/* if localstorage matches with this.state.creator */}
-                            {(this.state.creator == localStorage.getItem("id")) && <button className="btn btn-danger" data-dismiss="modal" onClick={this.archive}>Archive</button>}    
+                            {(this.state.creator == localStorage.getItem("id")) && <button className="btn btn-danger" data-dismiss="modal" onClick={this.archive}>Archive</button>}
                             <button type="button" className="btn btn-primary" onClick={this.reply}>Reply</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                             </div>
