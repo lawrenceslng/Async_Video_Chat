@@ -42,11 +42,29 @@ export default class Active_Thoughts extends React.Component {
     populate = (e) => {
         e.preventDefault();
         this.reset();
-        let convId = e.target.getAttribute('data-conversation_id');
-        let title = e.target.getAttribute('data-title');
-        let content = e.target.getAttribute('data-content');
-        let creator = e.target.getAttribute('data-creator');
-        let filepath = e.target.getAttribute('data-filepath');
+        // debugger;
+        let convId;
+        let title;
+        let content;
+        let creator;
+        let filepath;
+        if(e.target.getAttribute('data-conversation_id'))
+        {
+            convId = e.target.getAttribute('data-conversation_id');
+            title = e.target.getAttribute('data-title');
+            content = e.target.getAttribute('data-content');
+            creator = e.target.getAttribute('data-creator');
+            filepath = e.target.getAttribute('data-filepath');
+        }
+        else if(e.target.parentElement.getAttribute('data-conversation_id'))
+        {
+            convId = e.target.parentElement.getAttribute('data-conversation_id');
+            title = e.target.parentElement.getAttribute('data-title');
+            content = e.target.parentElement.getAttribute('data-content');
+            creator = e.target.parentElement.getAttribute('data-creator');
+            filepath = e.target.parentElement.getAttribute('data-filepath');
+        }
+        
         var token = this.props.token();
         console.log(filepath);
         fetch("http://localhost:3001/relevant_thoughts/"+convId,{
