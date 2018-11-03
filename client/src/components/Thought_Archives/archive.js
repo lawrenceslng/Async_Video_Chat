@@ -27,7 +27,7 @@ export default class Archived_Thoughts extends React.Component {
         super(props);
         this.state = initState;
     };
-    
+
     // tick(){
     //     this.setState(prevState => ({
     //       counter: prevState.counter + 1
@@ -84,7 +84,7 @@ export default class Archived_Thoughts extends React.Component {
                 conversationId: convId,
                 currentVidLoc: this.state.thoughts.length-1
             });
-            } 
+            }
         });
         // this.getVideo(filepath);
         // this.setState({
@@ -162,7 +162,7 @@ export default class Archived_Thoughts extends React.Component {
     };
     componentDidMount(){
 
-        return fetch("http://localhost:3001/conversations_archive",{headers : { 
+        return fetch("http://localhost:3001/conversations_archive",{headers : {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             "x-access-token": this.props.token()
@@ -181,7 +181,7 @@ export default class Archived_Thoughts extends React.Component {
             button = <button id={this.state.btnStatus} onClick={this.btnStopRecording}>{this.state.btnText}</button>
         }
         return (
-            <div>
+            <div id="archiveDiv">
                 <h1>These are archived conversations I am a part of.</h1>
                 <button id='2' onClick={this.populate}>Test</button>
                 {(this.state.conversations) && this.state.conversations.map((x) => <div className='thoughtBox' id={x.id} key={x.id}data-toggle="modal" data-target="#myModal" onClick={this.populate} data-conversation_id={x.id} data-creator={x.user_one_id} data-title={x.title} data-content={x.content}data-filepath={x.fs_path}>Conversation-id={x.id}...creator={x.user_one_id}.......title={x.title}.......content={x.content}......filepath={x.fs_path}</div>)}
@@ -213,7 +213,7 @@ export default class Archived_Thoughts extends React.Component {
                             {/* <!-- Modal footer --> */}
                             <div className="modal-footer">
                             {/* if localstorage matches with this.state.creator */}
-                            {(this.state.creator == 1) && <button className="btn btn-danger" data-dismiss="modal" onClick={this.archive}>Archive</button>}    
+                            {(this.state.creator == 1) && <button className="btn btn-danger" data-dismiss="modal" onClick={this.archive}>Archive</button>}
                             <button type="button" className="btn btn-primary" onClick={this.reply}>Reply</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                             </div>

@@ -161,6 +161,29 @@ h3{
 
 }
 
+/* css for your Community*/
+
+.FriendFinder {
+  background-color: white;
+  height: 500px;
+  padding-top: 20px;
+  margin-right: 20px;
+  margin-left: -10px;
+}
+
+
+/* css for thought archives*/
+
+
+
+#archiveDiv {
+  background-color: white;
+  height: 500px;
+  padding-top: 20px;
+  margin-right: 20px;
+  margin-left: -10px;
+}
+
 /* css for CreateNew*/
 
 .recorderPage {
