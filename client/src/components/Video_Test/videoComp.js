@@ -335,7 +335,7 @@ export default class Record extends React.Component {
                 {button}
                 {/* this does not work  */}
                 {this.state.friends.length == 0 && <button>Add a Friend Yo</button>}
-                {this.state.friends.length > 0 && <div id= "friendSelect2">Select friends to share the video.Otherwise, only you can see it. 
+                {this.state.friends.length > 0 && <div id= "friendSelect2">Select friends to share the video. Otherwise, only you can see it.
                     <Select isMulti options={this.state.friends} value={this.state.selectedOption} onChange={this.handleChange} /></div>}
                 {/* <button id="btn-stop-recording" onClick={this.btnStopRecording}>Stop Recording</button>  */}
                 <button id="btn-get-video" onClick={this.btnGetVideo}>Get Video</button>
