@@ -64,9 +64,9 @@ var connection = mysql.createConnection({
 });
 
 
-app.get('/', function(req, res){
-	res.send('hi');
-});
+// app.get('/', function(req, res){
+// 	res.send('hi');
+// });
 
 app.post('/login', function(req,res){
   let username = req.body.username;
