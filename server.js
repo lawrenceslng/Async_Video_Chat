@@ -61,7 +61,8 @@ var db_config = {
       database: process.env.DB_NAME   
 };
 var connection;
-
+// connection = mysql.createConnection(db_config);
+console.log("line 65");
 function handleDisconnect() {
   connection = mysql.createConnection(db_config); // Recreate the connection, since
                                                   // the old one cannot be reused.
