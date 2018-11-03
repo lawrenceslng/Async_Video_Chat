@@ -626,7 +626,7 @@ function getFriends(id){
 //idea is to get all filepaths of all video and send it to front-end; front-end stores filepaths in array 
 function getConversation(user_id, status){
   return new Promise(function(resolve, reject) {
-    connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ? AND stat = ?`, [user_id, status],function (error, results, fields) {
+    connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path, users.username FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id INNER JOIN users ON conversations.user_one_id = users.id WHERE user_id = ? AND stat = ?`, [user_id, status],function (error, results, fields) {
       if (error) return reject(error);
         console.log(results);
         resolve (results);
