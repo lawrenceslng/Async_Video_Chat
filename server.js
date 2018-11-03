@@ -17,7 +17,7 @@ var jwt = require('jsonwebtoken');
 var url = require('url');
     // path = require('path'),
     // fs = require('fs');
-var PORT = 3001;
+var PORT = process.env.PORT || 3001;
 var app = express();
 
 // set the app up with bodyparser
@@ -27,7 +27,17 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(express.static("public"));
+if (process.env.NODE_ENV === 'production') {
+  // Exprees will serve up production assets
+  app.use(express.static('client/build'));
+
+  // Express serve up index.html file if it doesn't recognize route
+  const path = require('path');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+else app.use(express.static("public"));
 
 
 /*
@@ -322,7 +332,8 @@ app.get('/uploads/:id', function (req, res){
       console.log(res);
       if(res.length == 0)
       {
-        response.send([]);
+        var result = [];
+        response.status(200).json(result);
       }
       else
       {
@@ -332,7 +343,7 @@ app.get('/uploads/:id', function (req, res){
         connection.query(`SELECT id, username FROM users WHERE id IN (${query})`,function (err, results, fields2) {
           if(err) throw err;
           console.log(results);
-          response.send(results);
+          response.status(200).json(results);
       //     arr.push(res);
           
         });
@@ -615,7 +626,7 @@ function getFriends(id){
 //idea is to get all filepaths of all video and send it to front-end; front-end stores filepaths in array 
 function getConversation(user_id, status){
   return new Promise(function(resolve, reject) {
-    connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id WHERE user_id = ? AND stat = ?`, [user_id, status],function (error, results, fields) {
+    connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path, users.username FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id INNER JOIN users ON conversations.user_one_id = users.id WHERE user_id = ? AND stat = ?`, [user_id, status],function (error, results, fields) {
       if (error) return reject(error);
         console.log(results);
         resolve (results);

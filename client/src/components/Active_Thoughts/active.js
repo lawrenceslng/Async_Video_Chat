@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import RecordRTC from 'recordrtc';
-import {_xhr} from '../Video_Test/video'
+import {_xhr} from '../Video_Test/video';
+import parcelBox from '../Images/open-parcel-boxes.jpg';
 //this will retrieve all conversations related to this particular user
 //hit up conversations, conversation_relation
 
@@ -357,10 +358,10 @@ export default class Active_Thoughts extends React.Component {
             button = <button id={this.state.btnStatus} onClick={this.btnStopRecording}>{this.state.btnText}</button>
         }
         return (
-            <div id="conversationsDiv">
+            <div className = 'row' id="conversationsDiv">
                 <h1>Your Active Conversations</h1>
-                <button id='2' onClick={this.populate}>Test</button>
-                {(this.state.conversations) && this.state.conversations.map((x) => <div className='thoughtBox' id={x.id} key={x.id}data-toggle="modal" data-target="#myModal" onClick={this.populate} data-conversation_id={x.id} data-creator={x.user_one_id} data-title={x.title} data-content={x.content}data-filepath={x.fs_path}>Conversation-id={x.id}...creator={x.user_one_id}.......title={x.title}.......content={x.content}......filepath={x.fs_path}</div>)}
+                {/* <button id='2' onClick={this.populate}>Test</button> */}
+                {(this.state.conversations) && this.state.conversations.map((x) => <div className='thoughtBox row' id={x.id} key={x.id} data-toggle="modal" data-target="#myModal" onClick={this.populate} data-conversation_id={x.id} data-creator={x.user_one_id} data-title={x.title} data-content={x.content}data-filepath={x.fs_path}><img src={parcelBox}className='parcelBox col-4'/><span className='col-8'>From: {x.username} <br/>Title: {x.title}</span></div>)}
                 {/* when user clicks on a button, opens up a modal where the last video message in that conversation resides and buttons that say exit/reply/close */}
                 {/* <!-- The Modal --> */}
                     <div className="modal" id="myModal">

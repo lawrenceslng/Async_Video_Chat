@@ -109,19 +109,26 @@ class AdminPanel extends Component {
   }
 
   render(){
-    return (
-      <div className="box">
-    <div className="container">
-
-      {this.state.NavBar && <NavBar expand={this.expand} />}
-      {this.state.record && <Record token={this.props.token}/>}
-      {this.state.activeThoughts && <Active_Thoughts token={this.props.token}/>}
-      {this.state.friends && <Friends token={this.props.token}/>}
-      {this.state.archiveThoughts && <Archived_Thoughts token={this.props.token}/>}
-
-
-
-{/*start box section*/}
+    if(this.state.NavBar)
+    {
+      return (
+        <div className="box">
+      <div className="container">
+        
+        {this.state.NavBar && <NavBar expand={this.expand} />}
+        {this.state.record && <Record token={this.props.token}/>}
+        {this.state.activeThoughts && <Active_Thoughts token={this.props.token}/>}
+        {this.state.friends && <Friends token={this.props.token}/>}
+        {this.state.archiveThoughts && <Archived_Thoughts token={this.props.token}/>}
+        </div>
+        </div>)
+    }
+    else
+    {
+      return (
+        <div className="box">
+      <div className="container">
+      {/*start box section*/}
 
 <div className = "logo">
 <img src={logo} alt="picture1" />
@@ -198,6 +205,12 @@ class AdminPanel extends Component {
           </div>
           </div>
           )
+    }
+    
+
+
+
+
           }
           }
 // export expand;
