@@ -48,6 +48,32 @@ app.use(function(req, res, next) {
 // use morgan to log requests to the console
 app.use(morgan('dev'));
 
+function retryOnDisconnect(){
+  var connection = mysql.createConnection({
+    host: process.env.DB_HOST,
+
+    // Your port; if not 3306
+    port: 3306,
+
+    // Your username
+    user: process.env.DB_USER,
+
+    // Your password
+    password: process.env.DB_PASSWORD,  //placeholder for your own mySQL password that you store in your own .env file
+    database: process.env.DB_NAME   //TBD
+  });
+  connection.connect(function(err){
+    if(err){
+      console.log('DB disconnect: ',err);
+      setTimeout(retryOnDisconnect,2000);
+    }
+  });
+  connection.on('error', function(err){
+    console.log('DB Error: ', err);
+    if(err.code === "PROTOCOL_CONNECTION_LOST"){
+      retryOnDisconnect();
+    }});
+}
 // Initializes the connection variable to sync with a MySQL database
 var connection = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -63,6 +89,7 @@ var connection = mysql.createConnection({
     database: process.env.DB_NAME   //TBD
 });
 
+
 if (process.env.NODE_ENV === 'production') {
   // Exprees will serve up production assets
   app.use(express.static('client/build'));
@@ -76,6 +103,7 @@ if (process.env.NODE_ENV === 'production') {
 // app.get('/', function(req, res){
 // 	res.send('hi');
 // });
+
 
 app.post('/login', function(req,res){
   let username = req.body.username;
