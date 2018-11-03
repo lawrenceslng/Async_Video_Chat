@@ -89,7 +89,7 @@ class Friends extends Component {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         "x-access-token": token
-       }}).then((res) => {console.log(res);res.json()}).then(rj => {
+       }}).then((res) => res.json()).then(rj => {
            console.log(rj);
             this.setState({friends: rj});
             this.getInfo();
