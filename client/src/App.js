@@ -33,7 +33,7 @@ class App extends Component {
       let username = document.getElementById("username").value;
       let password = document.getElementById("pw").value;
       // alert("Login Form Submitted");
-      return fetch("http://localhost:3001/login", {
+      return fetch("https://enigmatic-plains-24739.herokuapp.com/login", {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -69,7 +69,7 @@ class App extends Component {
       if(PWMatch(password, repw))
       {
         //post info to server
-        return fetch("http://localhost:3001/signup", {
+        return fetch("https://enigmatic-plains-24739.herokuapp.com/signup", {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -128,7 +128,7 @@ class App extends Component {
     localStorage.removeItem("id");
     console.log(localStorage.getItem("token"));
     // debugger;
-    return fetch("http://localhost:3001/logout", {
+    return fetch("https://enigmatic-plains-24739.herokuapp.com/logout", {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -169,7 +169,7 @@ class App extends Component {
     var id = localStorage.getItem("id");
     console.log(token + ", " + id);
     //hit up check-login-status
-    return fetch("http://localhost:3001/check-login", 
+    return fetch("https://enigmatic-plains-24739.herokuapp.com/check-login", 
     {method: 'POST', 
     headers: {'Accept': 'application/json',
     'Content-Type': 'application/json'},
