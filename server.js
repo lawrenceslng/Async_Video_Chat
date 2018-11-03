@@ -47,50 +47,58 @@ app.use(function(req, res, next) {
 
 // use morgan to log requests to the console
 app.use(morgan('dev'));
+var db_config = {
+  host: process.env.DB_HOST,
 
-function retryOnDisconnect(){
-  var connection = mysql.createConnection({
-    host: process.env.DB_HOST,
+      // Your port; if not 3306
+      port: 3306,
+  
+      // Your username
+      user: process.env.DB_USER,
+  
+      // Your password
+      password: process.env.DB_PASSWORD,  //placeholder for your own mySQL password that you store in your own .env file
+      database: process.env.DB_NAME   
+};
+var connection;
 
-    // Your port; if not 3306
-    port: 3306,
+function handleDisconnect() {
+  connection = mysql.createConnection(db_config); // Recreate the connection, since
+                                                  // the old one cannot be reused.
 
-    // Your username
-    user: process.env.DB_USER,
-
-    // Your password
-    password: process.env.DB_PASSWORD,  //placeholder for your own mySQL password that you store in your own .env file
-    database: process.env.DB_NAME   //TBD
-  });
-  connection.connect(function(err){
-    if(err){
-      console.log('DB disconnect: ',err);
-      setTimeout(retryOnDisconnect,2000);
+  connection.connect(function(err) {              // The server is either down
+    if(err) {                                     // or restarting (takes a while sometimes).
+      console.log('error when connecting to db:', err);
+      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+    }                                     // to avoid a hot loop, and to allow our node script to
+  });                                     // process asynchronous requests in the meantime.
+                                          // If you're also serving http, display a 503 error.
+  connection.on('error', function(err) {
+    console.log('db error', err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+      handleDisconnect();                         // lost due to either server restart, or a
+    } else {                                      // connnection idle timeout (the wait_timeout
+      throw err;                                  // server variable configures this)
     }
   });
-  connection.on('error', function(err){
-    console.log('DB Error: ', err);
-    if(err.code === "PROTOCOL_CONNECTION_LOST"){
-      retryOnDisconnect();
-    }});
-};
+}
 
-retryOnDisconnect();
+handleDisconnect();
 
 // Initializes the connection variable to sync with a MySQL database
-var connection = mysql.createConnection({
-    host: process.env.DB_HOST,
+// var connection = mysql.createConnection({
+//     host: process.env.DB_HOST,
 
-    // Your port; if not 3306
-    port: 3306,
+//     // Your port; if not 3306
+//     port: 3306,
 
-    // Your username
-    user: process.env.DB_USER,
+//     // Your username
+//     user: process.env.DB_USER,
 
-    // Your password
-    password: process.env.DB_PASSWORD,  //placeholder for your own mySQL password that you store in your own .env file
-    database: process.env.DB_NAME   //TBD
-});
+//     // Your password
+//     password: process.env.DB_PASSWORD,  //placeholder for your own mySQL password that you store in your own .env file
+//     database: process.env.DB_NAME   //TBD
+// });
 
 
 if (process.env.NODE_ENV === 'production') {
