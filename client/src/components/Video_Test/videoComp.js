@@ -10,7 +10,7 @@ const options = [
     { value: 'id2', label: 'asdfasdf' },
     { value: 'id3', label: 'qwerqwera' }
   ]
-
+  
   const MyComponent = () => (
     <Select options={options} />
   )
@@ -54,7 +54,7 @@ export default class Record extends React.Component {
         // let session = {
         //     audio: true,
         //     video: true
-        // };
+        // }; 
         // navigator.mediaDevices.getUserMedia(session)
         // .then(function(mediaStream) {
             var video = document.querySelector('video');
@@ -120,14 +120,14 @@ export default class Record extends React.Component {
         clearInterval(this.interval);
         classThis.state.videoRecorder.stopRecording(function() {
             // var recordedBlob = classThis.state.videoRecorder.blob; // blob property
-
+        
             var recorderBlob = classThis.state.videoRecorder.getBlob(); // getBlob method
             // console.log(recordedBlob);
             console.log(recorderBlob);
             // console.log(classThis.state.stream)
             if(classThis.state.stream) classThis.state.stream.stop();
             var fileName = 'test_vid.webm';
-
+                
             var file = new File([recorderBlob], fileName, {
                 type: 'video/webm'
             });
@@ -179,7 +179,7 @@ export default class Record extends React.Component {
                     btnText: 'Start Recording'
                 });
                 // fetch(`http://localhost:3001/uploads/${id}`).then(res => re);
-
+            
                 // document.querySelector('video').classList.add('autoplay');
                 return fetch("http://localhost:3001/uploadFile2", {
                     method: 'POST',
@@ -205,16 +205,16 @@ export default class Record extends React.Component {
                     }
                   })
             });
-
+            
         })
-
+        
     };
     btnGetVideo = () => {
         console.log("get Video button clicked");
         var token = this.props.token();
         var id = this.state.src;
         let classThis = this;
-        return fetch(id,{headers : {
+        return fetch(id,{headers : { 
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             "x-access-token": token
@@ -240,7 +240,7 @@ export default class Record extends React.Component {
 
     getFriends = () => {
         var token = this.props.token();
-        return fetch('http://localhost:3001/friends', {headers : {
+        return fetch('http://localhost:3001/friends', {headers : { 
      'Content-Type': 'application/json',
      'Accept': 'application/json',
      "x-access-token": token
@@ -284,19 +284,19 @@ export default class Record extends React.Component {
         let list;
         if(this.state.src)
         {
-            vid =
+            vid = 
             <div>
                 <ReactPlayer url={this.state.src} playing controls/>
             </div>
         }
         else{
-            vid =
+            vid = 
             <div>
                 {/* <ReactPlayer url={this.state.src} playing controls/> */}
                 <video id="record" width="500" height="281">
                 <source src={this.state.src} type='video/webm' />
                 </video>
-
+                
             </div>
         }
         if(this.state.btnStatus == 'btn-start-recording')
@@ -311,31 +311,29 @@ export default class Record extends React.Component {
         {
             //debugger
         }
-
+        
         // if(!this.state.isComplete)
         // {
-        return (
-
+        return (  
+              
             <div>
-            <div className= 'recorderPage'>
+            <div>
                 {/* {friend} */}
-            <h1>Share your thoughts</h1>
+            <h1>RecordRTC to Node.js</h1>
             {vid}<hr />
-
-
-            <form id="recorderForm">
-                <h4>Title: </h4>
-                <input type="text" placeholder= "Thought title" name="title"/><br/>
-                <h4>Description: </h4>
-                <input type="text" placeholder= "Thought description" name="content"/>
+            <form>
+                Title:<br/>
+                <input type="text" name="title"/><br/>
+                Description:<br/>
+                <input type="text" name="content"/>
             </form>
             <hr />
             {/* friend list with check boxes; need a getFriends function*/}
-            <div id="friendSelect">
+            <div>
                 {button}
                 {/* this does not work  */}
                 {this.state.friends.length == 0 && <button>Add a Friend Yo</button>}
-                {this.state.friends.length > 0 && <div id= "friendSelect2">Select friends to share the video. Otherwise, only you can see it.
+                {this.state.friends.length > 0 && <div>If you do not select any friends the thought parcel will only be visible to you
                     <Select isMulti options={this.state.friends} value={this.state.selectedOption} onChange={this.handleChange} /></div>}
                 {/* <button id="btn-stop-recording" onClick={this.btnStopRecording}>Stop Recording</button>  */}
                 <button id="btn-get-video" onClick={this.btnGetVideo}>Get Video</button>
@@ -344,7 +342,7 @@ export default class Record extends React.Component {
                 {/* {this.state.friends.length > 0 && this.state.friends.map((x) => <Select id = {x.id} option = {x.username} value={x.username}/>)} */}
             </div>
             </div>
-          </div>
+            </div>
             )
         }
         // else
