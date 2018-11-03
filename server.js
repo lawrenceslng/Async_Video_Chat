@@ -73,7 +73,10 @@ function retryOnDisconnect(){
     if(err.code === "PROTOCOL_CONNECTION_LOST"){
       retryOnDisconnect();
     }});
-}
+};
+
+retryOnDisconnect();
+
 // Initializes the connection variable to sync with a MySQL database
 var connection = mysql.createConnection({
     host: process.env.DB_HOST,
