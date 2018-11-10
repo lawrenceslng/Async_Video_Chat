@@ -12,11 +12,8 @@ var session = require('express-session');
 var morgan = require('morgan');
 var path = require("path");
 var jwt = require('jsonwebtoken');
-
-// var server = require('http'),
 var url = require('url');
-    // path = require('path'),
-    // fs = require('fs');
+//specifying the port for production build or local
 var PORT = process.env.PORT || 3001;
 var app = express();
 
@@ -73,11 +70,12 @@ var connection = mysql.createConnection({
     database: process.env.DB_NAME    //TBD
 });
 
-
+//unnecessary
 app.get('/', function(req, res){
 	res.send('hi');
 });
 
+//login post route to check info user submitted versus in our SQL database
 app.post('/login', function(req,res){
   let username = req.body.username;
   let password = req.body.password;
@@ -95,40 +93,18 @@ app.post('/login', function(req,res){
     else {
       bcrypt.compare(password, results[0].password, function(err, result) {
       if (result == true){
-        // const payload = {
-        //   user: username
-        // };
-          // var token = jwt.sign(payload, app.get('superSecret'), {
-              // expiresInMinutes: 1440 // expires in 24 hours }
-          // );
-          // req.session.user_id = results[0].id;
-          // req.session.email = results[0].email;
-          // req.session.username = results[0].username;
-          // req.session.firstName = results[0].first_name;
-          // req.session.lastName = results[0].last_name;
-          //signing token will need to be updated with user info
           var payload = {
             id: results[0].id,
             username: results[0].username
           };
-
           var token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '4h' });
-          // var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
-            // return the information including token as JSON
+          // return the information including token as JSON
           res.status(200).json({
               success: true,
               message: 'Enjoy your token!',
               token: token,
               id: payload.id
           });
-
-
-
-        // console.log(req.session.user_id + req.session.email + req.session.username + req.session.firstName + req.session.lastName);
-        // console.log("got session and sending it back");
-        // res.json({success: true});
-        // // res.redirect('decks');
-        // res.render('pages/decks', {data: [req.session]});
       }
       else{
         console.log("did not get session");
@@ -139,12 +115,15 @@ app.post('/login', function(req,res){
   });
 });
 
+//everytime someone hits our url, this runs first to see if a jwt exists and auto logs in our user
 app.post("/check-login", verifyToken, function(req,res){
     console.log("check-login: " + req.decoded);
     res.status(200).json({
       success: true
   });
 });
+
+//sign up route, putting all user entered info into our SQL DB
 app.post("/signup", function(req,res){
     console.log(req.body);
     var username = req.body.username;
@@ -170,7 +149,6 @@ app.post("/signup", function(req,res){
                   id: results[0].id,
                   username: results[0].username
                 };
-      
                 var token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '4h' });
                 res.json({success:true, token: token, id: payload.id});
               });
@@ -180,7 +158,6 @@ app.post("/signup", function(req,res){
       }
       else{
         console.log("username/email taken");
-
       }
     });
   });
@@ -208,36 +185,13 @@ function verifyToken(req, res, next) {
       });
   }
 };
-// app.use((req, res, next)=>{
-//     // check header or url parameters or post parameters for token
-//     console.log(req.body);
-//     var token = req.body.token || req.query.token || req.headers['x-access-token'];
-//     if(token){
-//       console.log("token");
-//       jwt.verify(token,"samplesecret",(err,decod)=>{
-//         if(err){
-//           res.status(403).json({
-//             message:"Wrong Token"
-//           });
-//         }
-//         else{
-//           console.log("success");
-//           req.decoded=decod;
-//           next();
-//         }
-//       });
-//     }
-//     else{
-//       res.status(403).json({
-//         message:"No Token"
-//       });
-//     }
-// });
 
+//logout route, jwt is deleted from front-end prior to hitting this route
 app.get('/logout', function(req, res){
     res.json({success: true});
 });
 
+//to be deleted, not used in our code
 app.get('/usersapi',verifyToken, function (req, res){
    // check header or url parameters or post parameters for token
   //  var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.authorization;
@@ -261,6 +215,7 @@ app.get('/usersapi',verifyToken, function (req, res){
   // }
 });
 
+//retrieves specific videos by file names from server harddrive 
 app.get('/uploads/:id', function (req, res){
     // console.log(req.sessions);
     var fileName = req.params.id;
@@ -310,19 +265,14 @@ app.get('/uploads/:id', function (req, res){
         res.end(err);
       });
     }
-  });
+});
 
-  app.get("/friends",verifyToken, function(req,response){
-    // var search = req.params.name;
+//retrieves all friends of user from database
+app.get("/friends",verifyToken, function(req,response){
     console.log("get Friends route");
     console.log(req.decoded);
-    // get the decoded payload ignoring signature, no secretOrPrivateKey needed
-    // var decoded = jwt.decode(token);
-
     // get the decoded payload and header
-    // var decoded = jwt.decode(token, {complete: true});
-    // console.log(decoded.header);
-    // console.log(decoded.payload)
+    
     //userId is going to be the user's id
     var userId = req.decoded.id;
     // var arr = [2];
@@ -343,23 +293,10 @@ app.get('/uploads/:id', function (req, res){
         connection.query(`SELECT id, username FROM users WHERE id IN (${query})`,function (err, results, fields2) {
           if(err) throw err;
           console.log(results);
-          response.status(200).json(results);
-      //     arr.push(res);
-          
+          response.status(200).json(results);   
         });
       } 
     });
-    //syntax for multiple value query
-    // connection.query(`SELECT username FROM users WHERE id IN (${arr.toString()})`,function (err, res, fields2) {
-    //     if(err) throw err;
-    //     console.log(res);
-
-    //   });
-      // console.log(arr);
-      // response.json(arr);
-    //   res.json(results);
-    // });
-    // res.send('hi');
 });
 
 //route to get friends by username
@@ -391,7 +328,6 @@ app.get("/conversations_active",verifyToken, function(req,response){
     console.log(res);
     response.json(res)
   });
-
 });
 
 app.get("/relevant_thoughts/:id",verifyToken, function(req,response){
