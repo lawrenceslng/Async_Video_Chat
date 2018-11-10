@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import RecordRTC from 'recordrtc';
-import {_xhr} from '../Video_Test/video'
+import {_xhr} from '../Video_Test/video';
+import parcelBox from '../Images/open-parcel-boxes.jpg';
 //this will retrieve all conversations related to this particular user
 //hit up conversations, conversation_relation
 const initState = {
@@ -40,13 +41,36 @@ export default class Archived_Thoughts extends React.Component {
     populate = (e) => {
         e.preventDefault();
         this.reset();
-        let convId = e.target.getAttribute('data-conversation_id');
-        let title = e.target.getAttribute('data-title');
-        let content = e.target.getAttribute('data-content');
-        let creator = e.target.getAttribute('data-creator');
-        let filepath = e.target.getAttribute('data-filepath');
+        let convId;
+        let title;
+        let content;
+        let creator;
+        let filepath;
+        if(e.target.getAttribute('data-conversation_id'))
+        {
+            convId = e.target.getAttribute('data-conversation_id');
+            title = e.target.getAttribute('data-title');
+            content = e.target.getAttribute('data-content');
+            creator = e.target.getAttribute('data-creator');
+            filepath = e.target.getAttribute('data-filepath');
+        }
+        else if(e.target.parentElement.getAttribute('data-conversation_id'))
+        {
+            convId = e.target.parentElement.getAttribute('data-conversation_id');
+            title = e.target.parentElement.getAttribute('data-title');
+            content = e.target.parentElement.getAttribute('data-content');
+            creator = e.target.parentElement.getAttribute('data-creator');
+            filepath = e.target.parentElement.getAttribute('data-filepath');
+        }
+        
+        var token = this.props.token();
         console.log(filepath);
-        fetch("http://localhost:3001/relevant_thoughts/"+convId).then(res => res.json()).then(RESJ => {
+        fetch("http://localhost:3001/relevant_thoughts/"+convId,{
+            headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          "x-access-token": token
+            }}).then(res => res.json()).then(RESJ => {
             // console.log('43: ' + RESJ[0].fs_path);
             if(RESJ.length == 0)
             {
@@ -181,10 +205,10 @@ export default class Archived_Thoughts extends React.Component {
             button = <button id={this.state.btnStatus} onClick={this.btnStopRecording}>{this.state.btnText}</button>
         }
         return (
-            <div id="archiveDiv">
+            <div className='row' id="archiveDiv">
                 <h1>Your Archived Thoughts</h1>
-                <button id='2' onClick={this.populate}>Test</button>
-                {(this.state.conversations) && this.state.conversations.map((x) => <div className='thoughtBox' id={x.id} key={x.id}data-toggle="modal" data-target="#myModal" onClick={this.populate} data-conversation_id={x.id} data-creator={x.user_one_id} data-title={x.title} data-content={x.content}data-filepath={x.fs_path}>Conversation-id={x.id}...creator={x.user_one_id}.......title={x.title}.......content={x.content}......filepath={x.fs_path}</div>)}
+                {/* <button id='2' onClick={this.populate}>Test</button> */}
+                {(this.state.conversations) && this.state.conversations.map((x) => <div className='thoughtBox row' id={x.id} key={x.id} data-toggle="modal" data-target="#myModal" onClick={this.populate} data-conversation_id={x.id} data-creator={x.user_one_id} data-title={x.title} data-content={x.content}data-filepath={x.fs_path}><img src={parcelBox}className='parcelBox col-4'/><span className='col-8' style={{fontSize:25}}>From: {x.username} <br/>Title: {x.title}</span></div>)}
                 {/* when user clicks on a button, opens up a modal where the last video message in that conversation resides and buttons that say exit/reply/close */}
                 {/* <!-- The Modal --> */}
                     <div className="modal" id="myModal">

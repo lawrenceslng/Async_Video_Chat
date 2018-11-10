@@ -516,7 +516,8 @@ app.post("/conversation_reply",verifyToken, function(req,res){
   console.log(req.body.content);
   console.log(req.body.conv_id);
   console.log(req.body.id);
-  connection.query("INSERT INTO conversations_reply (user_id, content, fs_path, c_id_fk) VALUES (?, ?, ?, ?)", [req.body.user_id, req.body.content, req.body.id, req.body.conv_id],function (error, results, fields) {
+  console.log(req.decoded);
+  connection.query("INSERT INTO conversations_reply (user_id, content, fs_path, c_id_fk) VALUES (?, ?, ?, ?)", [req.decoded.id, req.body.content, req.body.id, req.body.conv_id],function (error, results, fields) {
     if(error) throw error;
     console.log("conv_reply " + results.insertId);
     res.json({success:true});
