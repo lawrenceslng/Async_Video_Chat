@@ -135,7 +135,7 @@ export default class Record extends React.Component {
             console.log(users);
             // let users = classThis.state.selectedOption;
             console.log('line 86 file name before request: ' + fileName);
-            _xhr('http://localhost:3001/uploadFile', file, token, function(responseText) {
+            _xhr('/uploadFile', file, token, function(responseText) {
                 var fileURL = JSON.parse(responseText).fileURL;
                 console.info('fileURL', fileURL);
                 var id = fileURL.substring(30);
@@ -181,7 +181,7 @@ export default class Record extends React.Component {
                 // fetch(`http://localhost:3001/uploads/${id}`).then(res => re);
 
                 // document.querySelector('video').classList.add('autoplay');
-                return fetch("http://localhost:3001/uploadFile2", {
+                return fetch("/uploadFile2", {
                     method: 'POST',
                     headers: {
                       'Accept': 'application/json',
@@ -240,7 +240,7 @@ export default class Record extends React.Component {
 
     getFriends = () => {
         var token = this.props.token();
-        return fetch('http://localhost:3001/friends', {headers : {
+        return fetch('/friends', {headers : {
      'Content-Type': 'application/json',
      'Accept': 'application/json',
      "x-access-token": token

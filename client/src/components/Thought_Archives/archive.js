@@ -65,7 +65,7 @@ export default class Archived_Thoughts extends React.Component {
         
         var token = this.props.token();
         console.log(filepath);
-        fetch("http://localhost:3001/relevant_thoughts/"+convId,{
+        fetch("/relevant_thoughts/"+convId,{
             headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export default class Archived_Thoughts extends React.Component {
                     creator: creator,
                     filepath: filepath,
                     originalFilepath: filepath,
-                    src: 'http://localhost:3001/uploads/'+filepath,
+                    src: '/uploads/'+filepath,
                     conversationId: convId,
                     currentVidLoc: 0
                 });
@@ -104,7 +104,7 @@ export default class Archived_Thoughts extends React.Component {
                 creator: creator,
                 filepath: this.state.thoughts[this.state.thoughts.length-1],
                 originalFilepath: filepath,
-                src: 'http://localhost:3001/uploads/'+this.state.thoughts[this.state.thoughts.length-1],
+                src: '/uploads/'+this.state.thoughts[this.state.thoughts.length-1],
                 conversationId: convId,
                 currentVidLoc: this.state.thoughts.length-1
             });
@@ -145,7 +145,7 @@ export default class Archived_Thoughts extends React.Component {
             this.getVideo(this.state.thoughts[newVidLoc]);
             this.setState({
                 filepath: this.state.thoughts[newVidLoc],
-                src: 'http://localhost:3001/uploads/'+this.state.thoughts[newVidLoc],
+                src: '/uploads/'+this.state.thoughts[newVidLoc],
                 currentVidLoc: newVidLoc
             });
         }
@@ -153,7 +153,7 @@ export default class Archived_Thoughts extends React.Component {
             this.getVideo(this.state.originalFilepath);
             this.setState({
                 filepath: this.state.originalFilepath,
-                src: 'http://localhost:3001/uploads/'+this.state.originalFilepath,
+                src: '/uploads/'+this.state.originalFilepath,
                 currentVidLoc: -1
             });
         }
@@ -167,7 +167,7 @@ export default class Archived_Thoughts extends React.Component {
             this.getVideo(this.state.thoughts[newVidLoc]);
             this.setState({
                 filepath: this.state.thoughts[newVidLoc],
-                src: 'http://localhost:3001/uploads/'+this.state.thoughts[newVidLoc],
+                src: '/uploads/'+this.state.thoughts[newVidLoc],
                 currentVidLoc: newVidLoc
             });
         }
@@ -186,7 +186,7 @@ export default class Archived_Thoughts extends React.Component {
     };
     componentDidMount(){
 
-        return fetch("http://localhost:3001/conversations_archive",{headers : {
+        return fetch("/conversations_archive",{headers : {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             "x-access-token": this.props.token()

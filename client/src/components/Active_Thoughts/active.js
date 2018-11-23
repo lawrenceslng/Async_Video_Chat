@@ -67,7 +67,7 @@ export default class Active_Thoughts extends React.Component {
         
         var token = this.props.token();
         console.log(filepath);
-        fetch("http://localhost:3001/relevant_thoughts/"+convId,{
+        fetch("/relevant_thoughts/"+convId,{
             headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export default class Active_Thoughts extends React.Component {
                     creator: creator,
                     filepath: filepath,
                     originalFilepath: filepath,
-                    src: 'http://localhost:3001/uploads/'+filepath,
+                    src: '/uploads/'+filepath,
                     conversationId: convId,
                     currentVidLoc: 0
                 });
@@ -106,7 +106,7 @@ export default class Active_Thoughts extends React.Component {
                 creator: creator,
                 filepath: this.state.thoughts[this.state.thoughts.length-1],
                 originalFilepath: filepath,
-                src: 'http://localhost:3001/uploads/'+this.state.thoughts[this.state.thoughts.length-1],
+                src: '/uploads/'+this.state.thoughts[this.state.thoughts.length-1],
                 conversationId: convId,
                 currentVidLoc: this.state.thoughts.length-1
             });
@@ -136,7 +136,7 @@ export default class Active_Thoughts extends React.Component {
         // debugger;
         console.log("LINE 43: " + convId);
         // go to server with conversation ID and hit up archive route
-        return fetch("http://localhost:3001/archive/" + convId,
+        return fetch("/archive/" + convId,
             {method: 'POST',
             headers: {
           'Accept': 'application/json',
@@ -157,7 +157,7 @@ export default class Active_Thoughts extends React.Component {
         let classThis = this;
         var token = this.props.token();
         console.log(token);
-        return fetch("http://localhost:3001/uploads/"+id,{
+        return fetch("/uploads/"+id,{
         headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -261,7 +261,7 @@ export default class Active_Thoughts extends React.Component {
                 // console.log(users);
                 // let users = classThis.state.selectedOption;
                 console.log('line 86 file name before request: ' + fileName);
-                _xhr('http://localhost:3001/uploadFile', file, token, function(responseText) {
+                _xhr('/uploadFile', file, token, function(responseText) {
                     var fileURL = JSON.parse(responseText).fileURL;
                     console.info('fileURL', fileURL);
                     var id = fileURL.substring(30);
@@ -279,7 +279,7 @@ export default class Active_Thoughts extends React.Component {
                         btnStatus: 'btn-start-recording',
                         btnText: 'Start Recording'
                     });
-                    return fetch("http://localhost:3001/conversation_reply", {
+                    return fetch("/conversation_reply", {
                         method: 'POST',
                         headers: {
                           'Accept': 'application/json',
@@ -317,7 +317,7 @@ export default class Active_Thoughts extends React.Component {
             this.getVideo(this.state.thoughts[newVidLoc]);
             this.setState({
                 filepath: this.state.thoughts[newVidLoc],
-                src: 'http://localhost:3001/uploads/'+this.state.thoughts[newVidLoc],
+                src: '/uploads/'+this.state.thoughts[newVidLoc],
                 currentVidLoc: newVidLoc
             });
         }
@@ -325,7 +325,7 @@ export default class Active_Thoughts extends React.Component {
             this.getVideo(this.state.originalFilepath);
             this.setState({
                 filepath: this.state.originalFilepath,
-                src: 'http://localhost:3001/uploads/'+this.state.originalFilepath,
+                src: '/uploads/'+this.state.originalFilepath,
                 currentVidLoc: -1
             });
         }
@@ -339,7 +339,7 @@ export default class Active_Thoughts extends React.Component {
             this.getVideo(this.state.thoughts[newVidLoc]);
             this.setState({
                 filepath: this.state.thoughts[newVidLoc],
-                src: 'http://localhost:3001/uploads/'+this.state.thoughts[newVidLoc],
+                src: '/uploads/'+this.state.thoughts[newVidLoc],
                 currentVidLoc: newVidLoc
             });
         }
@@ -354,7 +354,7 @@ export default class Active_Thoughts extends React.Component {
     };
         //next up: able to see all videos related to a thought (need to search server for conv_reply as well)
     componentDidMount(){
-        return fetch("http://localhost:3001/conversations_active",{headers : {
+        return fetch("/conversations_active",{headers : {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             "x-access-token": this.props.token()
