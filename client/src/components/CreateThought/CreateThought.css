@@ -1,0 +1,42 @@
+.create-thought {
+  background-color: white;
+  height: 100%;
+  padding-top: 20px;
+}
+
+#description-input {
+  width: 500px;
+  min-width: 500px;
+  height: 300px;
+  min-height: 300px;
+  margin-bottom: 20px;
+  padding: 20px 0 0 20px;
+  border: 1px solid #CCCCCC;
+  border-radius: 10px;
+  outline: none;
+}
+
+#input-form {
+  margin-top: 50px;
+}
+#select-input {
+  width : 500px;
+}
+
+#title-input {
+  width: 500px;
+  height: 50px;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  border: 1px solid #CCCCCC;
+  border-radius: 10px;
+  outline: none;
+}
+
+#record-camera {
+  background: black;
+  border-radius: 4px;
+  height: 250px;
+  margin: 30px auto;
+  width: 500px;
+}
