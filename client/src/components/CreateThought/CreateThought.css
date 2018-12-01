@@ -5,10 +5,10 @@
 }
 
 #description-input {
-  width: 500px;
+  max-width: 500px;
   min-width: 500px;
-  height: 300px;
-  min-height: 300px;
+  height: 150px;
+  min-height: 150px;
   margin-bottom: 20px;
   padding: 20px 0 0 20px;
   border: 1px solid #CCCCCC;
@@ -16,11 +16,54 @@
   outline: none;
 }
 
-#input-form {
-  margin-top: 50px;
+#error-text {
+  color: red;
 }
+
+#left-container {
+  width: 50%;
+  float: left;
+}
+
+#record-button {
+  background-color: white;
+  width: 150px;
+  height: 40px;
+  border: 1px solid #CCCCCC;
+  border-radius: 10px;
+  line-height: 40px;
+  margin-bottom: 20px;
+  outline: none;
+}
+
+#record-button:hover:enabled {
+  background-color: lightblue;
+}
+
+#record-camera {
+  background: black;
+  border-radius: 4px;
+  height: 250px;
+  margin: 30px auto;
+  width: 500px;
+}
+
+#right-container {
+  margin-left: 50%;
+}
+
 #select-input {
+  position: absolute;
   width : 500px;
+  height: 50px;
+  margin-left: 35px;
+}
+
+#side-container {
+  width: 100%;
+  overflow: hidden;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 #title-input {
@@ -33,10 +76,7 @@
   outline: none;
 }
 
-#record-camera {
-  background: black;
-  border-radius: 4px;
-  height: 250px;
-  margin: 30px auto;
-  width: 500px;
+#video-playback {
+  padding-right: 20px;
+  margin-bottom: 20px;
 }

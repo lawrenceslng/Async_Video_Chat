@@ -10,6 +10,7 @@ export default class YourCommunity extends Component {
       discoverTab: false,
       friendsTab: true
     };
+    this.openTab = this.openTab.bind(this);
   }
 
   openTab = event => {
