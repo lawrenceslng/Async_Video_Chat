@@ -12,7 +12,7 @@ var session = require('express-session');
 var morgan = require('morgan');
 var path = require("path");
 var jwt = require('jsonwebtoken');
-
+const AWS = require('aws-sdk');
 // var server = require('http'),
 var url = require('url');
     // path = require('path'),
@@ -38,7 +38,20 @@ if (process.env.NODE_ENV === 'production') {
   // });
 }
 else app.use(express.static("public"));
-
+const S3_BUCKET = process.env.S3_BUCKET_NAME;
+console.log(S3_BUCKET);
+AWS.config.update({region: 'us-west-1'});
+// Create S3 service object
+s3 = new AWS.S3({apiVersion: '2006-03-01'});
+                    
+// Call S3 to list current buckets
+s3.listBuckets(function(err, data) {
+   if (err) {
+      console.log("Error", err);
+   } else {
+      console.log("Bucket List", data.Buckets);
+   }
+});
 
 /*
   if we don't do this here then we'll get this error in apps that use this api
@@ -526,8 +539,8 @@ app.post("/conversation_reply",verifyToken, function(req,res){
 
 function uploadFile(request, response) {
   console.log("start of uploadFile");
-  // console.log("request = " + request.body);
-  // console.log("response = " + response);
+  console.log("request = " + request.body);
+  console.log("response = " + response);
   // parse a file upload
   var mime = require('mime');
   var formidable = require('formidable');
@@ -548,7 +561,10 @@ function uploadFile(request, response) {
       var file = util.inspect(files);
       // console.log(file);
       response.writeHead(200, getHeaders('Content-Type', 'application/json'));
-
+      // var params = {Bucket: S3_BUCKET, Key: 'key', Body: 'test'};
+      // s3.upload(params, function(err, data) {
+          // console.log(err, data);
+      // });
       var fileName = file.split('path:')[1].split('\',')[0].split(dir)[1].toString().replace(/\\/g, '').replace(/\//g, '');
       var fileURL = 'http://localhost:' + PORT + '/uploads/' + fileName;
       console.log(fileName);
