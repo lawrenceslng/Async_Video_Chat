@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import NavBar from './navBar';
-import Record from './Video_Test/videoComp'
+// import Record from './Video_Test/videoComp'
 import Active_Thoughts from './Active_Thoughts/active'
-import Friends from './User_Friends/Friends'
+// import Friends from './User_Friends/Friends'
+import CreateThought from "./CreateThought/CreateThought";
+import YourCommunity from "./YourCommunity/YourCommunity";
 import Archived_Thoughts from './Thought_Archives/archive'
 import logo from './Images/Thought-Parcel-logo.png'
 
@@ -91,7 +93,7 @@ class AdminPanel extends Component {
     var elements = document.querySelectorAll('.title');
     for (var i=0; i<elements.length; i++){
 
-      if (elements[i].parentElement.getAttribute('id') == event.target.parentElement.getAttribute('id')) {
+      if (elements[i].parentElement.getAttribute('id') === event.target.parentElement.getAttribute('id')) {
         event.target.parentElement.children[0].classList.add("hidee");
         event.target.parentElement.children[1].classList.add("hidee");
       }else {
@@ -115,9 +117,9 @@ class AdminPanel extends Component {
         <div className="box">
       <div className="container">
         {this.state.NavBar && <NavBar expand={this.expand} />}
-        {this.state.record && <Record token={this.props.token}/>}
+        {this.state.record && <CreateThought token={this.props.token}/>}
         {this.state.activeThoughts && <Active_Thoughts token={this.props.token}/>}
-        {this.state.friends && <Friends token={this.props.token}/>}
+        {this.state.friends && <YourCommunity token={this.props.token}/>}
         {this.state.archiveThoughts && <Archived_Thoughts token={this.props.token}/>}
         </div>
         </div>)
