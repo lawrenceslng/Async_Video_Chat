@@ -97,10 +97,11 @@ export default class VideoPlayer extends Component {
         type: "video/webm"
       });
       let vidName = uuidv4();
-      _addVideo(file, vidName, () => {
+      _addVideo(file, vidName); 
         // var fileURL = JSON.parse(responseText).fileURL;
         // var id = fileURL.substring(30);
         var id = vidName + '.webm';
+        console.log("line 104: " + id);
         this.setState({
           btnText: "Start Recording",
           isDone: true,
@@ -122,7 +123,7 @@ export default class VideoPlayer extends Component {
             console.log("after return of uploadFile2");
             this.setState({isCompleted: rj.success});
           });
-      });
+      // };
     });
   };
 
