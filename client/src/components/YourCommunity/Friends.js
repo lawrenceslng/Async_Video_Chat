@@ -19,7 +19,7 @@ export default class Friends extends Component {
 
   componentDidMount() {
     var token = this.props.token();
-    return fetch("http://localhost:3001/friends", {
+    return fetch("/friends", {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -52,7 +52,7 @@ export default class Friends extends Component {
       var textnode = document.createTextNode("");
       document.querySelector(".results-list-box").appendChild(textnode);
     } else {
-      return fetch(`http://localhost:3001/friends/${this.state.searchValue}`, {
+      return fetch(`/friends/${this.state.searchValue}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export default class Friends extends Component {
   getFriends = () => {
     var token = this.props.token();
     console.log(token);
-    return fetch("http://localhost:3001/friends", {
+    return fetch("/friends", {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

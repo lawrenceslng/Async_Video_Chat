@@ -31,7 +31,7 @@ export default class Discover extends Component {
       document.querySelector(".results-list-box").appendChild(textnode);
     } else {
       console.log("DIS: search value");
-      return fetch(`http://localhost:3001/friends/${this.state.searchValue}`, {
+      return fetch(`/friends/${this.state.searchValue}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export default class Discover extends Component {
     var token = this.props.token();
 
     //do POST fetch call to server
-    fetch(`http://localhost:3001/friends/` + user_id, {
+    fetch(`/friends/` + user_id, {
       method: "POST",
       headers: {
         Accept: "application/json",
