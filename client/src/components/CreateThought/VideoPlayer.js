@@ -97,7 +97,7 @@ export default class VideoPlayer extends Component {
         type: "video/webm"
       });
       let vidName = uuidv4();
-      _xhr('/uploadFile', file, token, vidName, function(responseText) {
+      _xhr('/uploadFile', file, token, vidName, (responseText) => {
         var fileURL = JSON.parse(responseText).fileURL;
         // var id = fileURL.substring(30);
         var id = vidName + '.webm';

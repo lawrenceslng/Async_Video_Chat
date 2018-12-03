@@ -5,7 +5,7 @@ import {_xhr} from '../Video_Test/video';
 import parcelBox from '../Images/open-parcel-boxes.jpg';
 //this will retrieve all conversations related to this particular user
 //hit up conversations, conversation_relation
-
+const uuidv4 = require('uuid/v4');
 const initState = {
     stream: null,
     url:'',
@@ -84,7 +84,7 @@ export default class Active_Thoughts extends React.Component {
                     creator: creator,
                     filepath: filepath,
                     originalFilepath: filepath,
-                    src: '/uploads/'+filepath,
+                    src: 'https://s3-us-west-2.amazonaws.com/thought-parcel-2/'+filepath,
                     conversationId: convId,
                     currentVidLoc: 0
                 });
@@ -157,7 +157,7 @@ export default class Active_Thoughts extends React.Component {
         let classThis = this;
         var token = this.props.token();
         console.log(token);
-        return fetch("/uploads/"+id,{
+        return fetch("https://s3-us-west-2.amazonaws.com/thought-parcel-2/"+id,{
         headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -260,11 +260,13 @@ export default class Active_Thoughts extends React.Component {
                 // debugger;
                 // console.log(users);
                 // let users = classThis.state.selectedOption;
+                let vidName = uuidv4();
                 console.log('line 86 file name before request: ' + fileName);
-                _xhr('/uploadFile', file, token, function(responseText) {
+                _xhr('/uploadFile', file, token, vidName, function(responseText) {
                     var fileURL = JSON.parse(responseText).fileURL;
                     console.info('fileURL', fileURL);
-                    var id = fileURL.substring(30);
+                    // var id = fileURL.substring(30);
+                    var id = vidName + '.webm';
                     // let user_id = 1; //user_id will get ID number from localStorage after issue of jsonwebtoken
                     let content = "no content";
                     let conv_id = classThis.state.conversationId;
@@ -275,7 +277,7 @@ export default class Active_Thoughts extends React.Component {
                         videoRecorder: '',
                         isRecording: false,
                         isDone: true,
-                        src: fileURL,
+                        src: 'https://s3-us-west-2.amazonaws.com/thought-parcel-2/'+id,
                         btnStatus: 'btn-start-recording',
                         btnText: 'Start Recording'
                     });
