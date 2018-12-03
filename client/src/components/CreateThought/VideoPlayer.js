@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import RecordRTC from "recordrtc";
 import ReactPlayer from "react-player";
 import { _xhr } from "./XHR";
-
+const uuidv4 = require('uuid/v4');
 export default class VideoPlayer extends Component {
   constructor(props) {
     super(props);
@@ -96,17 +96,17 @@ export default class VideoPlayer extends Component {
       var file = new File([recorderBlob], "test_vid.webm", {
         type: "video/webm"
       });
-
-      _xhr("/uploadFile", file, token, responseText => {
+      let vidName = uuidv4();
+      _xhr('/uploadFile', file, token, vidName, function(responseText) {
         var fileURL = JSON.parse(responseText).fileURL;
-        var id = fileURL.substring(30);
-
+        // var id = fileURL.substring(30);
+        var id = vidName + '.webm';
         this.setState({
           btnText: "Start Recording",
           isDone: true,
           isRecording: false,
           setIntervalId: -1,
-          src: fileURL,
+          src: 'https://s3-us-west-2.amazonaws.com/thought-parcel-2/'+id,
         });
 
         return fetch("/uploadFile2", {
