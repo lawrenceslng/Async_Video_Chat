@@ -119,6 +119,7 @@ export default class VideoPlayer extends Component {
         })
           .then(res => res.json())
           .then(rj => {
+            console.log("after return of uploadFile2");
             this.setState({isCompleted: rj.success});
           });
       });
