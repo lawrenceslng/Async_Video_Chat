@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import RecordRTC from "recordrtc";
 import ReactPlayer from "react-player";
-import { _xhr } from "./XHR";
+import { _xhr, _addVideo } from "./XHR";
 const uuidv4 = require('uuid/v4');
 export default class VideoPlayer extends Component {
   constructor(props) {
@@ -97,8 +97,8 @@ export default class VideoPlayer extends Component {
         type: "video/webm"
       });
       let vidName = uuidv4();
-      _xhr('/uploadFile', file, token, vidName, (responseText) => {
-        var fileURL = JSON.parse(responseText).fileURL;
+      _addVideo(file, vidName, () => {
+        // var fileURL = JSON.parse(responseText).fileURL;
         // var id = fileURL.substring(30);
         var id = vidName + '.webm';
         this.setState({

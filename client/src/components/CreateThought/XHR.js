@@ -5,22 +5,22 @@ const uuidv4 = require('uuid/v4');
 
 export const _xhr = (url, data, token, vidName, callback) => {
 
-    console.log("start_xhr");
-    console.log(url);
-    var request = new XMLHttpRequest();
-    console.log(data);
-    console.log("video upload to s3 starts here");
+    // console.log("start_xhr");
+    // console.log(url);
+    // var request = new XMLHttpRequest();
+    // console.log(data);
+    // console.log("video upload to s3 starts here");
     addVideo(data, vidName);
     // debugger;
-    request.onreadystatechange = function() {
-        if (request.readyState == 4 && request.status == 200) {
-            callback(request.responseText);
-        }
-    };
-    request.open('POST', url);
-    request.setRequestHeader("x-access-token", token);
-    var formData = new FormData();
-    formData.append('video_file', data);
+    // request.onreadystatechange = function() {
+    //     if (request.readyState == 4 && request.status == 200) {
+    //         callback(request.responseText);
+    //     }
+    // };
+    // request.open('POST', url);
+    // request.setRequestHeader("x-access-token", token);
+    // var formData = new FormData();
+    // formData.append('video_file', data);
     // formData.append('users', data2);
     // request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     // var name = "fname=Henry&lname=Ford";
@@ -35,13 +35,13 @@ export const _xhr = (url, data, token, vidName, callback) => {
     // .then(response => response.json())
     // .catch(error => console.error('Error:', error))
     // .then(response => console.log('Success:', JSON.stringify(response)));
-    request.send(formData);
+    // request.send(formData);
 }
 
 
 //aws sdk add photo function
 
-function addVideo(video, videoName) {
+export const _addVideo = (video, videoName) => {
     //aws sdk code
     console.log("inside addVideo function");
     var albumBucketName = 'thought-parcel-2';
