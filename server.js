@@ -440,67 +440,67 @@ app.post("/friends/:id",verifyToken, function(req,res){
 })
 
 app.post("/uploadFile",verifyToken, function(request,response) {
-  var uri = url.parse(request.url).pathname,
-      filename = path.join(process.cwd(), uri);
-  var isWin = !!process.platform.match(/^win/);
+  // var uri = url.parse(request.url).pathname,
+  //     filename = path.join(process.cwd(), uri);
+  // var isWin = !!process.platform.match(/^win/);
 
-  if (filename && filename.toString().indexOf(isWin ? '\\uploadFile' : '/uploadFile') != -1 && request.method.toLowerCase() == 'post') {
-      uploadFile(request, response);
-      console.log('after uploadFile function 228');
-      return;
-  }
+  // if (filename && filename.toString().indexOf(isWin ? '\\uploadFile' : '/uploadFile') != -1 && request.method.toLowerCase() == 'post') {
+  //     uploadFile(request, response);
+  //     console.log('after uploadFile function 228');
+  //     return;
+  // }
 
-  fs.exists(filename, function(exists) {
-      if (!exists) {
-          response.writeHead(404, {
-              'Content-Type': 'text/plain'
-          });
-          response.write('404 Not Found: ' + filename + '\n');
-          response.end();
-          return;
-      }
+  // fs.exists(filename, function(exists) {
+  //     if (!exists) {
+  //         response.writeHead(404, {
+  //             'Content-Type': 'text/plain'
+  //         });
+  //         response.write('404 Not Found: ' + filename + '\n');
+  //         response.end();
+  //         return;
+  //     }
 
-      if (filename.indexOf('favicon.ico') !== -1) {
-          return;
-      }
+  //     if (filename.indexOf('favicon.ico') !== -1) {
+  //         return;
+  //     }
 
-      if (fs.statSync(filename).isDirectory() && !isWin) {
-          filename += '/index.html';
-      } else if (fs.statSync(filename).isDirectory() && !!isWin) {
-          filename += '\\index.html';
-      }
-      console.log('line 226 = ' + filename);
-      fs.readFile(filename, 'binary', function(err, file) {
-          if (err) {
-              response.writeHead(500, {
-                  'Content-Type': 'text/plain'
-              });
-              console.log(err);
-              response.write(err + '\n');
-              response.end();
-              return;
-          }
+  //     if (fs.statSync(filename).isDirectory() && !isWin) {
+  //         filename += '/index.html';
+  //     } else if (fs.statSync(filename).isDirectory() && !!isWin) {
+  //         filename += '\\index.html';
+  //     }
+  //     console.log('line 226 = ' + filename);
+  //     fs.readFile(filename, 'binary', function(err, file) {
+  //         if (err) {
+  //             response.writeHead(500, {
+  //                 'Content-Type': 'text/plain'
+  //             });
+  //             console.log(err);
+  //             response.write(err + '\n');
+  //             response.end();
+  //             return;
+  //         }
 
-          var contentType;
+  //         var contentType;
 
-          if (filename.indexOf('.html') !== -1) {
-              contentType = 'text/html';
-          }
+  //         if (filename.indexOf('.html') !== -1) {
+  //             contentType = 'text/html';
+  //         }
 
-          if (filename.indexOf('.js') !== -1) {
-              contentType = 'application/javascript';
-          }
+  //         if (filename.indexOf('.js') !== -1) {
+  //             contentType = 'application/javascript';
+  //         }
 
-          if (contentType) {
-              response.writeHead(200, {
-                  'Content-Type': contentType
-              });
-          } else response.writeHead(200);
+  //         if (contentType) {
+  //             response.writeHead(200, {
+  //                 'Content-Type': contentType
+  //             });
+  //         } else response.writeHead(200);
 
-          response.write(file, 'binary');
-          response.end();
-      });
-  });
+  //         response.write(file, 'binary');
+  //         response.end();
+  //     });
+  // });
 });
 
 //this is actual route that relates all users in a particular conversation
