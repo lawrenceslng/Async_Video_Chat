@@ -67,6 +67,24 @@ export default class Discover extends Component {
         this.getFriends();
       });
   };
+  
+  getFriends = () => {
+    var token = this.props.token();
+    console.log(token);
+    return fetch("/friends", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "x-access-token": token
+      }
+    })
+      .then(res => res.json())
+      .then(rj => {
+        console.log(rj);
+        this.setState({ friends: rj });
+      });
+  };
+
 
   render() {
     return (
