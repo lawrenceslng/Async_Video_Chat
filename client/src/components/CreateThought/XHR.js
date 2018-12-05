@@ -25,7 +25,7 @@ const uuidv4 = require('uuid/v4');
     // request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     // var name = "fname=Henry&lname=Ford";
     // for (var pair of formData.entries()) {
-    //     console.log(pair[0]+ ', ' + pair[1]); 
+    //     console.log(pair[0]+ ', ' + pair[1]);
     // }
     // debugger;
     // fetch(url, {
@@ -59,7 +59,7 @@ export const _addVideo = (video, videoName) => {
         apiVersion: '2006-03-01',
         params: {Bucket: albumBucketName}
     });
-    
+
     ////////////////////////////////
     // var files = document.getElementById('photoupload').files;
     // if (!files.length) {

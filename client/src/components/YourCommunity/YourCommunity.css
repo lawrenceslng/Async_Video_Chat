@@ -10,21 +10,24 @@ li:hover {
   background-color: lightblue;
 }
 
-.addButton {
+.add-button {
   width: 100px;
   height: 40px;
   float: right;
   margin-top: 5px;
   line-height: 40px;
   border-radius: 10px;
+  outline: none;
 }
 
-.addButton:hover {
+.add-button:hover {
   background: lightgray;
 }
 
 .results-list-box {
+  height: 300px;
   margin-top: 50px;
+  overflow-y: scroll;
 }
 
 .results-list {
@@ -40,7 +43,6 @@ li:hover {
 }
 
 .tab-button {
-  /* display: inline-block; */
   background-color: white;
   font-size: 24px;
   line-height: 75px;
@@ -52,10 +54,14 @@ li:hover {
   cursor: pointer;
 }
 
+.tab-button.active {
+  background-color: lightgray;
+}
+
 .tab-button:hover {
-  /* display: inline-block; */
   background-color: lightblue;
 }
+
 
 .tab-content {
   padding-top: 20px;
@@ -74,4 +80,9 @@ li:hover {
   width: 50%;
   margin: 0px;
   padding-left: 20px;
+}
+
+#search-placeholder {
+  color: lightgray;
+  margin-top: 100px;
 }
