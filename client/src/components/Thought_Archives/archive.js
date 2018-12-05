@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import RecordRTC from 'recordrtc';
-import {_xhr} from '../Video_Test/video';
+import {_xhr, _addVideo} from '../CreateThought/XHR';
 import parcelBox from '../Images/open-parcel-boxes.jpg';
 //this will retrieve all conversations related to this particular user
 //hit up conversations, conversation_relation
@@ -82,7 +82,7 @@ export default class Archived_Thoughts extends React.Component {
                     creator: creator,
                     filepath: filepath,
                     originalFilepath: filepath,
-                    src: '/uploads/'+filepath,
+                    src: 'https://s3-us-west-2.amazonaws.com/thought-parcel-2/'+filepath,
                     conversationId: convId,
                     currentVidLoc: 0
                 });
@@ -104,7 +104,7 @@ export default class Archived_Thoughts extends React.Component {
                 creator: creator,
                 filepath: this.state.thoughts[this.state.thoughts.length-1],
                 originalFilepath: filepath,
-                src: '/uploads/'+this.state.thoughts[this.state.thoughts.length-1],
+                src: 'https://s3-us-west-2.amazonaws.com/thought-parcel-2/'+this.state.thoughts[this.state.thoughts.length-1],
                 conversationId: convId,
                 currentVidLoc: this.state.thoughts.length-1
             });
@@ -145,7 +145,7 @@ export default class Archived_Thoughts extends React.Component {
             this.getVideo(this.state.thoughts[newVidLoc]);
             this.setState({
                 filepath: this.state.thoughts[newVidLoc],
-                src: '/uploads/'+this.state.thoughts[newVidLoc],
+                src: 'https://s3-us-west-2.amazonaws.com/thought-parcel-2/'+this.state.thoughts[newVidLoc],
                 currentVidLoc: newVidLoc
             });
         }
@@ -153,7 +153,7 @@ export default class Archived_Thoughts extends React.Component {
             this.getVideo(this.state.originalFilepath);
             this.setState({
                 filepath: this.state.originalFilepath,
-                src: '/uploads/'+this.state.originalFilepath,
+                src: 'https://s3-us-west-2.amazonaws.com/thought-parcel-2/'+this.state.originalFilepath,
                 currentVidLoc: -1
             });
         }
@@ -167,7 +167,7 @@ export default class Archived_Thoughts extends React.Component {
             this.getVideo(this.state.thoughts[newVidLoc]);
             this.setState({
                 filepath: this.state.thoughts[newVidLoc],
-                src: '/uploads/'+this.state.thoughts[newVidLoc],
+                src: 'https://s3-us-west-2.amazonaws.com/thought-parcel-2/'+this.state.thoughts[newVidLoc],
                 currentVidLoc: newVidLoc
             });
         }

@@ -11,7 +11,8 @@
     "react-player": "^1.6.6",
     "react-scripts": "2.0.4",
     "react-select": "^2.1.0",
-    "recordrtc": "^5.4.8"
+    "recordrtc": "^5.4.8",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
