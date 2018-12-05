@@ -1,37 +1,33 @@
 import React, { Component } from "react";
+import "./YourCommunity.css";
 
 export default class Discover extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchValue: "",
-      results: []
+      // friends: [],
+      results: [],
+      searchValue: ""
     };
     this.addFriend = this.addFriend.bind(this);
-    this.getInfo = this.getInfo.bind(this);
+    this.getSearchResults = this.getSearchResults.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   handleInputChange = () => {
-    this.setState(
-      {
-        searchValue: this.search.value
-      },
-      () => this.getInfo()
+    this.setState({ searchValue: this.search.value},
+      () => this.getSearchResults(this.state.searchValue)
     );
-    console.log("24D: " + this.state.searchValue);
   };
 
-  getInfo = () => {
+  getSearchResults = (searchValue) => {
     var token = this.props.token();
-    console.log("GET INFO: " + this.state.searchValue);
-    if (this.state.searchValue === "") {
+    if (searchValue === "") {
       this.setState({ results: [] });
       var textnode = document.createTextNode("");
       document.querySelector(".results-list-box").appendChild(textnode);
     } else {
-      console.log("DIS: search value");
-      return fetch(`/friends/${this.state.searchValue}`, {
+      return fetch(`/friends/${searchValue}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -41,7 +37,6 @@ export default class Discover extends Component {
       })
         .then(res => res.json())
         .then(rj => {
-          console.log(rj);
           this.setState({ results: rj });
         });
     }
@@ -53,7 +48,8 @@ export default class Discover extends Component {
     var user_id = e.target.id;
     var token = this.props.token();
 
-    //do POST fetch call to server
+    alert("Added friend!");
+    this.setState({ searchValue: ""});
     fetch(`/friends/` + user_id, {
       method: "POST",
       headers: {
@@ -64,27 +60,14 @@ export default class Discover extends Component {
     })
       .then(res => res.json())
       .then(rj => {
-        this.getFriends();
-      });
-  };
-  
-  getFriends = () => {
-    var token = this.props.token();
-    console.log(token);
-    return fetch("/friends", {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "x-access-token": token
-      }
-    })
-      .then(res => res.json())
-      .then(rj => {
-        console.log(rj);
-        this.setState({ friends: rj });
+        this.setState({ searchValue: ""});
+        this.props.updateFriends();
       });
   };
 
+  isFriend = user_id => {
+    return this.props.friends.some(friend => friend.id === user_id);
+  };
 
   render() {
     return (
@@ -95,23 +78,39 @@ export default class Discover extends Component {
           placeholder="Search"
           ref={input => (this.search = input)}
           onChange={this.handleInputChange}
+          value={this.state.searchValue}
         />
         <div className="results-list-box">
-          <ul className="results-list">
-            {this.state.results.length > 0 &&
-              this.state.results.map(x => (
-                <li className="results-box" id={x.id} name={x.name} key={x.id}>
-                  {x.username}
-                  <button
-                    className="addButton"
+          {this.state.searchValue === "" ? (
+            <h4 id="search-placeholder">
+              Connect with your friends and family!
+            </h4>
+          ) : (
+            <ul className="results-list">
+              {this.state.results.length > 0 &&
+                this.state.results.map(x => (
+                  <li
+                    className="results-box"
                     id={x.id}
-                    onClick={this.addFriend}
+                    name={x.name}
+                    key={x.id}
                   >
-                    Add Friend
-                  </button>
-                </li>
-              ))}
-          </ul>
+                    {x.username}
+                    {!this.isFriend(x.id) ? (
+                      <button
+                        className="add-button"
+                        id={x.id}
+                        onClick={this.addFriend}
+                      >
+                        Add Friend
+                      </button>
+                    ) : (
+                      ""
+                    )}
+                  </li>
+                ))}
+            </ul>
+          )}
         </div>
       </div>
     );

@@ -8,9 +8,16 @@ export default class YourCommunity extends Component {
     super(props);
     this.state = {
       discoverTab: false,
-      friendsTab: true
+      friendsTab: true,
+      friends: [],
     };
+
     this.openTab = this.openTab.bind(this);
+    this.updateFriends = this.updateFriends.bind(this);
+  }
+
+  componentDidMount() {
+    this.updateFriends();
   }
 
   openTab = event => {
@@ -20,20 +27,41 @@ export default class YourCommunity extends Component {
       this.setState({ friendsTab: true, discoverTab: false }, () => {
         document.getElementById("friends-content").style.display = "block";
         document.getElementById("discover-content").style.display = "none";
+
+        document.getElementById("friends").classList.toggle("active");
+        document.getElementById("discover").classList.toggle("active");
       });
     else
       this.setState({ friendsTab: false, discoverTab: true }, () => {
         document.getElementById("friends-content").style.display = "none";
         document.getElementById("discover-content").style.display = "block";
+
+        document.getElementById("discover").classList.toggle("active");
+        document.getElementById("friends").classList.toggle("active");
       });
   };
 
+  updateFriends = () => {
+    var token = this.props.token();
+
+    return fetch("/friends", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "x-access-token": token
+      }
+    })
+      .then(res => res.json())
+      .then(rj => {
+        this.setState({ friends: rj }, () => {console.log("UF" + this.state.friends)});
+      });
+  }
+
   render() {
-    console.log("PROPS: " + this.props);
     return (
       <div className="your-community">
         <div className="tab-menu">
-          <button className="tab-button" id="friends" onClick={this.openTab}>
+          <button className="tab-button active" id="friends" onClick={this.openTab}>
             Friends
           </button>
           <button className="tab-button" id="discover" onClick={this.openTab}>
@@ -41,8 +69,8 @@ export default class YourCommunity extends Component {
           </button>
         </div>
         <div className="tab-content">
-          <Friends token={this.props.token} />
-          <Discover token={this.props.token} />
+          <Friends token={this.props.token} friends={this.state.friends} />
+          <Discover token={this.props.token} friends={this.state.friends} updateFriends={this.updateFriends} />
         </div>
       </div>
     );

@@ -1,58 +1,48 @@
 import React, { Component } from "react";
+import "./YourCommunity.css";
 
 export default class Friends extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchValue: "",
-      friends: [{
-          id: 0,
-          name: ""
-        }
-      ],
       results: [],
+      searchValue: "",
     };
-    this.getFriends = this.getFriends.bind(this);
-    this.getInfo = this.getInfo.bind(this);
+    this.getSearchResults = this.getSearchResults.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   componentDidMount() {
-    var token = this.props.token();
-    return fetch("/friends", {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "x-access-token": token,
-      }
-    })
-      .then(res => res.json())
-      .then(rj => {
-        console.log(rj);
-        this.setState({ friends: rj });
-        this.getInfo();
-      });
+    this.setState({ results: this.props.friends });
+    this.getSearchResults(this.state.searchValue)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ results: nextProps.friends });
   }
 
   handleInputChange = () => {
-    this.setState(
-      {
-        searchValue: this.search.value
-      },
-      () => this.getInfo()
+    this.setState({ searchValue: this.search.value},
+      () => this.getSearchResults(this.state.searchValue)
     );
-    console.log("24F: " + this.state.searchValue);
   };
 
-  getInfo = () => {
+  getSearchResults = (searchValue) => {
     var token = this.props.token();
-
-    if (this.state.searchValue === "") {
-      this.setState({ results: [] });
-      var textnode = document.createTextNode("");
-      document.querySelector(".results-list-box").appendChild(textnode);
+    if (searchValue === "") {
+      return fetch("/friends", {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "x-access-token": token
+        }
+      })
+        .then(res => res.json())
+        .then(rj => {
+          this.setState({ results: rj });
+        });
     } else {
-      return fetch(`/friends/${this.state.searchValue}`, {
+      return fetch(`/friends/${searchValue}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -62,27 +52,9 @@ export default class Friends extends Component {
       })
         .then(res => res.json())
         .then(rj => {
-          console.log(rj);
           this.setState({ results: rj });
         });
     }
-  };
-
-  getFriends = () => {
-    var token = this.props.token();
-    console.log(token);
-    return fetch("/friends", {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "x-access-token": token
-      }
-    })
-      .then(res => res.json())
-      .then(rj => {
-        console.log(rj);
-        this.setState({ friends: rj });
-      });
   };
 
   render() {
@@ -95,10 +67,11 @@ export default class Friends extends Component {
           placeholder="Search"
           ref={input => (this.search = input)}
           onChange={this.handleInputChange}
+          value={this.state.searchValue}
         />
         <div className="results-list-box">
           <ul className="results-list">
-            {this.state.friends.map(x => (
+            {this.state.results.map(x => (
               <li className="results-box" id={x.id} key={x.id}>
                 {x.username}
               </li>
@@ -109,4 +82,3 @@ export default class Friends extends Component {
     );
   }
 }
-// {this.state.results.length > 0 && this.state.results.map((x) => <div id={x.id} name={x.name} key={x.id}>{x.username}</div>)}
