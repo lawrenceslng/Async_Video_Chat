@@ -28,16 +28,16 @@ export default class YourCommunity extends Component {
         document.getElementById("friends-content").style.display = "block";
         document.getElementById("discover-content").style.display = "none";
 
-        document.getElementById("friends").classList.toggle("active");
-        document.getElementById("discover").classList.toggle("active");
+        document.getElementById("friends").classList.add("active");
+        document.getElementById("discover").classList.remove("active");
       });
     else
       this.setState({ friendsTab: false, discoverTab: true }, () => {
         document.getElementById("friends-content").style.display = "none";
         document.getElementById("discover-content").style.display = "block";
 
-        document.getElementById("discover").classList.toggle("active");
-        document.getElementById("friends").classList.toggle("active");
+        document.getElementById("discover").classList.add("active");
+        document.getElementById("friends").classList.remove("active");
       });
   };
 
