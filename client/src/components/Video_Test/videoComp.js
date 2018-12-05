@@ -4,7 +4,7 @@ import {_xhr} from './video'
 // import axios from "axios";
 import ReactPlayer from 'react-player';
 import Select from 'react-select';
-
+require("dotenv").config();
 const options = [
     { value: 'id1', label: 'lasdf' },
     { value: 'id2', label: 'asdfasdf' },
@@ -14,6 +14,9 @@ const options = [
   const MyComponent = () => (
     <Select options={options} />
   )
+
+const uuidv4 = require('uuid/v4');
+
 export default class Record extends React.Component {
     constructor(props) {
         super(props);
@@ -48,6 +51,7 @@ export default class Record extends React.Component {
     btnStartRecording = (e) => {
     // debugger;
         let classThis = this;
+        
         // console.log(this.state.stream);
         // console.log(this.state.isRecording);
         e.preventDefault();
@@ -135,10 +139,12 @@ export default class Record extends React.Component {
             console.log(users);
             // let users = classThis.state.selectedOption;
             console.log('line 86 file name before request: ' + fileName);
-            _xhr('/uploadFile', file, token, function(responseText) {
+            let vidName = uuidv4();
+            _xhr('/uploadFile', file, token, vidName, function(responseText) {
                 var fileURL = JSON.parse(responseText).fileURL;
                 console.info('fileURL', fileURL);
-                var id = fileURL.substring(30);
+                // var id = fileURL.substring(30);
+                var id = vidName + '.webm';
                 // let creator = token; //creator will get ID number from localStorage after issue of jsonwebtoken
                 let title = document.querySelector('[name="title"]').value;
                 console.log(title);
@@ -168,13 +174,13 @@ export default class Record extends React.Component {
                 //     body: JSON.stringify({field: 'field1'}), // body data type must match "Content-Type" header
                 // }).then((res) => res.json());
                 // debugger;
-                console.log("after fetch");
+                // console.log("177: " + process.env.S3_BUCKET_URL);
                 classThis.setState({
                     stream: null,
                     videoRecorder: '',
                     isRecording: false,
                     isDone: true,
-                    src: fileURL,
+                    src: 'https://s3-us-west-2.amazonaws.com/thought-parcel-2/'+id,
                     btnStatus: 'btn-start-recording',
                     btnText: 'Start Recording'
                 });

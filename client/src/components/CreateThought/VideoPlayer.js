@@ -83,8 +83,8 @@ export default class VideoPlayer extends Component {
     var token = this.props.token();
     let users = [];
 
-    for (var i = 0; i < friends; i++) {
-      users.push(friends.id);
+    for (var i = 0; i < friends.length; i++) {
+      users.push(friends[i].id);
     }
 
     this.state.videoRecorder.stopRecording(url => {
@@ -131,7 +131,7 @@ export default class VideoPlayer extends Component {
     var title = this.props.titleInput;
     var description = this.props.descriptionInput;
     var friends = this.props.selectedOption;
-
+    console.log(friends);
     if (!this.state.isCompleted) {
       if (this.state.isRecording) {
         this.btnStopRecording(e, title, description, friends);
