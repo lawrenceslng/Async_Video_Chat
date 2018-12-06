@@ -386,11 +386,11 @@ export default class Active_Thoughts extends React.Component {
             });
     };
 
-    componentWillUnmount() {
-      document.querySelector("video").srcObject = null;
-      document.querySelector("video").camera = null;
-      document.querySelector("video").pause();
-    }
+    // componentWillUnmount() {
+      // document.querySelector("video").srcObject = null;
+      // document.querySelector("video").camera = null;
+      // document.querySelector("video").pause();
+    // }
 
     render(){
         let button;
