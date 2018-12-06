@@ -398,7 +398,7 @@ export default class Active_Thoughts extends React.Component {
                             <div className="modal-body">
                                 {this.state.filepath}
                                 {(!this.state.isRecording) && <div>
-                                <ReactPlayer url={this.state.src} playing controls/><button onClick={this.previousVid}>Prev</button><button onClick={this.nextVid}>Next</button></div>}
+                                <ReactPlayer url={this.state.src} playing controls width="500" height="281"/><button className="btn btn-primary btn-vid-nav" onClick={this.previousVid}>Previous Video</button><button className="btn btn-primary btn-vid-nav" onClick={this.nextVid}>Next Video</button></div>}
                                 {(this.state.isRecording) && <div>
                                     <video id="record" width="500" height="281">
                                     <source src={this.state.src} type='video/webm' />
