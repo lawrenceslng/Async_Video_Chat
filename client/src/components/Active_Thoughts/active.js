@@ -3,8 +3,12 @@ import ReactPlayer from 'react-player';
 import RecordRTC from 'recordrtc';
 import {_xhr, _addVideo} from '../CreateThought/XHR';
 import parcelBox from '../Images/open-parcel-boxes.jpg';
+import "./active.css";
+
 //this will retrieve all conversations related to this particular user
 //hit up conversations, conversation_relation
+
+
 const uuidv4 = require('uuid/v4');
 const initState = {
     stream: null,
@@ -21,13 +25,15 @@ const initState = {
     isComplete: false,
     conversationId: 0,
     thoughts: [],
-    currentVidLoc: 0
+    currentVidLoc: 0,
+    setIntervalId: -1,
 };
 
 export default class Active_Thoughts extends React.Component {
     constructor(props){
         super(props);
         this.state = initState;
+        this.recordButton = React.createRef();
     };
 
     tick(){
@@ -64,7 +70,7 @@ export default class Active_Thoughts extends React.Component {
             creator = e.target.parentElement.getAttribute('data-creator');
             filepath = e.target.parentElement.getAttribute('data-filepath');
         }
-        
+
         var token = this.props.token();
         console.log(filepath);
         fetch("/relevant_thoughts/"+convId,{
@@ -199,6 +205,15 @@ export default class Active_Thoughts extends React.Component {
             // };
             // navigator.mediaDevices.getUserMedia(session)
             // .then(function(mediaStream) {
+
+            var intervalId = setInterval(() => {
+              this.switch = !this.switch;
+              return this.switch
+                ? (this.recordButton.current.style.backgroundColor = "red")
+                : (this.recordButton.current.style.backgroundColor = "white");
+            }, 500);
+
+
                 var video = document.querySelector('video');
                 // if (typeof video.srcObject == "object") {
                 //     video.srcObject = mediaStream;
@@ -228,7 +243,8 @@ export default class Active_Thoughts extends React.Component {
                         videoRecorder: videoRecorder,
                         isRecording: true,
                         btnStatus: 'btn-stop-recording',
-                        btnText: 'Stop Recording'
+                        btnText: 'Stop Recording',
+                        setIntervalId: intervalId,
                     });
                     console.log(classThis.state.stream);
                     console.log(videoRecorder);
@@ -244,6 +260,9 @@ export default class Active_Thoughts extends React.Component {
             console.log("clicked");
             var token = this.props.token();
             clearInterval(this.interval);
+            clearInterval(this.state.setIntervalId);
+            this.recordButton.current.style.backgroundColor = "white";
+
             classThis.state.videoRecorder.stopRecording(function() {
                 // var recordedBlob = classThis.state.videoRecorder.blob; // blob property
 
@@ -253,13 +272,13 @@ export default class Active_Thoughts extends React.Component {
                 // console.log(classThis.state.stream)
                 if(classThis.state.stream) classThis.state.stream.stop();
                 var fileName = 'test_vid.webm';
-                
+
                 var file = new File([recorderBlob], fileName, {
                     type: 'video/webm'
                 });
-     
+
                 let vidName = uuidv4();
-                _addVideo(file, vidName); 
+                _addVideo(file, vidName);
                 console.log('line 86 file name before request: ' + fileName);
                 // _xhr('/uploadFile', file, token, vidName, function(responseText) {
                     // var fileURL = JSON.parse(responseText).fileURL;
@@ -278,7 +297,8 @@ export default class Active_Thoughts extends React.Component {
                         isDone: true,
                         src: 'https://s3-us-west-2.amazonaws.com/thought-parcel-2/'+id,
                         btnStatus: 'btn-start-recording',
-                        btnText: 'Start Recording'
+                        btnText: 'Start Recording',
+                        setIntervalId: -1,
                     });
                     return fetch("/conversation_reply", {
                         method: 'POST',
@@ -366,16 +386,21 @@ export default class Active_Thoughts extends React.Component {
             });
     };
 
+    // componentWillUnmount() {
+      // document.querySelector("video").srcObject = null;
+      // document.querySelector("video").camera = null;
+      // document.querySelector("video").pause();
+    // }
 
     render(){
         let button;
         if(this.state.btnStatus == 'btn-start-recording')
         {
-            button = <button id={this.state.btnStatus} onClick={this.btnStartRecording}>{this.state.btnText}</button>
+            button = <button className="reply-record-button" ref={this.recordButton} id={this.state.btnStatus} onClick={this.btnStartRecording}>{this.state.btnText}</button>
         }
         else
         {
-            button = <button id={this.state.btnStatus} onClick={this.btnStopRecording}>{this.state.btnText}</button>
+            button = <button className="reply-record-button" ref={this.recordButton} id={this.state.btnStatus} onClick={this.btnStopRecording}>{this.state.btnText}</button>
         }
         return (
             <div className = 'row' id="conversationsDiv">
