@@ -378,8 +378,10 @@ app.get('/uploads/:id', function (req, res){
 //route to get friends by username
 app.get("/friends/:name",verifyToken, function(req,res){
   var search = req.params.name;
+  let username = req.decoded.username;
   console.log(search);
-  connection.query(`SELECT id, username, first_name, last_name FROM users WHERE username LIKE ?`,['%'+search+'%'],function (error, results, fields) {
+  //need to exclue own name
+  connection.query(`SELECT id, username, first_name, last_name FROM users WHERE username LIKE ? AND username NOT LIKE ?`,['%'+search+'%', username],function (error, results, fields) {
     if (error) throw error;
     console.log(results);
     res.json(results);
