@@ -124,7 +124,7 @@ app.post('/login', function(req,res){
             id: results[0].id,
             username: results[0].username
           };
-
+          console.log(payload);
           var token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '4h' });
           // var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
             // return the information including token as JSON
@@ -176,16 +176,21 @@ app.post("/signup", function(req,res){
             connection.query('INSERT INTO users (username, password, first_name, last_name, email) VALUES (?,?,?,?,?)', [username, p_hash, firstName, lastName, email],function (error, results, fields) {
               if (error) throw error;
               console.log(results);
-              connection.query('SELECT id FROM users WHERE username = ?', [username],function (error, results, fields) {
+              connection.query('SELECT id, username FROM users WHERE username = ?', [username],function (error, results, fields) {
                 if(error) throw error;
                 console.log(results[0].id);
                 var payload = {
                   id: results[0].id,
                   username: results[0].username
                 };
-      
+                console.log(payload);
                 var token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '4h' });
-                res.json({success:true, token: token, id: payload.id});
+                res.status(200).json({
+                  success: true,
+                  message: 'Enjoy your token!',
+                  token: token,
+                  id: payload.id
+              });
               });
             })
           })

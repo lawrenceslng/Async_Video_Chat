@@ -23,3 +23,6 @@ reply button styling - ryan
 currently must refresh page before new video would show up if you are already in active thoughts ===
 
 play button instead of autoplay    - ryan
+
+
+after creating account, must logout before logging back in to be able to search for friends
