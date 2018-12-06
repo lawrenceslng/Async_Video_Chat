@@ -291,3 +291,8 @@ padding-top: 20px;
   height: 500px;
   width: 800px;
 }
+
+.btn-vid-nav {
+  margin: 10px 20px;
+  min-width: 120px;
+}
