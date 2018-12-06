@@ -5,6 +5,7 @@ import Carousel from './components/carousel';
 import LoginForm from './components/loginForm';
 import PWMatch from './components/accountCreate';
 import AdminPanel from './components/adminPanel';
+import SettingsMenu from './components/SettingsMenu/SettingsMenu';
 
 import './App.css';
 import './loginForm.css';
@@ -103,7 +104,7 @@ class App extends Component {
   changeForm = (e) => {
     e.preventDefault();
     console.log(e.target.className);
-    if(e.target.innerHTML == "Sign-Up")
+    if(e.target.innerHTML === "Sign-Up")
     {
       document.getElementById("form").reset();
       document.getElementById("sign-up-button").className = "btn btn-primary active";
@@ -122,29 +123,18 @@ class App extends Component {
   }
   logOut = (e) => {
     e.preventDefault();
-    console.log(e.target.className);
-    console.log(localStorage.getItem("token"));
+
     localStorage.removeItem("token");
     localStorage.removeItem("id");
-    console.log(localStorage.getItem("token"));
-    // debugger;
+
     return fetch("/logout", {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      // body: JSON.stringify({username, firstName, lastName, email, password})
     }).then(res => res.json()).then(rj => {
-      console.log(rj);
-      // debugger;
-      if(rj.success)
-      {
-        this.setState({loggedIn: false});
-      }
-      else{
-        this.setState({loggedIn: true});
-      }
+      this.setState({loggedIn: (rj.success ? false : true)});
     })
   }
 
@@ -177,7 +167,7 @@ class App extends Component {
     'Content-Type': 'application/json'},
     body: JSON.stringify({token})}).then((res) => {
       console.log(res.status);
-      if(res.status == '403')
+      if(res.status === '403')
       {
         this.setState({loggedIn: false});
         console.log("logged in false");
@@ -206,7 +196,7 @@ class App extends Component {
       return (
         // code for AdminPanel here
         <div className="App">
-          <button onClick={this.logOut}>Logout</button>
+          <SettingsMenu logOut={this.logOut}/>
           <AdminPanel token={this.getToken}/>
         </div>
       )
@@ -234,3 +224,5 @@ class App extends Component {
 }
 
 export default App;
+
+// <button onClick={this.logOut}>Logout</button>
