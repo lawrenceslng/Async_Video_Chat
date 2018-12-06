@@ -167,7 +167,7 @@ class App extends Component {
     'Content-Type': 'application/json'},
     body: JSON.stringify({token})}).then((res) => {
       console.log(res.status);
-      if(res.status === '403')
+      if(res.status === 403)
       {
         this.setState({loggedIn: false});
         console.log("logged in false");
