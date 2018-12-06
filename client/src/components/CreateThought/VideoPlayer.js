@@ -54,6 +54,12 @@ export default class VideoPlayer extends Component {
       });
   }
 
+  // componentWillUnmount() {
+    // document.querySelector("video").srcObject = null;
+    // document.querySelector("video").camera = null;
+    // document.querySelector("video").pause();
+  // }
+
   btnStartRecording = e => {
     e.preventDefault();
 
@@ -97,7 +103,7 @@ export default class VideoPlayer extends Component {
         type: "video/webm"
       });
       let vidName = uuidv4();
-      _addVideo(file, vidName); 
+      _addVideo(file, vidName);
         // var fileURL = JSON.parse(responseText).fileURL;
         // var id = fileURL.substring(30);
         var id = vidName + '.webm';
