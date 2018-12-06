@@ -54,6 +54,12 @@ export default class VideoPlayer extends Component {
       });
   }
 
+  componentWillUnmount() {
+    document.querySelector("video").srcObject = null;
+    document.querySelector("video").camera = null;
+    document.querySelector("video").pause();
+  }
+  
   btnStartRecording = e => {
     e.preventDefault();
 
