@@ -184,6 +184,11 @@ export default class Archived_Thoughts extends React.Component {
         e.preventDefault();
         alert("this is a reply button");
     };
+
+    stopVideo = () => {
+        this.setState({src: ""});
+    };
+
     componentDidMount(){
 
         return fetch("/conversations_archive",{headers : {
@@ -218,7 +223,7 @@ export default class Archived_Thoughts extends React.Component {
                             {/* <!-- Modal Header --> */}
                             <div className="modal-header">
                               <h4 className="modal-title">{this.state.modalId}</h4>
-                              <button type="button" className="close" data-dismiss="modal">&times;</button>
+                              <button type="button" onClick={this.stopVideo} className="close" data-dismiss="modal">&times;</button>
                             </div>
 
                             {/* <!-- Modal body --> */}
@@ -239,7 +244,7 @@ export default class Archived_Thoughts extends React.Component {
                             {/* if localstorage matches with this.state.creator */}
                             {(this.state.creator == 1) && <button className="btn btn-danger" data-dismiss="modal" onClick={this.archive}>Archive</button>}
                             <button type="button" className="btn btn-primary" onClick={this.reply}>Reply</button>
-                            <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-danger" onClick={this.stopVideo} data-dismiss="modal">Close</button>
                             </div>
 
                           </div>

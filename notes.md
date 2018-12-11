@@ -9,7 +9,7 @@ scroll for archive thought -
 
 TODO
 
-need to find way to stop video and audio from playing after closing out of modal LN
+need to find way to stop video and audio from playing after closing out of modal LN - should have solved
 
 loading screen for video upload ===
 
@@ -25,4 +25,8 @@ currently must refresh page before new video would show up if you are already in
 play button instead of autoplay    - ryan
 
 
-after creating account, must logout before logging back in to be able to search for friends
+after creating account, must logout before logging back in to be able to search for friends - fixed
+
+if no friends, user cannot post because it is defined as not a complete form
+
+search results in discover auto deletes after adding 1 friend
