@@ -1,1 +1,0 @@
-// carousel and sign-up/login form
