@@ -10,6 +10,7 @@ export default class LoginForm extends Component {
   }
 
   onClick = (event) => {
+    event.preventDefault();
     this.props.onClick(this.usernameInput.value, this.passwordInput.value);
   //   event.preventDefault();
   //   console.log(this.usernameInput.value)
@@ -95,6 +96,7 @@ export default class LoginForm extends Component {
             </button>
           </div>
         </form>
+      
       </div>
     );
   }
