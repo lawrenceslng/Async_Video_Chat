@@ -111,6 +111,7 @@ class AdminPanel extends Component {
   }
 
   render(){
+    console.log(this.props.token)
     if(this.state.NavBar)
     {
       return (
