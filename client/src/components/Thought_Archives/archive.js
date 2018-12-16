@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import RecordRTC from 'recordrtc';
 import {_xhr, _addVideo} from '../CreateThought/XHR';
-import parcelBox from '../Images/open-parcel-boxes.jpg';
+import parcelBox from '../../images/open-parcel-boxes.jpg';
 //this will retrieve all conversations related to this particular user
 //hit up conversations, conversation_relation
 const initState = {
@@ -62,7 +62,7 @@ export default class Archived_Thoughts extends React.Component {
             creator = e.target.parentElement.getAttribute('data-creator');
             filepath = e.target.parentElement.getAttribute('data-filepath');
         }
-        
+
         var token = this.props.token();
         console.log(filepath);
         fetch("/relevant_thoughts/"+convId,{

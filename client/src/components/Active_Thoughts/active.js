@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import RecordRTC from 'recordrtc';
 import {_xhr, _addVideo} from '../CreateThought/XHR';
-import parcelBox from '../Images/open-parcel-boxes.jpg';
+import parcelBox from '../../images/open-parcel-boxes.jpg';
 import "./active.css";
 
 //this will retrieve all conversations related to this particular user
