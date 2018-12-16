@@ -17,10 +17,8 @@ class Login extends Component {
   }
 
   onClick = (username, password) => {
-    if (username !== "" && password !== "") {
+    if (username !== "" && password !== "")
       this.props.login({ username, password });
-      this.props.checkLogin();
-    }
   };
 
   render() {
@@ -56,7 +54,8 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-  loggedIn: state.Login.loggedIn
+  token: state.Login.token,
+  id: state.Login.id,
 });
 
 const matchDispatchToProps = dispatch => {

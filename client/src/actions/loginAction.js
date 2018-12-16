@@ -1,33 +1,30 @@
-export function checkLogin(token) {
+export function checkLogin(token, id) {
   const settings = {
     method: "POST",
     headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
+      Accept: "application/json",
+      "Content-Type": "application/json"
     },
-    body: JSON.stringify({token})
+    body: JSON.stringify({ token })
   };
 
   return dispatch => {
-    return fetch("/check-login", settings)
-    .then(res => {
-      if(res.status === 403) {
+    return fetch("/check-login", settings).then(res => {
+      if (res.status === 403) {
         dispatch(fetchNotLoggedIn());
-      }
-      else {
-        dispatch(fetchLoggedIn());
+      } else {
+        dispatch(fetchLoggedIn(token, id));
       }
     });
   };
 }
 
 export function login(token) {
-  alert(token.username)
   const settings = {
     method: "POST",
     headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
+      Accept: "application/json",
+      "Content-Type": "application/json"
     },
     body: JSON.stringify(token)
   };
@@ -37,37 +34,49 @@ export function login(token) {
       .then(res => res.json())
       .then(json => {
         if (json.success) {
-          alert("RIGHT")
           dispatch(fetchLoginSuccess(json));
           return json;
         }
-        else
-          alert("FAIL")
-      });
-      // .catch(error => dispatch(fetchLoginFailure(error)));
+      })
+      .catch(error => dispatch(fetchLoginFailure(error)));
   };
 }
 
-export const fetchLoggedIn = () => {
+export function logout() {
+  const settings = {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    }
+  };
+
+  return dispatch => {
+    return fetch("/logout", settings).then(dispatch(fetchNotLoggedIn()));
+  };
+}
+
+export const fetchLoggedIn = (token, id) => {
   return {
     type: "LOGGED_IN",
+    payload: { token, id }
   };
 };
 
 export const fetchNotLoggedIn = () => {
   return {
-    type: "NOT_LOGGED_IN",
+    type: "NOT_LOGGED_IN"
   };
 };
 
-export const fetchLoginSuccess = (json) => {
+export const fetchLoginSuccess = json => {
   return {
     type: "LOGIN_SUCCESS",
     payload: { json }
   };
 };
 
-export const fetchLoginFailure = (error) => {
+export const fetchLoginFailure = error => {
   return {
     type: "LOGIN_FAILURE",
     payload: { error }

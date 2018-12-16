@@ -22,7 +22,7 @@ export default class SettingsMenu extends Component {
         </button>
         <ul className="dropdown-menu dropdown-menu-right" aria-labelledby="settings-button">
           <li>
-            <a href="/" onClick={this.props.logOut}>Logout</a>
+            <a href="/" onClick={this.props.logout}>Logout</a>
           </li>
         </ul>
       </div>

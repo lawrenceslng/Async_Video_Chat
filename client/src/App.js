@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { checkLogin } from "./actions/loginAction";
+import { checkLogin, logout } from "./actions/loginAction";
 
 import Header from "./containers/Header/Header.js";
 import Login from "./containers/Login/Login.js";
@@ -16,7 +16,7 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    // this.logOut = this.logOut.bind(this);
+    this.logout = this.logout.bind(this);
     this.checkLogin = this.checkLogin.bind(this);
   }
 
@@ -25,34 +25,24 @@ class App extends Component {
   }
 
   checkLogin = () => {
-    this.props.checkLogin(localStorage.getItem("token"));
-  }
+    if (localStorage.getItem("state") === null) {
+      this.props.checkLogin("");
+    } else this.props.checkLogin(this.props.token, this.props.id);
+  };
 
-  // logOut = e => {
-  //   e.preventDefault();
-  //
-  //   localStorage.removeItem("token");
-  //   localStorage.removeItem("id");
-  //
-  //   return fetch("/logout", {
-  //     method: "GET",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json"
-  //     }
-  //   })
-  //     .then(res => res.json())
-  //     .then(rj => {
-  //       this.setState({ loggedIn: rj.success ? false : true });
-  //     });
-  // };
+  logout = event => {
+    event.preventDefault();
+
+    localStorage.removeItem("state");
+    this.props.logout();
+  };
 
   render() {
-    if (this.props.loggedIn) {
+    if (this.props.token !== "") {
       return (
         <div className="App">
-          <SettingsMenu logOut={localStorage.getItem("token")} />
-          <AdminPanel token={localStorage.getItem("token")} />
+          <SettingsMenu logout={this.logout} />
+          <AdminPanel token={this.props.token} />
         </div>
       );
     } else {
@@ -68,11 +58,12 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  loggedIn: state.Login.loggedIn,
+  token: state.Login.token,
+  id: state.Login.id
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ checkLogin }, dispatch);
+  return bindActionCreators({ checkLogin, logout }, dispatch);
 };
 
 export default connect(

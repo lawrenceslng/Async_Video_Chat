@@ -10,39 +10,9 @@ export default class LoginForm extends Component {
   }
 
   onClick = (event) => {
+    event.preventDefault();
+
     this.props.onClick(this.usernameInput.value, this.passwordInput.value);
-  //   event.preventDefault();
-  //   console.log(this.usernameInput.value)
-  //   console.log(this.passwordInput.value)
-  //
-  //   let username = this.usernameInput.value;
-  //   let password = this.passwordInput.value;
-  //
-  //   if(username !== "" && password !== "") {
-  //     this.props.login({ username, password });
-  //     if(this.props.loggedIn)
-  //       console.log("HERE")
-  // return fetch("/login", {
-  //   method: "POST",
-  //   headers: {
-  //     Accept: "application/json",
-  //     "Content-Type": "application/json"
-  //   },
-  //   body: JSON.stringify({ username, password })
-  // })
-  //   .then(res => res.json())
-  //   .then(rj => {
-  //     console.log(rj);
-  //     if (rj.success) {
-  //       this.setState({ loggedIn: true }, function() {
-  //         localStorage.setItem("token", rj.token);
-  //         localStorage.setItem("id", rj.id);
-  //       });
-  //     } else {
-  //       alert("wrong password, try again");
-  //     }
-  //   });
-  //   }
   };
 
   render() {
