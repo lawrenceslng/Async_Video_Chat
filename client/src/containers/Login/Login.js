@@ -9,18 +9,11 @@ import logo from "../../images/ParcelMascot.png";
 
 import "./Login.css";
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
-
-    this.onClick = this.onClick.bind(this);
+export default class Login extends Component {
+  constructor() {
+    super();
   }
-
-  onClick = (username, password) => {
-    if (username !== "" && password !== "")
-      this.props.login({ username, password });
-  };
-
+  
   render() {
     return (
       <div>
@@ -31,7 +24,7 @@ class Login extends Component {
             <img id="logo" src={logo} alt="logo" width="250" height="250" />
           </div>
           <div id="login-box">
-            <LoginForm onClick={this.onClick} />
+            <LoginForm />
             <div className="clearfix">
               <label>Don't have an account?</label>
               <button
@@ -52,17 +45,3 @@ class Login extends Component {
     );
   }
 }
-
-const mapStateToProps = state => ({
-  token: state.Login.token,
-  id: state.Login.id,
-});
-
-const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ login }, dispatch);
-};
-
-export default connect(
-  mapStateToProps,
-  matchDispatchToProps
-)(Login);

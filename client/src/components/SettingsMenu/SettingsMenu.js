@@ -1,12 +1,19 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import {bindActionCreators} from 'redux';
+import { logout } from "../../actions/loginAction";
 import "./SettingsMenu.css";
 
-export default class SettingsMenu extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+class SettingsMenu extends Component {
+  constructor() {
+    super();
+  };
 
+  onClick = (e) => {
+    e.preventDefault();
+    this.props.logout();
+  };
+  
   render() {
     return (
       <div className="dropdown">
@@ -22,10 +29,25 @@ export default class SettingsMenu extends Component {
         </button>
         <ul className="dropdown-menu dropdown-menu-right" aria-labelledby="settings-button">
           <li>
-            <a href="/" onClick={this.props.logout}>Logout</a>
+            <a href="/" onClick={this.onClick}>Logout</a>
           </li>
         </ul>
       </div>
     );
   }
-}
+};
+
+const mapStateToProps = state => ({
+  loggedIn: state.Login.loggedIn,
+  token: state.Login.token,
+  id: state.Login.id,
+});
+
+const matchDispatchToProps = dispatch => {
+  return bindActionCreators({ logout }, dispatch);
+};
+
+export default connect(
+  mapStateToProps,
+  matchDispatchToProps
+)(SettingsMenu);
