@@ -17,16 +17,18 @@ export function checkLogin(token, id) {
       }
     });
   };
-}
+};
 
-export function login(token) {
+export function login(username, password) {
+  // console.log(username);
+  // console.log(password);
   const settings = {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(token)
+    body: JSON.stringify({username, password})
   };
 
   return dispatch => {
@@ -43,8 +45,9 @@ export function login(token) {
 }
 
 export function logout() {
+  console.log("user is logging out");
   const settings = {
-    method: "POST",
+    method: "GET",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json"

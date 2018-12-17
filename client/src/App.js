@@ -16,40 +16,42 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.logout = this.logout.bind(this);
-    this.checkLogin = this.checkLogin.bind(this);
+    // this.logout = this.logout.bind(this);
+    // this.checkLogin = this.checkLogin.bind(this);
   }
 
   componentDidMount() {
-    this.checkLogin();
+    console.log("this is my token if it exists: " + localStorage.getItem("token"));
+    // this.checkLogin();
+    this.props.checkLogin();
   }
 
-  checkLogin = () => {
-    if (localStorage.getItem("state") === null) {
-      this.props.checkLogin("");
-    } else this.props.checkLogin(this.props.token, this.props.id);
-  };
+  // checkLogin = () => {
+  //   if (localStorage.getItem("state") === null) {
+  //     this.props.checkLogin("");
+  //   } else this.props.checkLogin(this.props.token, this.props.id);
+  // };
 
-  logout = event => {
-    event.preventDefault();
-
-    localStorage.removeItem("state");
-    this.props.logout();
-  };
+  // logout = event => {
+  //   event.preventDefault();
+  //   localStorage.removeItem("state");
+  //   this.props.logout();
+  // };
 
   render() {
-    if (this.props.token !== "") {
+    const { token, id } = this.props;
+    if (token !== "") {
       return (
         <div className="App">
-          <SettingsMenu logout={this.logout} />
-          <AdminPanel token={this.props.token} />
+          <SettingsMenu />
+          <AdminPanel />
         </div>
       );
     } else {
       return (
         <div className="App">
           <Header />
-          <Login checkLogin={this.checkLogin} />
+          <Login />
           <Footer />
         </div>
       );

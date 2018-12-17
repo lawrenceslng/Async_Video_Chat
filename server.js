@@ -61,7 +61,7 @@ app.get('/', function(req, res){
 app.post('/login', function(req,res){
   let username = req.body.username;
   let password = req.body.password;
-  // console.log(username + " " + password);
+  console.log(username + " " + password);
   connection.query('SELECT * FROM users WHERE username = ?', [username],function (error, results, fields) {
     if (error) throw error;
     // console.log(results);

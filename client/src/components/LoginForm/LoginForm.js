@@ -1,17 +1,20 @@
 import React, { Component } from "react";
-
+import { connect } from "react-redux";
+import {bindActionCreators} from 'redux';
+import { login } from "../../actions/loginAction";
 import "./LoginForm.css";
 
-export default class LoginForm extends Component {
+class LoginForm extends Component {
   constructor(props) {
     super(props);
 
-    this.onClick = this.onClick.bind(this);
+    // this.onClick = this.onClick.bind(this);
   }
 
   onClick = (event) => {
     event.preventDefault();
-    this.props.onClick(this.usernameInput.value, this.passwordInput.value);
+    // console.log(this.usernameInput.value);
+    this.props.login(this.usernameInput.value, this.passwordInput.value);
   };
 
   render() {
@@ -68,4 +71,19 @@ export default class LoginForm extends Component {
       </div>
     );
   }
-}
+};
+
+const mapStateToProps = state => ({
+  loggedIn: state.Login.loggedIn,
+  token: state.Login.token,
+  id: state.Login.id,
+});
+
+const matchDispatchToProps = dispatch => {
+  return bindActionCreators({ login }, dispatch);
+};
+
+export default connect(
+  mapStateToProps,
+  matchDispatchToProps
+)(LoginForm);

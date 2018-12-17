@@ -1,4 +1,5 @@
 const initialState = {
+  loggedIn: false,
   token: "",
   id: ""
 };
@@ -8,6 +9,7 @@ export default function loginReducer(state = initialState, action) {
     case "LOGGED_IN":
       return {
         ...state,
+        loggedIn: true,
         token: action.payload.token,
         id: action.payload.id,
       };
@@ -20,6 +22,7 @@ export default function loginReducer(state = initialState, action) {
     case "LOGIN_SUCCESS":
       return {
         ...state,
+        loggedIn: true,
         token: action.payload.json.token,
         id: action.payload.json.id,
       };
