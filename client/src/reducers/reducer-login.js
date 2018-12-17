@@ -16,6 +16,7 @@ export default function loginReducer(state = initialState, action) {
     case "NOT_LOGGED_IN":
       return {
         ...state,
+        loggedIn: false,
         token: "",
         id: ""
       };

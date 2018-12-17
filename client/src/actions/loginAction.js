@@ -1,4 +1,5 @@
-export function checkLogin(token, id) {
+export function checkLogin(token) {
+  console.log(token);
   const settings = {
     method: "POST",
     headers: {
@@ -13,7 +14,7 @@ export function checkLogin(token, id) {
       if (res.status === 403) {
         dispatch(fetchNotLoggedIn());
       } else {
-        dispatch(fetchLoggedIn(token, id));
+        dispatch(fetchLoggedIn(token));
       }
     });
   };
@@ -35,6 +36,9 @@ export function login(username, password) {
     return fetch("/login", settings)
       .then(res => res.json())
       .then(json => {
+        // console.log(json);
+        localStorage.setItem('token', json.token);
+        localStorage.setItem('id',json.id);
         if (json.success) {
           dispatch(fetchLoginSuccess(json));
           return json;
@@ -46,6 +50,8 @@ export function login(username, password) {
 
 export function logout() {
   console.log("user is logging out");
+  localStorage.removeItem('token');
+  localStorage.removeItem('id');
   const settings = {
     method: "GET",
     headers: {
@@ -59,23 +65,24 @@ export function logout() {
   };
 }
 
-export const fetchLoggedIn = (token, id) => {
+export const fetchLoggedIn = (token) => {
   return {
     type: "LOGGED_IN",
-    payload: { token, id }
+    payload: {token}
   };
 };
 
 export const fetchNotLoggedIn = () => {
   return {
-    type: "NOT_LOGGED_IN"
+    type: "NOT_LOGGED_IN",
+    payload: {loggedIn: false}
   };
 };
 
 export const fetchLoginSuccess = json => {
   return {
     type: "LOGIN_SUCCESS",
-    payload: { json }
+    payload: { loggedIn: true, json }
   };
 };
 

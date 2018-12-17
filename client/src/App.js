@@ -23,7 +23,10 @@ class App extends Component {
   componentDidMount() {
     console.log("this is my token if it exists: " + localStorage.getItem("token"));
     // this.checkLogin();
-    this.props.checkLogin();
+    if(localStorage.getItem("item") !== '')
+    {
+      this.props.checkLogin(localStorage.getItem("token"));
+    } 
   }
 
   // checkLogin = () => {
@@ -39,8 +42,8 @@ class App extends Component {
   // };
 
   render() {
-    const { token, id } = this.props;
-    if (token !== "") {
+    // const { loggedIn, token, id } = this.props;
+    if (this.props.loggedIn) {
       return (
         <div className="App">
           <SettingsMenu />
@@ -60,6 +63,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
+  loggedIn: state.Login.loggedIn,
   token: state.Login.token,
   id: state.Login.id
 });
