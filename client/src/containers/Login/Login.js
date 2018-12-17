@@ -10,17 +10,10 @@ import logo from "../../images/ParcelMascot.png";
 import "./Login.css";
 
 export default class Login extends Component {
-  constructor(props) {
-    super(props);
-
-    // this.onClick = this.onClick.bind(this);
+  constructor() {
+    super();
   }
-
-  // onClick = (username, password) => {
-  //   if (username !== "" && password !== "")
-  //     this.props.login({ username, password });
-  // };
-
+  
   render() {
     return (
       <div>
@@ -52,17 +45,3 @@ export default class Login extends Component {
     );
   }
 }
-
-// const mapStateToProps = state => ({
-//   token: state.Login.token,
-//   id: state.Login.id,
-// });
-
-// const matchDispatchToProps = dispatch => {
-//   return bindActionCreators({ login }, dispatch);
-// };
-
-// export default connect(
-//   mapStateToProps,
-//   matchDispatchToProps
-// )(Login);

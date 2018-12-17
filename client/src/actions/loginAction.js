@@ -68,7 +68,7 @@ export function logout() {
 export const fetchLoggedIn = (token) => {
   return {
     type: "LOGGED_IN",
-    payload: {token}
+    payload: {loggedIn: true, token}
   };
 };
 

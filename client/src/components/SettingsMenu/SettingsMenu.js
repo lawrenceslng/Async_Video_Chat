@@ -5,15 +5,15 @@ import { logout } from "../../actions/loginAction";
 import "./SettingsMenu.css";
 
 class SettingsMenu extends Component {
-  constructor(props) {
-    super(props);
-    // this.state = {};
-  }
+  constructor() {
+    super();
+  };
 
   onClick = (e) => {
     e.preventDefault();
     this.props.logout();
-  }
+  };
+  
   render() {
     return (
       <div className="dropdown">

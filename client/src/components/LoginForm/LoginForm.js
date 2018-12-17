@@ -5,15 +5,12 @@ import { login } from "../../actions/loginAction";
 import "./LoginForm.css";
 
 class LoginForm extends Component {
-  constructor(props) {
-    super(props);
-
-    // this.onClick = this.onClick.bind(this);
-  }
+  constructor() {
+    super();
+  };
 
   onClick = (event) => {
     event.preventDefault();
-    // console.log(this.usernameInput.value);
     this.props.login(this.usernameInput.value, this.passwordInput.value);
   };
 
