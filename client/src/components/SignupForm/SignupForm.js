@@ -91,6 +91,8 @@ export default class SignupForm extends Component {
       repassword: "",
       groupName: "",
       groupList: []
+    }, () => {
+      this.stepIndicator(this.state.step);
     });
   };
 
