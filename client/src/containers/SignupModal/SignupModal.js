@@ -1,72 +1,31 @@
 import React, { Component } from "react";
-import CreateGroupForm from "../../components/CreateGroupForm/CreateGroupForm.js";
-import CreateUserForm from "../../components/CreateUserForm/CreateUserForm.js";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { createUser } from "../../actions/createUserAction.js";
+
+import SignupForm from "../../components/SignupForm/SignupForm.js";
 
 import "./SignupModal.css";
 
-export default class SignupModal extends Component {
+class SignupModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showGroupForm: false
+      step: 1
     };
+
     this.onClose = this.onClose.bind(this);
-    this.showNext = this.showNext.bind(this);
     this.submitForm = this.submitForm.bind(this);
   }
 
   onClose = () => {
-    this.setState({ showGroupForm: false });
+    this.setState({ step: 1 });
   };
 
-  showNext = () => {
-    this.setState({ showGroupForm: true });
+  submitForm = (user) => {
+    this.onClose();
+    this.props.createUser(user);
   };
-
-  submitForm = () => {
-    // e.preventDefault();
-    // let username = document.getElementById("username").value;
-    // let password = document.getElementById("pw").value;
-    // let firstName = document.getElementById("firstName").value;
-    // let lastName = document.getElementById("lastName").value;
-    // let repw = document.getElementById("repw").value;
-    // let email = document.getElementById("email").value;
-    //
-    // if (PWMatch(password, repw)) {
-    //   return fetch("/signup", {
-    //     method: "POST",
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify({
-    //       username,
-    //       firstName,
-    //       lastName,
-    //       email,
-    //       password
-    //     })
-    //   })
-    //     .then(res => res.json())
-    //     .then(rj => {
-    //       if (rj.success) {
-    //         this.setState({ loggedIn: true }, function() {
-    //           localStorage.setItem("token", rj.token);
-    //           localStorage.setItem("id", rj.id);
-    //         });
-    //       } else {
-    //         this.setState({ loggedIn: false });
-    //       }
-    //     });
-    // } else {
-    //   alert("Passwords Do Not Match");
-    //   document.getElementById("repw").value = "";
-    //   document.getElementById("pw").value = "";
-    // }
-    this.setState({ showGroupForm: false });
-  };
-
-
 
   render() {
     return (
@@ -93,11 +52,10 @@ export default class SignupModal extends Component {
               </button>
             </div>
             <div className="modal-body">
-              {!this.state.showGroupForm ? (
-                <CreateUserForm showNext={this.showNext} />
-              ) : (
-                <CreateGroupForm submitForm={this.submitForm} />
-              )}
+              <SignupForm
+                step={this.state.step}
+                submitForm={this.submitForm}
+              />
             </div>
           </div>
         </div>
@@ -105,3 +63,14 @@ export default class SignupModal extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({});
+
+const matchDispatchToProps = dispatch => {
+  return bindActionCreators({ createUser }, dispatch);
+};
+
+export default connect(
+  mapStateToProps,
+  matchDispatchToProps
+)(SignupModal);
