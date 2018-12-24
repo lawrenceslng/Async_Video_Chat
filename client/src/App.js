@@ -22,7 +22,7 @@ class App extends Component {
     if(localStorage.getItem("item") !== null)
     {
       this.props.checkLogin(localStorage.getItem("token"));
-    } 
+    }
   };
 
   render() {
@@ -59,4 +59,3 @@ export default connect(
   mapStateToProps,
   matchDispatchToProps
 )(App);
-
