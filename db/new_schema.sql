@@ -7,14 +7,13 @@ CREATE DATABASE ThoughtParcel_db;
 USE ThoughtParcel_db;
 
 -- table for all users (login system table)
--- I am going to follow the guidelines in the video I sent you guys for setting the data types of this table to make authentication and other things dealing with login system work
-
 CREATE TABLE users(
 	id INT NOT NULL AUTO_INCREMENT,
 	username VARCHAR(30) NOT NULL,
 	first_name VARCHAR(255) NOT NULL,
 	last_name VARCHAR (255) NOT NULL, 
-	email VARCHAR(100) NOT NULL, 
+	email VARCHAR(100), 
+	phone VARCHAR(30),
 	password VARCHAR(100) BINARY NOT NULL,
 	date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	UNIQUE (username),
@@ -22,20 +21,33 @@ CREATE TABLE users(
 	PRIMARY KEY (id)
 );
 
+--this table stores all groups that exist in the ThoughtParcel sphere
 CREATE TABLE groups(
 	id INT NOT NULL AUTO_INCREMENT,
 	group_name VARCHAR(30) NOT NULL,
 	members INT NOT NULL,
+	date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id)
 );
 
+--this table stores all emails of people invited to join groups, as these users verify and create account, their email will be moved from this table
+CREATE TABLE invites(
+	id INT NOT NULL AUTO_INCREMENT,
+	group_id INT NOT NULL,
+	email VARCHAR(100) NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (group_id) REFERENCES groups(id)
+);
+
+--user group relations table, keeping track of which group each user belongs too and what kind of members they are within that group
 CREATE TABLE users_groups_relations(
 	user_id INT NOT NULL,
 	group_id INT NOT NULL,
 	user_level NOT NULL ENUM('admin', 'member'),
+	date_joined TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (group_id) REFERENCES groups(id),
-)
+);
 -- backend checks emails in databases to see if a user with that email already EXISTS
 
 -- CREATE TABLE contacts(
@@ -45,6 +57,7 @@ CREATE TABLE users_groups_relations(
 -- 	FOREIGN KEY (friend_id) REFERENCES users(id)
 -- );
 
+--same conversation table as before with date_created added so we can sort each conversation by month/year
 CREATE TABLE conversations(
 	id INT NOT NULL AUTO_INCREMENT,
 	user_one_id INT NOT NULL, 
@@ -53,30 +66,32 @@ CREATE TABLE conversations(
 	fs_path TEXT,
 	stat ENUM('active', 'archive'),
 	-- share ENUM('public', 'group'),
-	date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_one_id) REFERENCES users(id)
 	-- FOREIGN KEY (user_two_id) REFERENCES users(id)
 );
 
+-- same conversation relation table as before with viewed added so we know which user has viewed which conversation
+-- actually also added conversation reply so we know if someone has viewed a reply yet as well, this could get messy
 CREATE TABLE conversation_relation(
-	conversation_id INT NOT NULL,
+	conversation_id INT,
+	conversation_reply_id INT,
 	user_id INT NOT NULL,
 	viewed NOT NULL ENUM('0', '1'),
 	FOREIGN KEY (conversation_id) REFERENCES conversations(id),
+	FOREIGN KEY (conversation_reply_id) REFERENCES conversations_reply(id),
 	FOREIGN KEY (user_id) REFERENCES users(id)
 );
--- to enable group chat:
--- create a chatroom table (each conversation is a new chatroom)
--- have a table that list the chat user_two_id
 
+-- same conversations reply as before
 CREATE TABLE conversations_reply(
 	id INT NOT NULL AUTO_INCREMENT,
 	user_id INT NOT NULL,
 	content TEXT,
 	fs_path TEXT,
 	c_id_fk INT NOT NULL,
-	date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (c_id_fk) REFERENCES conversations(id)
