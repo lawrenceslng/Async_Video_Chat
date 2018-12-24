@@ -103,49 +103,119 @@ app.post("/check-login", verifyToken, function(req,res){
   });
 });
 
+
+//need to rework below route
+//may need async/await and connection pool
 app.post("/signup", function(req,res){
     // console.log(req.body);
-    var username = req.body.username;
-    var password = req.body.password;
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var email = req.body.email;
-    var query = connection.query("SELECT * FROM users WHERE username = ? OR email = ?", [username, email],function (error, results, fields) {
-      if(error) throw error;
-      if(results.length == 0)
-      {
-        console.log("no duplicate username or email" + password.length);
-        bcrypt.genSalt(10, function(err, salt) {
-          bcrypt.hash(password, salt, function(err, p_hash) {
-            connection.query('INSERT INTO users (username, password, first_name, last_name, email) VALUES (?,?,?,?,?)', [username, p_hash, firstName, lastName, email],function (error, results, fields) {
-              if (error) throw error;
-              console.log(results);
-              connection.query('SELECT id, username FROM users WHERE username = ?', [username],function (error, results, fields) {
-                if(error) throw error;
-                console.log(results[0].id);
-                var payload = {
-                  id: results[0].id,
-                  username: results[0].username
-                };
-                console.log(payload);
-                var token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '4h' });
-                res.status(200).json({
-                  success: true,
-                  message: 'Enjoy your token!',
-                  token: token,
-                  id: payload.id
-              });
-              });
-            })
-          })
-        })
-      }
-      else{
-        console.log("username/email taken");
-        //need to add response to front end to show error
-      }
-    });
+    let email = req.body.email;
+    let firstName = req.body.firstName;
+    let lastName = req.body.lastName;
+    let username = req.body.username;
+    let password = req.body.password;
+    let groupName = req.body.groupName;
+    let phone = req.body.phone;
+    let inviteArr = req.body.groupList;
+    
+    //check if username or email exists (availability should be reflected to front end as user inputs these two fields)
+    if(userCheck(username) && emailCheck(email))
+    {
+      bcrypt.genSalt(10, function(err, salt) {
+        bcrypt.hash(password, salt, function(err, p_hash) {
+          connection.query('INSERT INTO users (username, password, first_name, last_name, email, phone) VALUES (?,?,?,?,?)', [username, p_hash, firstName, lastName, email, phone],function (error, results, fields) {
+            if (error) throw error;
+          });
+        });
+      });
+    }
+    //then check if groupName exists (availability should be reflected to front end as user inputs groupName)
+
+    //if all checks pass, insert into users table, then groups table, then invites table, then users_groups relations
+    
+    
+    // let query = connection.query("SELECT * FROM users WHERE username = ? OR email = ?", [username, email],function (error, results, fields) {
+    //   if(error) throw error;
+    //   if(results.length == 0)
+    //   {
+    //     console.log("no duplicate username or email" + password.length);
+    //     bcrypt.genSalt(10, function(err, salt) {
+    //       bcrypt.hash(password, salt, function(err, p_hash) {
+    //         connection.query('INSERT INTO users (username, password, first_name, last_name, email) VALUES (?,?,?,?,?)', [username, p_hash, firstName, lastName, email],function (error, results, fields) {
+    //           if (error) throw error;
+    //           console.log(results);
+    //           connection.query('SELECT id, username FROM users WHERE username = ?', [username],function (error, results, fields) {
+    //             if(error) throw error;
+    //             console.log(results[0].id);
+    //             var payload = {
+    //               id: results[0].id,
+    //               username: results[0].username
+    //             };
+    //             console.log(payload);
+    //             var token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '4h' });
+    //             res.status(200).json({
+    //               success: true,
+    //               message: 'Enjoy your token!',
+    //               token: token,
+    //               id: payload.id
+    //           });
+    //           });
+    //         })
+    //       })
+    //     })
+    //   }
+    //   else{
+    //     console.log("username/email taken");
+    //     //need to add response to front end to show error
+    //   }
+    // });
   });
+
+//true is available, false is NOT available
+function userCheck(username){
+  connection.query("SELECT * FROM users WHERE username = ?", [username],function (error, results, fields) {
+    if(error) throw error;
+    if(results.length == 0)
+    {
+      // console.log("no duplicate username or email" + password.length);
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  });
+};
+
+function emailCheck(email){
+  connection.query("SELECT * FROM users WHERE email = ?", [email],function (error, results, fields) {
+    if(error) throw error;
+    if(results.length == 0)
+    {
+      // console.log("no duplicate username or email" + password.length);
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  });
+};
+
+function groupCheck(groupName){
+  connection.query("SELECT * FROM groups WHERE group_name = ?", [groupName],function (error, results, fields) {
+    if(error) throw error;
+    if(results.length == 0)
+    {
+      // console.log("no duplicate username or email" + password.length);
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  });
+};
+
 
 // ALL AUTHENTICATED ROUTE GOES BELOW THIS
 function verifyToken(req, res, next) {
