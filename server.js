@@ -103,9 +103,43 @@ app.post("/check-login", verifyToken, function(req,res){
   });
 });
 
+app.post("/checkusername", (req,res) => {
+  userCheck(req.body.user.username).then(response => {
+    if(response)
+    {
+      res.status(200).json({success: true, message: 'username available'});
+    }
+    else{
+      res.status(200).json({success: true, message: 'username taken'});
+    }
+  });
+});
+
+app.post("/checkemail", (req,res) => {
+  emailCheck(req.body.user.email).then(response => {
+    if(response)
+    {
+      res.status(200).json({success: true, message: 'email available'});
+    }
+    else{
+      res.status(200).json({success: true, message: 'email taken'});
+    }
+  });
+});
+
+app.post("/checkgroup", (req,res) => {
+  groupCheck(req.body.user.groupName).then(response => {
+    if(response)
+    {
+      res.status(200).json({success: true, message: 'group Name available'});
+    }
+    else{
+      res.status(200).json({success: true, message: 'group Name taken'});
+    }
+  });
+});
 
 //need to rework below route
-//may need async/await and connection pool
 app.post("/signup", (req,res) => {
     console.log(req.body);
     let email = req.body.user.email;
@@ -118,7 +152,7 @@ app.post("/signup", (req,res) => {
     let inviteArr = req.body.user.groupList;
 
     Promise.all([userCheck(username),emailCheck(email),groupCheck(groupName)])
-    .then(([res1,res2,res3])=>{
+    .then(([res1,res2,res3]) => {
       if(res1 && res2 && res3)
       {
         bcrypt.genSalt(10, function(err, salt) {
