@@ -150,12 +150,14 @@ app.post("/signup", (req,res) => {
                     {
                     connection.query('INSERT INTO invites (group_id, email) VALUES (?,?)', [group_id,inviteArr[i]],function (error, invitesResults, fields) {
                       if (error) throw error;
-                          connection.query('INSERT INTO users_groups_relations (user_id, group_id) VALUES (?,?)', [payload.id,group_id],function (error, invitesResults, fields) {
-                          if (error) throw error;
-                          
-                          })
+                     
                     })
+
                     }
+                    connection.query('INSERT INTO users_groups_relations (user_id, group_id) VALUES (?,?)', [payload.id,group_id],function (error, invitesResults, fields) {
+                      if (error) throw error;
+                      
+                    })
                   });
                 })
               });                 
