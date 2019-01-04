@@ -7,11 +7,26 @@ import "./LoginForm.css";
 class LoginForm extends Component {
   constructor() {
     super();
+    this.state = {
+      formError: false
+    };
   };
 
   onClick = (event) => {
     event.preventDefault();
-    this.props.login(this.usernameInput.value, this.passwordInput.value);
+    if(this.usernameInput.value === "" || this.passwordInput.value === "") {
+      this.setState({formError: true}, ()=> {
+        document.getElementById("username-input").classList.add("error-input");
+        document.getElementById("password-input").classList.add("error-input");
+      })
+    }
+    else {
+      this.setState({formError: false}, ()=> {
+        document.getElementById("username-input").classList.remove("error-input");
+        document.getElementById("password-input").classList.remove("error-input");
+        this.props.login(this.usernameInput.value, this.passwordInput.value);
+      })
+    }
   };
 
   render() {
@@ -40,6 +55,15 @@ class LoginForm extends Component {
               required
             />
           </div>
+          <div className="form-group">
+            {this.state.formError ? (
+              <small className="error-message">
+                Please input your user credentials!
+              </small>
+            ) : (
+              ""
+            )}
+          </div>
           <div className="form-group col">
             <div className="row">
               <div className="col-auto mr-auto">
@@ -64,7 +88,7 @@ class LoginForm extends Component {
             </button>
           </div>
         </form>
-      
+
       </div>
     );
   }

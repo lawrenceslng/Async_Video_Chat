@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { createUser } from "../../actions/createUserAction.js";
+import { checkEmail, checkGroupName, checkUsername, createUser } from "../../actions/createUserAction.js";
 
 import SignupForm from "../../components/SignupForm/SignupForm.js";
 
@@ -23,7 +23,7 @@ class SignupModal extends Component {
   };
 
   submitForm = (user) => {
-    this.onClose();
+    document.getElementById('close-modal').click();
     this.props.createUser(user);
   };
 
@@ -44,6 +44,7 @@ class SignupModal extends Component {
               <button
                 type="button"
                 className="close"
+                id="close-modal"
                 data-dismiss="modal"
                 aria-label="Close"
                 onClick={this.onClose}
@@ -53,6 +54,9 @@ class SignupModal extends Component {
             </div>
             <div className="modal-body">
               <SignupForm
+                checkEmail={this.props.checkEmail}
+                checkGroupName={this.props.checkGroupName}
+                checkUsername={this.props.checkUsername}
                 step={this.state.step}
                 submitForm={this.submitForm}
               />
@@ -67,7 +71,7 @@ class SignupModal extends Component {
 const mapStateToProps = state => ({});
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ createUser }, dispatch);
+  return bindActionCreators({ checkEmail, checkGroupName, checkUsername, createUser }, dispatch);
 };
 
 export default connect(

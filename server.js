@@ -50,8 +50,8 @@ var connection = mysql.createConnection({
     host: process.env.DB_HOST,
     port: 3306,
     user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,  
-    database: process.env.DB_NAME   
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
 app.get('/', function(req, res){
@@ -103,39 +103,30 @@ app.post("/check-login", verifyToken, function(req,res){
   });
 });
 
-app.post("/checkusername", (req,res) => {
-  userCheck(req.body.user.username).then(response => {
+app.post("/check-username", (req,res) => {
+  userCheck(req.body.username).then(response => {
     if(response)
-    {
       res.status(200).json({success: true, message: 'username available'});
-    }
-    else{
-      res.status(200).json({success: true, message: 'username taken'});
-    }
+    else
+      res.status(200).json({success: false, message: 'username taken'});
   });
 });
 
-app.post("/checkemail", (req,res) => {
-  emailCheck(req.body.user.email).then(response => {
+app.post("/check-email", (req,res) => {
+  emailCheck(req.body.email).then(response => {
     if(response)
-    {
       res.status(200).json({success: true, message: 'email available'});
-    }
-    else{
-      res.status(200).json({success: true, message: 'email taken'});
-    }
+    else
+      res.status(200).json({success: false, message: 'email taken'});
   });
 });
 
-app.post("/checkgroup", (req,res) => {
-  groupCheck(req.body.user.groupName).then(response => {
+app.post("/check-group-name", (req,res) => {
+  groupCheck(req.body.groupName).then(response => {
     if(response)
-    {
-      res.status(200).json({success: true, message: 'group Name available'});
-    }
-    else{
-      res.status(200).json({success: true, message: 'group Name taken'});
-    }
+      res.status(200).json({success: true, message: 'group name available'});
+    else
+      res.status(200).json({success: false, message: 'group name taken'});
   });
 });
 
@@ -184,17 +175,17 @@ app.post("/signup", (req,res) => {
                     {
                     connection.query('INSERT INTO invites (group_id, email) VALUES (?,?)', [group_id,inviteArr[i]],function (error, invitesResults, fields) {
                       if (error) throw error;
-                     
+
                     })
 
                     }
                     connection.query('INSERT INTO users_groups_relations (user_id, group_id) VALUES (?,?)', [payload.id,group_id],function (error, invitesResults, fields) {
                       if (error) throw error;
-                      
+
                     })
                   });
                 })
-              });                 
+              });
             });
           });
         });
@@ -283,13 +274,13 @@ function verifyToken(req, res, next) {
               res.status(403).json({
                   message: "Wrong Token"
               });
-          } 
+          }
           else {
               req.decoded = decod;
               next();
           }
       });
-  } 
+  }
   else {
       res.status(403).json({
           message: "No Token"
@@ -379,9 +370,9 @@ app.get("/friends",verifyToken, function(req,response){
         connection.query(`SELECT id, username FROM users WHERE id IN (${query})`,function (err, results, fields2) {
           if(err) throw err;
           // console.log(results);
-          response.status(200).json(results); 
+          response.status(200).json(results);
         });
-      } 
+      }
     });
 });
 
@@ -400,16 +391,16 @@ app.get("/friends/:name",verifyToken, function(req,res){
 
 //route to get all conversations related to one user
 app.get("/conversations_archive",verifyToken, function(req,response){
-  let user_id = req.decoded.id; 
+  let user_id = req.decoded.id;
   getConversation(user_id, 'archive').then(res => {
-    // console.log(res);    
+    // console.log(res);
     response.json(res);
   });
 });
 
 //need to add info to get conversation reply table info as well
 app.get("/conversations_active",verifyToken, function(req,response){
-  let user_id = req.decoded.id; 
+  let user_id = req.decoded.id;
   getConversation(user_id, 'active').then(res => {
     // console.log(res);
     response.json(res)
@@ -648,7 +639,7 @@ function getFriends(id){
   })
 };
 
-//idea is to get all filepaths of all video and send it to front-end; front-end stores filepaths in array 
+//idea is to get all filepaths of all video and send it to front-end; front-end stores filepaths in array
 function getConversation(user_id, status){
   return new Promise(function(resolve, reject) {
     connection.query(`SELECT conversations.id, conversations.user_one_id, conversations.title, conversations.content, conversations.fs_path, users.username FROM conversations INNER JOIN conversation_relation ON conversations.id = conversation_relation.conversation_id INNER JOIN users ON conversations.user_one_id = users.id WHERE user_id = ? AND stat = ?`, [user_id, status],function (error, results, fields) {
