@@ -64,10 +64,11 @@ app.post('/login', function(req,res){
   console.log(username + " " + password);
   connection.query('SELECT * FROM users WHERE username = ?', [username],function (error, results, fields) {
     if (error) throw error;
-    // console.log(results);
+    console.log(results);
     if (results.length == 0){
       // console.log("no such user");
-      res.json({success: false});
+      //add message
+      res.status(201).json({success: false, message: "incorrect credential"});
     }
     else {
       bcrypt.compare(password, results[0].password, function(err, result) {
@@ -89,6 +90,7 @@ app.post('/login', function(req,res){
       }
       else{
         // console.log("did not get session");
+        //add message
         res.status(403).json({success: false});;
       }
       });

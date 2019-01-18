@@ -36,13 +36,16 @@ export function login(username, password) {
     return fetch("/login", settings)
       .then(res => res.json())
       .then(json => {
-        // console.log(json);
+        console.log(json);
         localStorage.setItem('token', json.token);
         localStorage.setItem('id',json.id);
         if (json.success) {
           dispatch(fetchLoginSuccess(json));
+          console.log()
           return json;
         }
+        //change error to reflect whatever is sent back from backend
+        dispatch(fetchLoginFailure(json.message));
       })
       .catch(error => dispatch(fetchLoginFailure(error)));
   };
