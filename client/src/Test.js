@@ -1,4 +1,8 @@
-// import React, { Component } from 'react';
+import React, { Component } from 'react';
+// import Modal from 'react-awesome-modal';
+import { connect } from "react-redux";
+import {bindActionCreators} from 'redux';
+import { openModal, closeModal } from './actions/testAction';
 // // import Header from './components/header';
 // // import Footer from './components/footer';
 // // import Carousel from './components/carousel';
@@ -12,176 +16,44 @@
 // import Archived_Thoughts from './components/Thought_Archives/archive';
 // // import './App.css';
 
-// class Test extends Component {
-//   // pass in initial states
-//   constructor(){
-//    super();
-// //    this.state = {
-
-// //     };
-//   };
-
-// //   componentDidMount(){
-// //     // fetching DOM references
-// //     var btnStartRecording = document.querySelector('#btn-start-recording');
-// //     var btnStopRecording  = document.querySelector('#btn-stop-recording');
-
-// //     var videoElement = document.querySelector('video');
-
-// //     var progressBar = document.querySelector('#progress-bar');
-// //     var percentage = document.querySelector('#percentage');
-
-// //     var recorder;
-// //   }
+class Test extends Component {
+  // pass in initial states
+  constructor(){
+    super();
+  };
 
 
-// //     // reusable helpers
-
-// //     // this function submits recorded blob to nodejs server
-// //     postFiles() {
-// //         var blob = recorder.getBlob();
-
-// //         // getting unique identifier for the file name
-// //         var fileName = generateRandomString() + '.webm';
-
-// //         var file = new File([blob], fileName, {
-// //             type: 'video/webm'
-// //         });
-
-// //         videoElement.src = '';
-// //         videoElement.poster = '/ajax-loader.gif';
-
-// //         xhr('/uploadFile', file, function(responseText) {
-// //             var fileURL = JSON.parse(responseText).fileURL;
-
-// //             console.info('fileURL', fileURL);
-// //             videoElement.src = fileURL;
-// //             videoElement.play();
-// //             videoElement.muted = false;
-// //             videoElement.controls = true;
-
-// //             document.querySelector('#footer-h2').innerHTML = '<a href="' + videoElement.src + '">' + videoElement.src + '</a>';
-// //         });
-
-// //         if(mediaStream) mediaStream.stop();
-// //     }
-
-// //     // XHR2/FormData
-// //    xhr(url, data, callback) {
-// //         var request = new XMLHttpRequest();
-// //         request.onreadystatechange = function() {
-// //             if (request.readyState == 4 && request.status == 200) {
-// //                 callback(request.responseText);
-// //             }
-// //         };
-
-// //         request.upload.onprogress = function(event) {
-// //             progressBar.max = event.total;
-// //             progressBar.value = event.loaded;
-// //             progressBar.innerHTML = 'Upload Progress ' + Math.round(event.loaded / event.total * 100) + "%";
-// //         };
-
-// //         request.upload.onload = function() {
-// //             percentage.style.display = 'none';
-// //             progressBar.style.display = 'none';
-// //         };
-// //         request.open('POST', url);
-
-// //         var formData = new FormData();
-// //         formData.append('file', data);
-// //         request.send(formData);
-// //     }
-
-// //     // generating random string
-// //     generateRandomString() {
-// //         if (window.crypto) {
-// //             var a = window.crypto.getRandomValues(new Uint32Array(3)),
-// //                 token = '';
-// //             for (var i = 0, l = a.length; i < l; i++) token += a[i].toString(36);
-// //             return token;
-// //         } else {
-// //             return (Math.random() * new Date().getTime()).toString(36).replace( /\./g , '');
-// //         }
-// //     }
-
-// //     // reusable getUserMedia
-// //     captureUserMedia(success_callback) {
-// //         var session = {
-// //             audio: true,
-// //             video: true
-// //         };
-
-// //         navigator.getUserMedia(session, success_callback, function(error) {
-// //             alert('Unable to capture your camera. Please check console logs.');
-// //             console.error(error);
-// //         });
-// //     }
-
-// //     // UI events handling
-// //     btnStartRecording = (e) => {
-// //         e.preventDefault();
-// //         btnStartRecording.disabled = true;
-// //         let mediaStream;
-// //         captureUserMedia(function(stream) {
-// //             mediaStream = stream;
-
-// //             videoElement.src = window.URL.createObjectURL(stream);
-// //             videoElement.play();
-// //             videoElement.muted = true;
-// //             videoElement.controls = false;
-
-// //             recorder = RecordRTC(stream, {
-// //                 type: 'video'
-// //             });
-
-// //             recorder.startRecording();
-
-// //             // enable stop-recording button
-// //             btnStopRecording.disabled = false;
-// //         });
-// //     };
 
 
-// //     btnStopRecording = (e) => {
-// //         e.preventDefault();
-// //         btnStartRecording.disabled = false;
-// //         btnStopRecording.disabled = true;
-
-// //         recorder.stopRecording(postFiles);
-// //     };
-
-// //     componentDidMount(){
-// //         startRecording.disabled = false;
-// //     };
 
 
-//   render() {
-//     return(
-//         // <div className="app">
-//         // <h1>RecordRTC to Node.js</h1>
-//         // <p>
-//         //     <video></video>
-//         // </p><hr />
+//     componentDidMount(){
+//         startRecording.disabled = false;
+//     };
 
-//         // <div>
-//         //     <label id="percentage">0%</label>
-//         //     {/* <progress id="progress-bar" value=0></progress><br /> */}
-//         // </div>
 
-//         // <hr />
+  render() {
+  const { test } = this.props;
+  console.log(this.props.test);
+    return(
+        <div>
 
-//         // <div>
-//         //     <button id="btn btn-primary btn-start-recording" onClick={this.btnStartRecording}>Start Recording</button>
-//         //     <button id="btn btn-danger btn-stop-recording" onClick={this.btnStopRecording} disabled="">Stop Recording</button>
-//         // </div>
-//         // <script src="/node_modules/recordrtc/RecordRTC.js"> </script>
-//         // </div>
-//         <Active_Thoughts />
-//         // <Archived_Thoughts />
-//         // <Record />
-//         // <Friends />
-//     );
-//   }
-// }
+            <button onClick={this.props.openModal}>True</button>
+            <button onClick={this.props.closeModal}>False</button>
+        </div>
+    );
+  }
+}
 
-// export default Test;
+const mapStateToProps = state => ({
+    test: state.Test.test
+  });
+  
+const matchDispatchToProps = dispatch =>{
+    return bindActionCreators({openModal, closeModal}, dispatch);
+}
+  
+  
+export default connect(mapStateToProps, matchDispatchToProps)(Test);
+  
+

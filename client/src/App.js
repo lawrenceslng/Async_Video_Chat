@@ -1,221 +1,43 @@
-import React, { Component } from 'react';
-import Header from './components/header';
-import Footer from './components/footer';
-import Carousel from './components/carousel';
-import LoginForm from './components/loginForm';
-import PWMatch from './components/accountCreate';
-import AdminPanel from './components/adminPanel';
-import SettingsMenu from './components/SettingsMenu/SettingsMenu';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { checkLogin, logout } from "./actions/loginAction";
 
-import './App.css';
-import './loginForm.css';
+import Header from "./containers/Header/Header.js";
+import Login from "./containers/Login/Login.js";
+import Footer from "./containers/Footer/Footer.js";
+import PWMatch from "./components/accountCreate";
+import AdminPanel from "./components/adminPanel";
+import SettingsMenu from "./components/SettingsMenu/SettingsMenu";
+
+import "./App.css";
 
 class App extends Component {
-  // pass in initial states
-  constructor(){
+  constructor() {
     super();
-    this.state = {
-      loggedIn: false,
-      accountCreated: false,
-    };
-  };
-
-  getToken = () => {
-    return localStorage.getItem('token');
-  };
-
-  buttonClick = (e) => {
-    e.preventDefault();
-    // alert("submit");
-    console.log(e.target.children[0].className);
-    // debugger;
-    if(e.target.children[0].className.includes("login-form"))
-    {
-      let username = document.getElementById("username").value;
-      let password = document.getElementById("pw").value;
-      // alert("Login Form Submitted");
-      return fetch("/login", {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({username, password})
-      }).then(res => res.json()).then(rj => {
-        console.log(rj);
-        // debugger
-        if(rj.success)
-        {
-          this.setState({loggedIn: true}, function(){
-            localStorage.setItem('token', rj.token);
-            localStorage.setItem('id', rj.id);
-          });
-        }
-        else{
-          alert("wrong password, try again");
-          // this.setState({loggedIn: false});
-        }
-      })
-    }
-    else
-    {
-      // alert("this is a sign up form");
-      let username = document.getElementById("username").value;
-      let password = document.getElementById("pw").value;
-      let firstName = document.getElementById("firstName").value;
-      let lastName = document.getElementById("lastName").value;
-      let repw = document.getElementById("repw").value;
-      let email = document.getElementById("email").value;
-      // alert("here");
-      if(PWMatch(password, repw))
-      {
-        //post info to server
-        return fetch("/signup", {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({username, firstName, lastName, email, password})
-        }).then(res => res.json()).then(rj => {
-          console.log(rj);
-          // debugger;
-          if(rj.success)
-          {
-            this.setState({loggedIn: true}, function(){
-              localStorage.setItem('token', rj.token);
-              localStorage.setItem('id', rj.id);
-            });
-          }
-          else{
-            this.setState({loggedIn: false});
-          }
-        })
-      }
-      else
-      {
-        //alert passwords do not match, clear out password fields
-        alert("Passwords Do Not Match");
-        document.getElementById("repw").value = "";
-        document.getElementById("pw").value = "";
-      }
-    }
   }
-  changeForm = (e) => {
-    e.preventDefault();
-    console.log(e.target.className);
-    if(e.target.innerHTML === "Sign-Up")
-    {
-      document.getElementById("form").reset();
-      document.getElementById("sign-up-button").className = "btn btn-primary active";
-      document.getElementById("login-button").className = "btn btn-primary";
-      this.setState({accountCreated: false})
-      // e.target.addClass("active");
-    }
-    else
-    {
-      document.getElementById("form").reset();
-      document.getElementById("sign-up-button").className = "btn btn-primary";
-      document.getElementById("login-button").className = "btn btn-primary active";
-      this.setState({accountCreated: true})
-      // e.target.addClass("active");
-    }
-  }
-  logOut = (e) => {
-    e.preventDefault();
-
-    localStorage.removeItem("token");
-    localStorage.removeItem("id");
-
-    return fetch("/logout", {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-    }).then(res => res.json()).then(rj => {
-      this.setState({loggedIn: (rj.success ? false : true)});
-    })
-  }
-
-  //route to get all users when users search for friends to connect
-  // getUsers = (e) => {
-  //   e.preventDefault();
-  //   console.log(this.state.token);
-  //   return fetch("http://localhost:3001/usersapi", {
-  //     method: 'GET',
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json',
-  //       'Authorization': this.state.token
-  //     }
-  //   })
-  //   .then(res => res.json())
-  //   .then(rj => console.log(rj));
-  // };
 
   componentDidMount() {
-    var token = localStorage.getItem("token");
-    var id = localStorage.getItem("id");
-    console.log(token + ", " + id);
-    //hit up check-login-status
-
-    return fetch("/check-login",
-    {method: 'POST',
-
-    headers: {'Accept': 'application/json',
-    'Content-Type': 'application/json'},
-    body: JSON.stringify({token})}).then((res) => {
-      console.log(res.status);
-      if(res.status === 403)
-      {
-        this.setState({loggedIn: false});
-        console.log("logged in false");
-        // break;
-      }
-      else
-      {
-        this.setState({loggedIn: true});
-        console.log("logged in true!");
-        // res.json();
-      }
-      })
-    // .then(resultingJSON => {
-    //   console.log(resultingJSON);
-    //   if(resultingJSON.success){
-    //     this.setState({loggedIn: true});
-    //   }
-    //   else{
-    //     this.setState({loggedIn: false});
-    //   }});
-  };
-  render(){
-
-  if(this.state.loggedIn)
+    console.log("this is my token if it exists: " + localStorage.getItem("token"));
+    if(localStorage.getItem("item") !== null)
     {
-      return (
-        // code for AdminPanel here
-        <div className="App">
-          <SettingsMenu logOut={this.logOut}/>
-          <AdminPanel token={this.getToken}/>
-        </div>
-      )
+      this.props.checkLogin(localStorage.getItem("token"));
     }
-    else
-    {
+  };
+
+  render() {
+    if (this.props.loggedIn) {
+      return (
+        <div className="App">
+          <SettingsMenu />
+          <AdminPanel />
+        </div>
+      );
+    } else {
       return (
         <div className="App">
           <Header />
-          <Carousel />
-          <div className="loginBox">
-            <button id="sign-up-button"
-              onClick={this.changeForm}
-              className="btn btn-primary">
-              Sign-Up
-            </button>
-            <button id="login-button" onClick={this.changeForm} className="btn btn-primary">Login</button>
-            <LoginForm buttonClick={this.buttonClick} loginForm={this.state.accountCreated} />
-          </div>
+          <Login />
           <Footer />
         </div>
       );
@@ -223,6 +45,17 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  loggedIn: state.Login.loggedIn,
+  token: state.Login.token,
+  id: state.Login.id
+});
 
-// <button onClick={this.logOut}>Logout</button>
+const matchDispatchToProps = dispatch => {
+  return bindActionCreators({ checkLogin, logout }, dispatch);
+};
+
+export default connect(
+  mapStateToProps,
+  matchDispatchToProps
+)(App);

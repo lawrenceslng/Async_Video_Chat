@@ -6,7 +6,7 @@ import Active_Thoughts from './Active_Thoughts/active'
 import CreateThought from "./CreateThought/CreateThought";
 import YourCommunity from "./YourCommunity/YourCommunity";
 import Archived_Thoughts from './Thought_Archives/archive'
-import logo from './Images/Thought-Parcel-logo.png'
+import logo from '../images/Thought-Parcel-logo.png'
 
 // -import record class from videocomp to adminPanel. videoComp.js should show up on click when we hit CreateNew in admin panel.
 
@@ -111,6 +111,7 @@ class AdminPanel extends Component {
   }
 
   render(){
+    console.log(this.props.token)
     if(this.state.NavBar)
     {
       return (

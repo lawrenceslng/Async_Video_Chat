@@ -1,0 +1,38 @@
+.login {
+  position: relative;
+  top: 50%;
+  max-width: 700px;
+  margin: 0 auto;
+  transform: perspective(1px) translateY(5%);
+}
+
+#login-box {
+  width: 75%;
+  margin: 0 auto;
+  padding-top: 30px;
+  padding-bottom: 25px;
+  border: 1px solid #cccccc;
+}
+
+#logo {
+  border-radius: 25%;
+}
+
+#logo-box {
+  background-color: #b6f2d4;
+  display: inline-block;
+  border: 5px solid #d4f2b6;
+  padding: 5px;
+  margin-bottom: 50px;
+}
+
+#signup-button {
+  width: 100px;
+  height: 40px;
+  margin-left: 50px;
+  color: #b6f2d4;
+  border: 1px solid #b6f2d4;
+  border-radius: 3px;
+  cursor: pointer;
+  outline: none;
+}

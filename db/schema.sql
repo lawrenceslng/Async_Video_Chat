@@ -7,6 +7,7 @@ USE ThoughtParcel_db;
 
 CREATE TABLE users(
 	id INT NOT NULL AUTO_INCREMENT,
+	group VARCHAR(30),
 	username VARCHAR(30) NOT NULL,
 	first_name VARCHAR(255) NOT NULL,
 	last_name VARCHAR (255) NOT NULL, 
@@ -17,6 +18,13 @@ CREATE TABLE users(
 	UNIQUE (email),
 	PRIMARY KEY (id)
 );
+
+CREATE TABLE groups(
+	id INT NOT NULL AUTO_INCREMENT,
+	groupName VARCHAR(30),
+);
+
+-- backend checks emails in databases to see if a user with that email already EXISTS
 
 CREATE TABLE contacts(
 	user_id INT NOT NULL,

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import RecordRTC from 'recordrtc';
 import {_xhr, _addVideo} from '../CreateThought/XHR';
-import parcelBox from '../Images/open-parcel-boxes.jpg';
+import parcelBox from '../../images/open-parcel-boxes.jpg';
 import "./active.css";
 
 //this will retrieve all conversations related to this particular user
@@ -373,6 +373,10 @@ export default class Active_Thoughts extends React.Component {
         //     });
         // }
     };
+
+    stopVideo = () => {
+        this.setState({src: ""});
+    }
         //next up: able to see all videos related to a thought (need to search server for conv_reply as well)
     componentDidMount(){
         return fetch("/conversations_active",{headers : {
@@ -416,7 +420,7 @@ export default class Active_Thoughts extends React.Component {
                             {/* <!-- Modal Header --> */}
                             <div className="modal-header">
                               <h4 className="modal-title">{this.state.modalId}</h4>
-                              <button type="button" className="close" data-dismiss="modal">&times;</button>
+                              <button onClick={this.stopVideo} type="button" className="close" data-dismiss="modal">&times;</button>
                             </div>
 
                             {/* <!-- Modal body --> */}
@@ -437,7 +441,7 @@ export default class Active_Thoughts extends React.Component {
                             {/* if localstorage matches with this.state.creator */}
                             {(this.state.creator == localStorage.getItem("id")) && <button className="btn btn-danger" data-dismiss="modal" onClick={this.archive}>Archive</button>}
                             <button type="button" className="btn btn-primary" onClick={this.reply}>Reply</button>
-                            <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-danger" data-dismiss="modal" onClick={this.stopVideo} >Close</button>
                             </div>
 
                           </div>
