@@ -1,3 +1,11 @@
+.error-input {
+  border-color: red;
+}
+
+.error-message {
+  color: red;
+}
+
 .first {
   display: block;
 }
@@ -6,10 +14,10 @@
   width: 47.5% !important;
 }
 
-.divider{
-    width: 5%;
-    height: auto;
-    display: inline-block;
+.divider {
+  width: 5%;
+  height: auto;
+  display: inline-block;
 }
 
 .signup-form {

@@ -80,20 +80,23 @@ export default class SignupForm extends Component {
       groupList
     };
     this.props.submitForm(user);
-    this.setState({
-      step: this.props.step,
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      username: "",
-      password: "",
-      repassword: "",
-      groupName: "",
-      groupList: []
-    }, () => {
-      this.stepIndicator(this.state.step);
-    });
+    this.setState(
+      {
+        step: this.props.step,
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        username: "",
+        password: "",
+        repassword: "",
+        groupName: "",
+        groupList: []
+      },
+      () => {
+        this.stepIndicator(this.state.step);
+      }
+    );
   };
 
   render() {
@@ -120,6 +123,7 @@ export default class SignupForm extends Component {
                   handleChange={this.handleChange}
                   email={this.state.email}
                   phone={this.state.phone}
+                  checkEmail={this.props.checkEmail}
                 />
               );
             case 3:
@@ -131,6 +135,7 @@ export default class SignupForm extends Component {
                   username={this.state.username}
                   password={this.state.password}
                   repassword={this.state.repassword}
+                  checkUsername={this.props.checkUsername}
                 />
               );
             case 4:
@@ -141,6 +146,7 @@ export default class SignupForm extends Component {
                   handleChange={this.handleChange}
                   groupName={this.state.groupName}
                   groupList={this.state.groupList}
+                  checkGroupName={this.props.checkGroupName}
                 />
               );
             default:

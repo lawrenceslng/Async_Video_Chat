@@ -1,7 +1,7 @@
 const initialState = {
   loggedIn: false,
   token: "",
-  id: ""
+  id: "",
 };
 
 export default function loginReducer(state = initialState, action) {
@@ -11,12 +11,12 @@ export default function loginReducer(state = initialState, action) {
         ...state,
         loggedIn: action.payload.loggedIn,
         token: action.payload.token,
-        id: action.payload.id,
+        id: action.payload.id
       };
     case "NOT_LOGGED_IN":
       return {
         ...state,
-        loggedIn:  action.payload.loggedIn,
+        loggedIn: action.payload.loggedIn,
         token: "",
         id: ""
       };
@@ -25,7 +25,7 @@ export default function loginReducer(state = initialState, action) {
         ...state,
         loggedIn: action.payload.loggedIn,
         token: action.payload.json.token,
-        id: action.payload.json.id,
+        id: action.payload.json.id
       };
     default:
       return state;
