@@ -191,13 +191,13 @@ export default class Archived_Thoughts extends React.Component {
 
     componentDidMount(){
 
-        return fetch("/conversations_archive",{headers : {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            "x-access-token": this.props.token()
-           }}).then(res => res.json()).then(resultingJSON => {
-            console.log(resultingJSON);
-            this.setState({conversations : resultingJSON})});
+        // return fetch("/conversations_archive",{headers : {
+        //     'Content-Type': 'application/json',
+        //     'Accept': 'application/json',
+        //     "x-access-token": this.props.token()
+        //    }}).then(res => res.json()).then(resultingJSON => {
+        //     console.log(resultingJSON);
+        //     this.setState({conversations : resultingJSON})});
     };
     render(){
         let button;

@@ -95,33 +95,19 @@ h3{
 }
 
 /* navBar */
-
-#thoughtArchivesNav{
-  display:inline-block;
-  width: 275px;
-  margin-right: 10px;
-  }
-
-
-#activeThoughtsNav{
-  display:inline-block;
-  width: 275px;
-  margin-right: 10px;
-
+.row{
+  display: block;
 }
-#createNewNav{
-  display:inline-block;
-  width: 275px;
-  margin-right: 10px;
-
-}
-#yourCommunityNav{
-  display:inline-block;
-  width: 275px;
-  margin-right: 10px;
-
+.row-main{
+  display: flex;
+  flex-wrap: wrap;
 }
 
+#allThoughtsNav, #settingsNav, #createNewNav, #yourCommunityNav{
+  display: inline-block;
+  width: 275px;
+  margin-right: 10px;
+}
 
 .expand {
   animation: expand-animation;
@@ -150,7 +136,7 @@ h3{
 
 .card-img-top {
   height: 100px;
-    width: 30%;
+  width: 30%;
 }
 
 .box-part{

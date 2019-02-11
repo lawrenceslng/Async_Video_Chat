@@ -379,15 +379,15 @@ export default class Active_Thoughts extends React.Component {
     }
         //next up: able to see all videos related to a thought (need to search server for conv_reply as well)
     componentDidMount(){
-        return fetch("/conversations_active",{headers : {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            "x-access-token": this.props.token()
-           }}).then(res => res.json()).then(resultingJSON => {
-                console.log(resultingJSON);
-                // debugger;
-                this.setState({conversations : resultingJSON})
-            });
+        // return fetch("/conversations_active",{headers : {
+        //     'Content-Type': 'application/json',
+        //     'Accept': 'application/json',
+        //     "x-access-token": this.props.token()
+        //    }}).then(res => res.json()).then(resultingJSON => {
+        //         console.log(resultingJSON);
+        //         // debugger;
+        //         this.setState({conversations : resultingJSON})
+        //     });
     };
 
     // componentWillUnmount() {
